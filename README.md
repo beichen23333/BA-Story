@@ -1,112 +1,96 @@
-# 碧蓝档案剧情站
+# 剧情播放器组件仓库
 
-简体中文 | [English](README_EN.md)
+本仓库是剧情播放器组件仓库, 用于播放碧蓝档案游戏剧情.
 
-## 子项目 (monorepos)
+在进入全屏后, 如果宽高比小于 16/9, 则维持宽高比, 若大于, 则锁定为 16/9.
+全屏时会自动检测是否横屏并自动旋转.
 
-- Plana Studio - 碧蓝档案剧情编辑器 ([/apps/blue-archive-story-player](https://github.com/ba-archive/blue-archive/tree/dev-notype/apps/blue-archive-story-editor))
-- blue-archive-story-viewer - 碧蓝档案剧情站 ([/apps/blue-archive-story-viewer](https://github.com/ba-archive/blue-archive/tree/main/apps/blue-archive-story-viewer))
-- ba-online-toolbox - 在线翻译工具 ([/apps/ba-online-toolbox](https://github.com/ba-archive/blue-archive/tree/main/apps/ba-online-toolbox))
-- Eden Design - 组件库 ([/lib/eden-design](https://github.com/ba-archive/blue-archive/tree/main/lib/eden-design))
-- ba-story-player - 剧情播放器组件 ([/lib/ba-story-player](https://github.com/ba-archive/blue-archive/tree/main/lib/ba-story-player))
+# 使用
 
-
-## 环境信息
-
-项目采用 `rush.js` 组织 monorepo, 统一各个项目的代码规范和依赖, 优化引入项目公用包形式
-
-- 当前 rush 版本：`5.120.6`
-- 推荐 node 版本：`>=14.15.0 <=22.*` （测试可用版本：`v22.2.0`）
-- 项目包管理器版本信息：`pnpm@latest` （测试可用版本：`9.1.2`）
-
-## 配置教程
-
-**安装 node18（推荐使用 [nvm](https://github.com/nvm-sh/nvm)）**
-
-> linux 安装教程
-
-```bash
-# Linux
-# 安装 nvm https://github.com/nvm-sh/nvm
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-
-# 安装 node
-nvm install 18
-nvm use 18
+```html
+<script setup>
+  import storyPlayer from "ba-story-player";
+  import "ba-story-player/dist/style.css";
+</script>
 ```
 
-> 对于 windows 系统推荐先安装 [scoop](https://scoop.sh/)，然后使用 scoop 安装 nvm，最后使用 nvm 安装 node
+# props
 
-```powershell
-# Windows
-# 安装 scoop
-Set-ExecutionPolicy RemoteSigned -Scope CurrentUser # Optional: Needed to run a remote script the first time
-irm get.scoop.sh | iex
+## story
 
-# 安装 nvm
-scoop install nvm
+type: `StoryRawUnit[]`
 
-# 安装 node
-nvm install 18
-nvm use 18
+剧情原始数据数组.
+
+## dataUrl
+
+type: `string`
+
+资源服务器地址, 用于获取立绘语音等游戏资源. 各资源的具体路径请参照`lib/utils.ts`中的`getResourcesUrl`.
+
+## width
+
+type: `number`
+
+播放器宽度, 单位是 px, 可变.
+
+## height
+
+播放器高度, 单位是 px, 可变. 注意请不要设置偏离 16/9 太多的宽高比, 可能导致播放器表现变差.
+
+## storySummary
+
+type:
+
+```ts
+export interface StorySummary {
+  /**
+   * 章节名
+   */
+  chapterName: string;
+  /**
+   * 简介
+   */
+  summary: string;
+}
 ```
 
-**安装 rush**
+## language
 
-```bash
-# 安装 pnpm
-npm install -g pnpm
-npm install -g @microsoft/rush
-rush update # 在 blue-archive 根目录下执行，下同
-# 编译项目、链接项目
-rush build
-```
+type: `'Cn'|'Jp'|'En'|'Tw'`
 
-## 常用命令
+语言选项
 
-**对一个子库新增依赖**
+## startFullScreen
 
-> -m 将所有其他库的依赖保持一致
+type: `boolean`
 
-```bash
-rush add -p <库名> [--dev] [-m]
-```
+是否立即全屏, 用于移动端.
 
-**git commit 时禁用自动格式化 hook**
+## useMp3
 
-```bash
-git commit -m "..." --no-verify
-```
+type: `boolean`
 
-**更新依赖**
+使用 mp3 代替 ogg 格式音频, 用于解决 safari 浏览器的音频解码问题.
 
-```base
-rush add --make-consistent -p <库名>
-```
+## useSuperSampling
 
-## 项目结构
+type: `'' | '2' | '4' | boolean`
 
-- `apps/` 应用程序目录
-- `lib/` 库目录
-- `lib/ba-rig` 此仓库的 rush-rig 包，详见：https://heft.rushstack.io/zh-cn/pages/intro/rig_packages/
-- `lib/ba-story-player` 剧情播放器组件库
+是否使用超分素材。请注意目前 '4' 配置项无效果，仅支持 2 倍超分。
 
-## ~~正确的使用 eslint 和 lint-staged~~
+当设置为 `true` 时，使用 2 倍超分。
 
-> deprecated 已过时
+# event
 
-**eslint lint-staged 配置文件**
+## end
 
-- `.eslintrc`
-- `.eslintignore`
-- `.lintstagedrc.mjs`
-- `common/autoinstallers/rush-eslint/.eslintrc`
-- `common/autoinstallers/rush-eslint/.lintstagedrc_base.mjs`
+播放结束时发送
 
-**全局 tsconfig**
+## error
 
-- `lib/ba-rig/profiles/default/tsconfig-base.json`
+发生错误时发送(播放错误或资源加载错误)
 
-## 正确使用 .vscode 文件夹
+# 贡献说明
 
-`.vscode` 文件夹内可以保存项目推荐的扩展，`settings.json` 还可以用来统一一些 vscode 设置，比如 typo 插件的词库。
+请参照[贡献指南](./docs/contribute.md)
