@@ -330,6 +330,7 @@ $tooltip-padding-t: 4px;
   position: relative;
   height: var(--font-size);
   font-size: var(--font-size);
+  font-weight: bold;
   line-height: var(--font-size);
   .rt {
     --local-font-size: max(calc(var(--font-size) * 0.6), 12px);

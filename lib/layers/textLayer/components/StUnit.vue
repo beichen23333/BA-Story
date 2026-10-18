@@ -136,6 +136,7 @@ type IProps = {
   top: calc(var(--top) - var(--font-size) / 2);
   left: var(--left);
   font-size: var(--font-size);
+  font-weight: bold;
   line-height: var(--font-size);
 }
 </style>

@@ -181,6 +181,9 @@ function parseTextEffect(_text: Text) {
     flex-direction: column;
     gap: 1em;
     width: 80%;
+    transform-origin: center center;
+    animation: ba-selector-appear 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
     .ba-selector-item {
       -webkit-tap-highlight-color: transparent;
       transform: skewX(-10deg);
@@ -238,6 +241,17 @@ function parseTextEffect(_text: Text) {
   .ba-selector-item {
     scale: 1.1;
     opacity: 0;
+  }
+}
+
+@keyframes ba-selector-appear {
+  0% {
+    opacity: 0;
+    transform: scale(0.65);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
 </style>

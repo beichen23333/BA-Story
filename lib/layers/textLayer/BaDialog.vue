@@ -904,6 +904,7 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 .content {
   //--font-size: 2rem;
   --param-font-size: 64;
+  font-weight: bold;
   margin-top: 1.5%;
   color: white;
   :deep(span.unit) {
@@ -926,10 +927,13 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   position: absolute;
   overflow: hidden;
   pointer-events: none;
-  font-family: "Resource Han Rounded CN Medium", "Microsoft YaHei",
-    "PingFang SC", -apple-system, system-ui, "Segoe UI", Roboto, Ubuntu,
-    Cantarell, "Noto Sans", BlinkMacSystemFont, "Helvetica Neue",
-    "Hiragino Sans GB", Arial, sans-serif;
+  font-family: "Resource Han Rounded CN Bold", "Resource Han Rounded CN Heavy",
+    "Resource Han Rounded CN", "Source Han Rounded CN", "Source Han Rounded SC",
+    "Gen Jyuu Gothic Bold", "Gen Jyuu Gothic", "Resource Han Rounded CN Medium",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", -apple-system,
+    system-ui, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans",
+    BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  font-weight: bold;
   user-select: none;
   hr {
     border: 0.1px rgba(255, 255, 255, 0.666) solid;
