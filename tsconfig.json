@@ -11,23 +11,11 @@
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
-    "outDir": "dist",
-    "declaration": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["lib/*"]
+      "@/*": ["player-lib/*"],
+      "@assets/*": ["lobby/player-scss/*"]
     }
   },
-  "include": [
-    "lib/**/*.ts",
-    "lib/**/*.d.ts",
-    "lib/**/*.tsx",
-    "lib/**/*.vue",
-    "src/vite-env.d.ts"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ]
+  "include": ["lobby/**/*", "player-lib/**/*"]
 }
