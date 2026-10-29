@@ -12,6 +12,7 @@ import { ClubStoryPanel } from "./components/ClubStoryPanel";
 import { ClubStoryDetail } from "./components/ClubStoryDetail";
 import { StoryInfoModal } from "./components/StoryInfoModal";
 import { CLUB_STORY_PAGES } from "./components/ClubStories";
+import { MINI_STORY_PAGES } from "./components/MiniStories";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import StoryPlayer from "./components/StoryPlayerHost";
 
@@ -87,6 +88,7 @@ export function App({ active = true } = {}) {
   const [sceneEntering, setSceneEntering] = useState(false);
   const [sceneEntryKey, setSceneEntryKey] = useState(0);
   const [groupStoryOpen, setGroupStoryOpen] = useState(false);
+  const [miniStoryMode, setMiniStoryMode] = useState(false);
   const [clubDetailOpen, setClubDetailOpen] = useState(false);
   const [selectedClubStory, setSelectedClubStory] = useState(null);
   const [storyInfoSelection, setStoryInfoSelection] = useState(null);
@@ -359,7 +361,7 @@ export function App({ active = true } = {}) {
   const handleCardClick = (key) => {
     playButtonTouchSound();
     setSelected(key);
-    if (key === "club") setStoryTransitionPending(true);
+    if (key === "club" || key === "mini") setStoryTransitionPending(true);
     return true;
   };
 
@@ -395,6 +397,7 @@ export function App({ active = true } = {}) {
     pageFlipTimer.current = null;
     runBlackoutTransition(() => {
       setGroupStoryOpen(false);
+      setMiniStoryMode(false);
       setClubDetailOpen(false);
       setSelectedClubStory(null);
       setSelected("");
@@ -434,11 +437,13 @@ export function App({ active = true } = {}) {
     }, 160);
   };
 
-  const finishClubCardBounce = () => {
+  const finishStoryCardBounce = () => {
     if (!storyTransitionPending || groupStoryOpen) return;
+    const openMini = selected === "mini";
     setStoryTransitionPending(false);
     runBlackoutTransition(() => {
       setSelected("");
+      setMiniStoryMode(openMini);
       setStoryPageIndex(0);
       setFlipPhase("");
       setFlipDirection("next");
@@ -525,7 +530,8 @@ export function App({ active = true } = {}) {
             background="Scenario_Mode_Bg_2.png"
             label={t.affinity}
             subtitle={t.affinitySub}
-            onClick={() => handleCardClick("affinity")}
+            onClick={() => handleCardClick("mini")}
+            onBounceComplete={finishStoryCardBounce}
           />
           <StoryCard
             className="small-card club"
@@ -534,7 +540,7 @@ export function App({ active = true } = {}) {
             label={t.club}
             subtitle={t.clubSub}
             onClick={() => handleCardClick("club")}
-            onBounceComplete={finishClubCardBounce}
+            onBounceComplete={finishStoryCardBounce}
           />
         </div>
         <StoryCard
@@ -548,13 +554,13 @@ export function App({ active = true } = {}) {
       </section>
       {groupStoryOpen && !clubDetailOpen && (<>
         <button className="club-story-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <ClubStoryPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openClubDetail} onCardClickSound={playButtonTouchSound} />
+        <ClubStoryPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openClubDetail} onCardClickSound={playButtonTouchSound} isMini={miniStoryMode} />
         {storyPageIndex > 0 && <button className={`club-story-prev-page-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("previous")} aria-label={t.previousPage} disabled={Boolean(flipPhase)}><ChevronLeft size={43} strokeWidth={2.7} /></button>}
-        {storyPageIndex < CLUB_STORY_PAGES.length - 1 && <button className={`club-story-next-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("next")} aria-label={t.nextPage} disabled={Boolean(flipPhase)}><ChevronRight size={43} strokeWidth={2.7} /></button>}
+        {storyPageIndex < (miniStoryMode ? MINI_STORY_PAGES.length : CLUB_STORY_PAGES.length) - 1 && <button className={`club-story-next-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("next")} aria-label={t.nextPage} disabled={Boolean(flipPhase)}><ChevronRight size={43} strokeWidth={2.7} /></button>}
       </>)}
       {groupStoryOpen && clubDetailOpen && <>
         <button className="club-story-back-button" type="button" onClick={closeClubDetail} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <ClubStoryDetail story={selectedClubStory} pageIndex={storyPageIndex} language={language} onBack={closeClubDetail} onEpisodeSelect={(story, episode) => setStoryInfoSelection({ story, episode })} />
+        <ClubStoryDetail story={selectedClubStory} pageIndex={storyPageIndex} language={language} onBack={closeClubDetail} isMini={miniStoryMode} onEpisodeSelect={(story, episode) => setStoryInfoSelection({ story, episode })} />
         {storyInfoSelection && <StoryInfoModal story={storyInfoSelection.story} episode={storyInfoSelection.episode} language={language} onClose={() => setStoryInfoSelection(null)} onEnter={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); setStoryInfoSelection(null); void loadAndPlayEpisode(story, episode); }} />}
       </>}
       {playingStorySelection && loadedStoryData && <StoryPlayer

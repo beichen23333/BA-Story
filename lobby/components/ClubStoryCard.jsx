@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-export function ClubStoryCard({ story, index = 0, onSelect, onClickSound }) {
+export function ClubStoryCard({ story, index = 0, onSelect, onClickSound, isMini = false }) {
   const [bouncing, setBouncing] = useState(false);
   const lock = useRef(false);
   const click = () => { if (lock.current) return; lock.current = true; onClickSound?.(); setBouncing(true); };

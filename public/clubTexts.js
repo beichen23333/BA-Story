@@ -1,4 +1,3 @@
-// 社团剧情文本与章节目录，独立维护。
 export const CLUB_STORY_TEXTS = {
     gourmet: {
         cn:["美食研究会", "为了美食可以不顾水深火热！\n美食研究会所追求的真正的美味到底是什么？"],
@@ -268,7 +267,7 @@ export const CLUB_STORY_TEXTS = {
         ]
     }
 };
-// 社团剧情章节目录：标题与剧情概括统一按界面语言维护。
+
 export const CLUB_STORY_EPISODES = {
     "gourmet":[
         {
