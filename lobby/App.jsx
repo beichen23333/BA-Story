@@ -7,12 +7,14 @@ import { useOrientation } from "./hooks/useOrientation";
 import { useClickEffect } from "./hooks/useClickEffect";
 import { Header } from "./components/Header";
 import { StoryCard } from "./components/StoryCard";
+import { ArchivePanel } from "./components/ArchivePanel";
+import { WORK_STORY_PAGES_BY_PAGE } from "./stories/WorkStories.js";
 import { OrientationOverlay } from "./components/OrientationOverlay";
-import { ClubStoryPanel } from "./components/ClubStoryPanel";
-import { ClubStoryDetail } from "./components/ClubStoryDetail";
+import { StoryListPanel } from "./components/StoryListPanel";
+import { StoryDetailPanel } from "./components/StoryDetailPanel";
 import { StoryInfoModal } from "./components/StoryInfoModal";
-import { CLUB_STORY_PAGES } from "./components/ClubStories";
-import { MINI_STORY_PAGES } from "./components/MiniStories";
+import { CLUB_STORY_PAGES } from "./stories/ClubStories.js";
+import { MINI_STORY_PAGES } from "./stories/MiniStories.js";
 import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import StoryPlayer from "./components/StoryPlayerHost";
 
@@ -88,9 +90,13 @@ export function App({ active = true } = {}) {
   const [sceneEntering, setSceneEntering] = useState(false);
   const [sceneEntryKey, setSceneEntryKey] = useState(0);
   const [groupStoryOpen, setGroupStoryOpen] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
+  const [workStoryOpen, setWorkStoryOpen] = useState(false);
+  const [workDetailOpen, setWorkDetailOpen] = useState(false);
+  const [selectedWorkStory, setSelectedWorkStory] = useState(null);
   const [miniStoryMode, setMiniStoryMode] = useState(false);
   const [clubDetailOpen, setClubDetailOpen] = useState(false);
-  const [selectedClubStory, setSelectedClubStory] = useState(null);
+  const [selectedStory, setSelectedStory] = useState(null);
   const [storyInfoSelection, setStoryInfoSelection] = useState(null);
   const [playingStorySelection, setPlayingStorySelection] = useState(null);
   const [loadedStoryData, setLoadedStoryData] = useState(null);
@@ -100,6 +106,7 @@ export function App({ active = true } = {}) {
   const storyLoadRequestRef = useRef(0);
   const [playerReplayKey, setPlayerReplayKey] = useState(0);
   const detailTransitionLock = useRef(false);
+  const workDetailTransitionLock = useRef(false);
   const [storyTransitionPending, setStoryTransitionPending] = useState(false);
   const [blackout, setBlackout] = useState("");
   const [storyPageIndex, setStoryPageIndex] = useState(0);
@@ -390,8 +397,12 @@ export function App({ active = true } = {}) {
 
   const returnToScenarioMenu = () => {
     detailTransitionLock.current = false;
+    workDetailTransitionLock.current = false;
+    if (workStoryOpen && workDetailOpen) { runBlackoutTransition(() => { setWorkDetailOpen(false); setSelectedWorkStory(null); setStoryInfoSelection(null); }); return; }
+    if (workStoryOpen) { runBlackoutTransition(() => { setWorkStoryOpen(false); setArchiveOpen(true); setStoryPageIndex(0); }); return; }
+    if (archiveOpen) { runBlackoutTransition(() => { setArchiveOpen(false); setSelected(""); setActiveMain(1); setStoryTransitionPending(false); setSceneEntering(false); setSceneEntryKey((key) => key + 1); requestAnimationFrame(() => { setSceneEntering(true); window.setTimeout(() => setSceneEntering(false), 850); }); }); return; }
     setClubDetailOpen(false);
-    setSelectedClubStory(null);
+    setSelectedStory(null);
     setStoryInfoSelection(null);
     if (pageFlipTimer.current) window.clearTimeout(pageFlipTimer.current);
     pageFlipTimer.current = null;
@@ -399,7 +410,7 @@ export function App({ active = true } = {}) {
       setGroupStoryOpen(false);
       setMiniStoryMode(false);
       setClubDetailOpen(false);
-      setSelectedClubStory(null);
+      setSelectedStory(null);
       setSelected("");
       setActiveMain(1);
       setStoryTransitionPending(false);
@@ -418,7 +429,8 @@ export function App({ active = true } = {}) {
   // 翻页时先显示空白纸面，再翻动右半页；切换数据后禁用卡片入场动画，避免旧页残影与延迟显示。
   const flipStoryPage = (direction = "next") => {
     if (flipPhase) return;
-    const nextIndex = direction === "next" ? Math.min(CLUB_STORY_PAGES.length - 1, storyPageIndex + 1) : Math.max(0, storyPageIndex - 1);
+    const pageCount = workStoryOpen ? WORK_STORY_PAGES_BY_PAGE.length : miniStoryMode ? MINI_STORY_PAGES.length : CLUB_STORY_PAGES.length;
+    const nextIndex = direction === "next" ? Math.min(pageCount - 1, storyPageIndex + 1) : Math.max(0, storyPageIndex - 1);
     if (nextIndex === storyPageIndex) return;
     playButtonTouchSound();
     setFlipDirection(direction);
@@ -438,6 +450,11 @@ export function App({ active = true } = {}) {
   };
 
   const finishStoryCardBounce = () => {
+    if (selected === "archive") {
+      setSelected("");
+      runBlackoutTransition(() => setArchiveOpen(true));
+      return;
+    }
     if (!storyTransitionPending || groupStoryOpen) return;
     const openMini = selected === "mini";
     setStoryTransitionPending(false);
@@ -451,14 +468,26 @@ export function App({ active = true } = {}) {
     });
   };
 
-  const openClubDetail = (story) => {
+  const openStoryDetail = (story) => {
     if (detailTransitionLock.current || !story) return;
     detailTransitionLock.current = true;
-    setSelectedClubStory(story);
+    setSelectedStory(story);
     setStoryInfoSelection(null);
     runBlackoutTransition(() => { setClubDetailOpen(true); detailTransitionLock.current = false; });
   };
-  const closeClubDetail = () => {
+  const openWorkDetail = (story) => {
+    if (workDetailTransitionLock.current || !story) return;
+    workDetailTransitionLock.current = true;
+    setSelectedWorkStory(story);
+    setStoryInfoSelection(null);
+    runBlackoutTransition(() => { setWorkDetailOpen(true); workDetailTransitionLock.current = false; });
+  };
+  const closeWorkDetail = () => {
+    if (workDetailTransitionLock.current) return;
+    workDetailTransitionLock.current = true;
+    runBlackoutTransition(() => { setWorkDetailOpen(false); setSelectedWorkStory(null); setStoryInfoSelection(null); workDetailTransitionLock.current = false; });
+  };
+  const closeStoryDetail = () => {
     if (detailTransitionLock.current) return;
     detailTransitionLock.current = true;
     runBlackoutTransition(() => { setClubDetailOpen(false); setStoryInfoSelection(null); detailTransitionLock.current = false; });
@@ -490,7 +519,7 @@ export function App({ active = true } = {}) {
 
   return (
     <main
-      className={`screen ${sceneEntering ? "scene-entering" : ""} ${groupStoryOpen ? "group-story-screen" : ""}`}
+      className={`screen ${sceneEntering ? "scene-entering" : ""} ${groupStoryOpen ? "group-story-screen" : ""} ${(archiveOpen || workStoryOpen) ? "archive-screen" : ""}`}
       style={{
         backgroundColor: "#fff",
         backgroundImage: `url("${bgImage}")`,
@@ -499,8 +528,8 @@ export function App({ active = true } = {}) {
         backgroundRepeat: "no-repeat"
       }}
     >
-    <Header t={groupStoryOpen ? { ...t, pageTitle: clubDetailOpen ? t.clubDetailTitle : t.clubTitle } : t} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName} isClubDetail={groupStoryOpen && clubDetailOpen}/>
-      <section key={sceneEntryKey} className="story-layout" aria-label={t.pageTitle}>
+    <Header t={(archiveOpen || workStoryOpen) ? { ...t, pageTitle: t.archiveTitle } : groupStoryOpen ? { ...t, pageTitle: miniStoryMode ? t.affinity : (clubDetailOpen ? t.clubDetailTitle : t.clubTitle) } : t} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName} isClubDetail={groupStoryOpen && clubDetailOpen}/>
+      <section key={sceneEntryKey} className={`story-layout ${(archiveOpen || workStoryOpen) ? "story-layout-hidden" : ""}`} aria-label={t.pageTitle}>
         <div className="main-stack">
           <StoryCard
             className="main-card-back"
@@ -550,17 +579,33 @@ export function App({ active = true } = {}) {
           label={t.archive}
           subtitle={t.archiveSub}
           onClick={() => handleCardClick("archive")}
+          onBounceComplete={finishStoryCardBounce}
         />
       </section>
+      {archiveOpen && !workStoryOpen && <>
+        <button className="story-list-back-button archive-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
+        <ArchivePanel t={t} onSelect={(key) => { if (key === "archiveWork") { runBlackoutTransition(() => { setStoryPageIndex(0); setFlipPhase(""); setWorkDetailOpen(false); setWorkStoryOpen(true); }); return; } playButtonTouchSound(); window.dispatchEvent(new CustomEvent("ba-archive-replay-select", { detail: key })); }} />
+      </>}
+      {workStoryOpen && !workDetailOpen && <>
+        <button className="story-list-back-button archive-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
+        <StoryListPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openWorkDetail} onCardClickSound={playButtonTouchSound} storyType="work" />
+        {storyPageIndex > 0 && <button className={`story-list-prev-page-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("previous")} aria-label={t.previousPage} disabled={Boolean(flipPhase)}><ChevronLeft size={43} strokeWidth={2.7} /></button>}
+        {storyPageIndex < WORK_STORY_PAGES_BY_PAGE.length - 1 && <button className={`story-list-next-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("next")} aria-label={t.nextPage} disabled={Boolean(flipPhase)}><ChevronRight size={43} strokeWidth={2.7} /></button>}
+      </>}
+      {workStoryOpen && workDetailOpen && <>
+        <button className="story-list-back-button archive-back-button" type="button" onClick={closeWorkDetail} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
+        <StoryDetailPanel story={selectedWorkStory} pageIndex={storyPageIndex} language={language} onBack={closeWorkDetail} storyType="work" onEpisodeSelect={(story, episode) => setStoryInfoSelection({ story, episode })} />
+        {storyInfoSelection && <StoryInfoModal story={storyInfoSelection.story} episode={storyInfoSelection.episode} language={language} onClose={() => setStoryInfoSelection(null)} onEnter={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); setStoryInfoSelection(null); void loadAndPlayEpisode(story, episode); }} />}
+      </>}
       {groupStoryOpen && !clubDetailOpen && (<>
-        <button className="club-story-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <ClubStoryPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openClubDetail} onCardClickSound={playButtonTouchSound} isMini={miniStoryMode} />
-        {storyPageIndex > 0 && <button className={`club-story-prev-page-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("previous")} aria-label={t.previousPage} disabled={Boolean(flipPhase)}><ChevronLeft size={43} strokeWidth={2.7} /></button>}
-        {storyPageIndex < (miniStoryMode ? MINI_STORY_PAGES.length : CLUB_STORY_PAGES.length) - 1 && <button className={`club-story-next-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("next")} aria-label={t.nextPage} disabled={Boolean(flipPhase)}><ChevronRight size={43} strokeWidth={2.7} /></button>}
+        <button className="story-list-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
+        <StoryListPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openStoryDetail} onCardClickSound={playButtonTouchSound} storyType={miniStoryMode ? "mini" : "club"} />
+        {storyPageIndex > 0 && <button className={`story-list-prev-page-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("previous")} aria-label={t.previousPage} disabled={Boolean(flipPhase)}><ChevronLeft size={43} strokeWidth={2.7} /></button>}
+        {storyPageIndex < (miniStoryMode ? MINI_STORY_PAGES.length : CLUB_STORY_PAGES.length) - 1 && <button className={`story-list-next-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("next")} aria-label={t.nextPage} disabled={Boolean(flipPhase)}><ChevronRight size={43} strokeWidth={2.7} /></button>}
       </>)}
       {groupStoryOpen && clubDetailOpen && <>
-        <button className="club-story-back-button" type="button" onClick={closeClubDetail} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <ClubStoryDetail story={selectedClubStory} pageIndex={storyPageIndex} language={language} onBack={closeClubDetail} isMini={miniStoryMode} onEpisodeSelect={(story, episode) => setStoryInfoSelection({ story, episode })} />
+        <button className="story-list-back-button" type="button" onClick={closeStoryDetail} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
+        <StoryDetailPanel story={selectedStory} pageIndex={storyPageIndex} language={language} onBack={closeStoryDetail} storyType={miniStoryMode ? "mini" : "club"} onEpisodeSelect={(story, episode) => setStoryInfoSelection({ story, episode })} />
         {storyInfoSelection && <StoryInfoModal story={storyInfoSelection.story} episode={storyInfoSelection.episode} language={language} onClose={() => setStoryInfoSelection(null)} onEnter={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); setStoryInfoSelection(null); void loadAndPlayEpisode(story, episode); }} />}
       </>}
       {playingStorySelection && loadedStoryData && <StoryPlayer
@@ -590,11 +635,6 @@ export function App({ active = true } = {}) {
         </div>
       </div>}
       {blackout && <div className={`story-scene-blackout ${blackout === "fade" ? "is-fading" : "is-cover"}`} aria-hidden="true" />}
-      {selected && !groupStoryOpen && (
-        <div className="selection-hint">
-          {t[selected]} {t.selected}
-        </div>
-      )}
       {showRotatePrompt && (
         <OrientationOverlay t={t} onEnterLandscape={enterLandscape} />
       )}

@@ -27,7 +27,7 @@ export function StoryInfoModal({ story, episode, language = "cn", onClose, onEnt
       </header>
       <div className="story-info-body">
         <div className="story-info-episode-title"><span>{episodeNumber}</span><span className="story-info-separator">｜</span><span>{episode.title || story.title}</span></div>
-        <h3 className="club-detail-episodes-heading story-info-reward-heading">{t.episodeSummaryTitle || t.storyRewards}</h3>
+        <h3 className="story-detail-episodes-heading story-info-reward-heading">{t.episodeSummaryTitle || t.storyRewards}</h3>
         <p className="story-info-reward-copy">{episode.description || t.storyRewardsComplete}</p>
         <button className="story-info-enter" type="button" onClick={() => onEnter?.(story, episode)}>
           <img src={blueButton} alt="" draggable="false" />

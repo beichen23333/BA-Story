@@ -1,5 +1,5 @@
 import { asset } from "../../public/utils.ts";
-import { MINI_STORY_TEXTS, MINI_STORY_EPISODES } from "../../public/miniTexts.js";
+import { MINI_STORY_TEXTS, MINI_STORY_EPISODES } from "../../public/texts/minitexts.js";
 
 export const MINI_STORY_PAGES = [
     [

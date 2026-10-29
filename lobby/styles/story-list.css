@@ -1,5 +1,5 @@
 /* 社团故事面板：背景与标题栏由父级页面继承。 */
-.club-story-panel {
+.story-list-panel {
     position: absolute;
     left: 16%;
     top: 20%;
@@ -18,7 +18,7 @@
     perspective: 1400px;
     isolation: isolate;
 }
-.club-story-panel::before {
+.story-list-panel::before {
     content: "";
     position: absolute;
     z-index: 4;
@@ -31,7 +31,7 @@
     box-shadow: 0 0 3px rgba(55, 70, 80, .12);
     pointer-events: none;
 }
-.club-story-card {
+.story-list-card {
     min-width: 0;
     min-height: 0;
     display: flex;
@@ -46,7 +46,7 @@
     animation: storyCardEnter .42s cubic-bezier(.2, 1, .3, 1) both;
     animation-delay: calc(var(--card-index)*45ms);
 }
-.club-story-image {
+.story-list-image {
     display: block;
     flex: 0 0 42%;
     width: 42%;
@@ -54,13 +54,13 @@
     height: auto;
     object-fit: contain;
 }
-.club-story-copy {
+.story-list-copy {
     flex: 1 1 0;
     min-width: 0;
     align-self: center;
     color: #35404b;
 }
-.club-story-title {
+.story-list-title {
     margin: 0 0 .28em;
     color: #39485a;
     font-size: clamp(14px, 1.55vw, 24px);
@@ -68,7 +68,7 @@
     line-height: 1.15;
     overflow-wrap: anywhere;
 }
-.club-story-description {
+.story-list-description {
     margin: 0;
     color: #343b42;
     font-size: clamp(10px, .98vw, 15px);
@@ -76,7 +76,7 @@
     line-height: 1.28;
     overflow-wrap: anywhere;
 }
-.club-story-back-button {
+.story-list-back-button {
     position: absolute;
     z-index: 30;
     left: 1.5%;
@@ -93,13 +93,13 @@
     cursor: pointer;
     transition: transform .16s ease, filter .16s ease;
 }
-.club-story-back-button:hover {
+.story-list-back-button:hover {
     filter: brightness(1.1);
 }
-.club-story-back-button:active {
+.story-list-back-button:active {
     transform: scale(.92);
 }
-.club-story-next-button, .club-story-prev-page-button {
+.story-list-next-button, .story-list-prev-page-button {
     position: absolute;
     z-index: 25;
     top: 48%;
@@ -114,55 +114,55 @@
     cursor: pointer;
     transition: transform .16s ease, color .16s ease;
 }
-.club-story-next-button {
+.story-list-next-button {
     left: auto;
     right: 5.4%;
 }
-.club-story-prev-page-button {
+.story-list-prev-page-button {
     left: 5.4%;
 }
-.club-story-next-button:hover {
+.story-list-next-button:hover {
     color: #244776;
     transform: translateX(3px);
 }
-.club-story-prev-page-button:hover {
+.story-list-prev-page-button:hover {
     color: #244776;
     transform: translateX(-3px);
 }
-.club-story-next-button:disabled, .club-story-prev-page-button:disabled {
+.story-list-next-button:disabled, .story-list-prev-page-button:disabled {
     cursor: default;
     opacity: .45;
 }
-.club-story-next-button.is-flipping, .club-story-prev-page-button.is-flipping {
+.story-list-next-button.is-flipping, .story-list-prev-page-button.is-flipping {
     animation: arrowNudge .62s ease both;
 }
 .screen.group-story-screen .story-layout, .screen.group-story-screen .selection-hint {
     display: none!important;
 }
-.screen.group-story-screen .club-story-panel {
+.screen.group-story-screen .story-list-panel, .screen.archive-screen .story-list-panel {
     animation: storyPanelEnter .48s cubic-bezier(.2, 1, .3, 1) both;
 }
-.screen.group-story-screen .club-story-panel.is-page-blank {
+.screen.group-story-screen .story-list-panel.is-page-blank, .screen.archive-screen .story-list-panel.is-page-blank {
     background: rgba(247, 251, 253, .98);
 }
-.screen.group-story-screen .club-story-panel.is-page-blank .club-story-card {
+.screen.group-story-screen .story-list-panel.is-page-blank .story-list-card, .screen.archive-screen .story-list-panel.is-page-blank .story-list-card {
     visibility: hidden;
     animation: none;
 }
-.screen.group-story-screen .club-story-panel.is-page-flipping {
+.screen.group-story-screen .story-list-panel.is-page-flipping, .screen.archive-screen .story-list-panel.is-page-flipping {
     pointer-events: none;
 }
-.screen.group-story-screen .club-story-panel.is-page-flipping .club-story-card {
+.screen.group-story-screen .story-list-panel.is-page-flipping .story-list-card, .screen.archive-screen .story-list-panel.is-page-flipping .story-list-card {
     visibility: hidden;
     animation: none;
 }
-.screen.group-story-screen .club-story-panel.is-page-revealing .club-story-card {
+.screen.group-story-screen .story-list-panel.is-page-revealing .story-list-card, .screen.archive-screen .story-list-panel.is-page-revealing .story-list-card {
     visibility: visible;
     animation: none;
     opacity: 1;
     transform: none;
 }
-.club-story-panel.is-page-flipping::after {
+.story-list-panel.is-page-flipping::after {
     content: "";
     position: absolute;
     z-index: 8;
@@ -176,13 +176,13 @@
     transform-style: preserve-3d;
     animation: halfPageTurnRight .65s cubic-bezier(.55, .08, .35, 1) both;
 }
-.club-story-panel.is-page-flipping:not(.flip-previous)::after {
+.story-list-panel.is-page-flipping:not(.flip-previous)::after {
     left: 50%;
     transform-origin: left center;
     border-left: 0;
     border-radius: 0 13px 13px 0;
 }
-.club-story-panel.is-page-flipping.flip-previous::after {
+.story-list-panel.is-page-flipping.flip-previous::after {
     left: 0;
     transform-origin: right center;
     border-right: 0;
@@ -267,7 +267,7 @@
     }
 }
 @media(max-width:900px) {
-    .club-story-panel {
+    .story-list-panel {
         left: 5%;
         top: 14%;
         width: 90%;
@@ -275,39 +275,39 @@
         padding: 1.4%;
         gap: 1.4%;
     }
-    .club-story-card {
+    .story-list-card {
         padding: 2%;
         gap: 2%;
     }
-    .club-story-image {
+    .story-list-image {
         flex-basis: 39%;
         width: 39%;
         max-width: 39%;
     }
-    .club-story-title {
+    .story-list-title {
         font-size: clamp(12px, 2.1vw, 19px);
     }
-    .club-story-description {
+    .story-list-description {
         font-size: clamp(9px, 1.4vw, 13px);
     }
-    .club-story-back-button {
+    .story-list-back-button {
         left: 2%;
         top: 1%;
         width: 48px;
         height: 48px;
     }
-    .club-story-next-button {
+    .story-list-next-button {
         left: auto;
         right: 2%;
         width: 42px;
     }
-    .club-story-prev-page-button {
+    .story-list-prev-page-button {
         left: 0%;
         width: 42px;
     }
 }
 @media(max-width:560px) {
-    .club-story-panel {
+    .story-list-panel {
         left: 3%;
         top: 12%;
         width: 94%;
@@ -318,57 +318,57 @@
         gap: 1%;
         padding: 1.5%;
     }
-    .club-story-panel::before {
+    .story-list-panel::before {
         left: 50%;
     }
-    .club-story-card {
+    .story-list-card {
         padding: 1.5% 2%;
     }
-    .club-story-image {
+    .story-list-image {
         flex-basis: 35%;
         width: 35%;
         max-width: 35%;
         max-height: 90%;
     }
-    .club-story-title {
+    .story-list-title {
         font-size: clamp(12px, 3vw, 16px);
     }
-    .club-story-description {
+    .story-list-description {
         font-size: clamp(9px, 2.2vw, 12px);
         line-height: 1.2;
     }
-    .club-story-next-button, .club-story-prev-page-button {
+    .story-list-next-button, .story-list-prev-page-button {
         top: auto;
         bottom: 1%;
         height: 42px;
     }
-    .club-story-next-button {
+    .story-list-next-button {
         right: 1%;
     }
-    .club-story-prev-page-button {
+    .story-list-prev-page-button {
         left: 1%;
     }
 }
 @media(prefers-reduced-motion:reduce) {
     .story-scene-blackout,
-    .screen.group-story-screen .club-story-panel,
-    .club-story-card,
-    .club-story-panel.is-page-flipping::after,
-    .club-story-next-button.is-flipping,
-    .club-story-prev-page-button.is-flipping {
+    .screen.group-story-screen .story-list-panel,
+    .story-list-card,
+    .story-list-panel.is-page-flipping::after,
+    .story-list-next-button.is-flipping,
+    .story-list-prev-page-button.is-flipping {
         animation-duration: .01ms;
     }
 }/* 可点击化只重置原生按钮外观，保留原有卡片尺寸、网格与间距。 */
-.club-story-card-bounce{animation:clubStoryBounce .42s cubic-bezier(.2,.85,.25,1) both!important;z-index:8;position:relative}
-@keyframes clubStoryBounce{0%{transform:scale(1)}28%{transform:scale(1.055)}55%{transform:scale(.975)}78%{transform:scale(1.018)}100%{transform:scale(1)}}
+.story-list-card-bounce{animation:storyCardBounce .42s cubic-bezier(.2,.85,.25,1) both!important;z-index:8;position:relative;transform-origin:center}
+@keyframes storyCardBounce{0%{transform:scale(1)}40%{transform:scale(.95)}100%{transform:scale(1)}}
 
 /* 可交互卡片沿用原 article / div / h2 / p 结构，仅增加点击与键盘可访问性。 */
-.club-story-card{cursor:pointer;outline-offset:3px;transition:filter .14s ease;}
-.club-story-card:hover{filter:brightness(1.025)}
-.club-story-card:focus-visible{outline:2px solid #4b91b9}
-.club-story-card-bounce{animation:clubStoryBounce .42s cubic-bezier(.2,.85,.25,1) both!important;z-index:8;position:relative}
-@keyframes clubStoryBounce{0%{transform:scale(1)}28%{transform:scale(1.055)}55%{transform:scale(.975)}78%{transform:scale(1.018)}100%{transform:scale(1)}}
+.story-list-card{cursor:pointer;outline-offset:3px;transition:filter .14s ease;}
+.story-list-card:hover{filter:brightness(1.025)}
+.story-list-card:focus-visible{outline:2px solid #4b91b9}
+.story-list-card-bounce{animation:storyCardBounce .42s cubic-bezier(.2,.85,.25,1) both!important;z-index:8;position:relative;transform-origin:center}
+@keyframes storyCardBounce{0%{transform:scale(1)}40%{transform:scale(.95)}100%{transform:scale(1)}}
 
-.club-story-card{-webkit-tap-highlight-color:transparent;user-select:none;}
-.club-story-card:focus,.club-story-card:focus-visible{outline:none;}
-.club-story-card:active{background:rgba(250,253,255,.94);}
+.story-list-card{-webkit-tap-highlight-color:transparent;user-select:none;}
+.story-list-card:focus,.story-list-card:focus-visible{outline:none;}
+.story-list-card:active{background:rgba(250,253,255,.94);}

@@ -1,5 +1,5 @@
 import { asset } from "../../public/utils.ts";
-import { CLUB_STORY_TEXTS, CLUB_STORY_EPISODES } from "../../public/texts.js";
+import { CLUB_STORY_TEXTS, CLUB_STORY_EPISODES } from "../../public/texts/clubtexts.js";
 
 export const CLUB_STORY_PAGES = [
     [
