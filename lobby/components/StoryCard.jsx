@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { asset } from "../../public/utils.ts";
+import { getResourcesUrl } from "../../public/utils.ts";
 
 export function StoryCard({
   className = "",
@@ -31,14 +31,14 @@ export function StoryCard({
   return (
     <button
       className={`story-card ${main ? "main-card" : ""} ${className} ${active ? "active" : ""} ${bouncing ? "card-bounce" : ""}`}
-      style={{ "--card-background": `url("${asset(background)}")` }}
+      style={{ "--card-background": `url("${getResourcesUrl("ui", background)}")` }}
       onClick={handleClick}
       onAnimationEnd={(event) => { if (event.animationName.includes("Bounce") || event.animationName === "cardBounce") { setBouncing(false); onBounceComplete?.(); } }}
       type="button"
     >
-      <img className="card-background" src={asset(background)} alt="" draggable="false" />
+      <img className="card-background" src={getResourcesUrl("ui", background)} alt="" draggable="false" />
       <div className="card-art-wrap">
-        <img className="card-art" src={asset(image)} alt="" draggable="false" />
+        <img className="card-art" src={getResourcesUrl("ui", image)} alt="" draggable="false" />
       </div>
       <div className="card-copy">
         <div className="card-label">{label}</div>

@@ -1,4 +1,4 @@
-import { asset } from "../../public/utils.ts";
+import { getResourcesUrl } from "../../public/utils.ts";
 import { CLUB_STORY_TEXTS, CLUB_STORY_EPISODES } from "../../public/texts/clubtexts.js";
 
 export const CLUB_STORY_PAGES = [
@@ -44,7 +44,7 @@ export const CLUB_STORY_PAGES = [
         id: `club-page-${pageIndex + 1}`, stories: page.map(([id, volume]) => ({
             id,
             volume,
-            image: asset(`mode/Sub_Volume_${volume}.png`)
+            image: getResourcesUrl("scenarioMode", `Sub_Volume_${volume}.png`)
         }))
     })
 );

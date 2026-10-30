@@ -22,8 +22,6 @@ export function L2DInit() {
    * 用来防止dev动画和普通动画都有event时的冲突
    */
   let currentVoice = "";
-  // 背景混合或者其他播放 spine, 如普通星野和运动邮箱
-  let otherItems: Spine[] = [];
   // 当前顶层的spine index
   let currentIndex = 0;
   let startAnimations: ({
@@ -36,9 +34,6 @@ export function L2DInit() {
       clearInterval(timeout);
     }
     timeOutArray = [];
-    otherItems.forEach(it =>
-      app.stage?.removeChild(it as unknown as Container)
-    );
     if (startAnimations) {
       startAnimations.forEach(it =>
         app.stage?.removeChild(it as unknown as Container)
@@ -70,9 +65,7 @@ export function L2DInit() {
   });
   // 停止
   eventBus.on("endL2D", () => {
-    [mainItem, ...otherItems]
-      .filter(Boolean)
-      .forEach(i => app.stage?.removeChild(i));
+    if (mainItem) app.stage?.removeChild(mainItem);
   });
   // 播放live2D
   eventBus.on("playL2D", () => {
@@ -309,16 +302,6 @@ export function L2DInit() {
 
     // 设置名字区分
     mainItem.name = curL2dConfig?.name || "";
-    if (curL2dConfig?.otherSpine) {
-      otherItems = curL2dConfig.otherSpine.map((i, idx) => {
-        const temItem = new Spine(
-          characterSpineData(undefined, getResourcesUrl("otherL2dSpine", i))
-        );
-        temItem.name = i;
-        setSpinePlayInfo({ item: temItem, zIndex: 100 + idx + 1 });
-        return temItem;
-      });
-    }
     setSpinePlayInfo({ item: mainItem, zIndex: 100 });
     // 注意!!! 起始动画中最后一个动作是塞入的待机动作
     startAnimations = mainItem.skeleton.data.animations
@@ -332,16 +315,10 @@ export function L2DInit() {
         };
       });
     if (curL2dConfig?.playQue) {
-      startAnimations = curL2dConfig.playQue.map(i => {
-        return {
-          ...i,
-          // playQue 中的name和otherSpine中的一致
-          spine:
-            i.name === curL2dConfig.name
-              ? mainItem
-              : otherItems.find(j => j.name === i.name)!,
-        };
-      });
+      // 仅播放主 L2D Spine，忽略依赖额外 Spine 文件的队列项
+      startAnimations = curL2dConfig.playQue
+        .filter(i => i.name === curL2dConfig.name)
+        .map(i => ({ ...i, spine: mainItem }));
     }
     // 最后置入一个待机动作
     startAnimations.push({

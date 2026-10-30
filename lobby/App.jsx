@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { Howler } from "howler";
 import { TEXT } from "../public/texts.js";
-import { LANGUAGE_HTML_MAP, AUDIO_FILES, RESOURCE_ROOT, asset, audioAsset, loadResources, getScenarioScriptUrl } from "../public/utils.ts";
+import { LANGUAGE_HTML_MAP, AUDIO_FILES, dataUrl, getResourcesUrl, loadResources } from "../public/utils.ts";
 import { useOrientation } from "./hooks/useOrientation";
 import { useClickEffect } from "./hooks/useClickEffect";
 import { Header } from "./components/Header";
@@ -49,7 +49,7 @@ export function App({ active = true } = {}) {
   };
   const loadAndPlayEpisode = async (story, episode) => {
     const groupId = Number(episode?.GroupId);
-    const url = getScenarioScriptUrl(groupId);
+    const url = Number.isInteger(groupId) && groupId > 0 ? getResourcesUrl("scenarioScript", `${groupId}.json`) : "";
     const requestId = ++storyLoadRequestRef.current;
     setStoryLoading(true);
     setStoryLoadError("");
@@ -278,7 +278,7 @@ export function App({ active = true } = {}) {
     if (!resourcesReady) return;
 
     if (!audioRef.current) {
-      const audio = new Audio(audioAsset(AUDIO_FILES.theme12));
+      const audio = new Audio(getResourcesUrl("bgm", AUDIO_FILES.theme12.name));
       audio.loop = true;
       audioRef.current = audio;
     }
@@ -612,7 +612,7 @@ export function App({ active = true } = {}) {
         className="ba-story-player-page"
         key={`${playingStorySelection.story?.id ?? "story"}-${playingStorySelection.episode?.id ?? "episode"}-${playerReplayKey}`}
         story={loadedStoryData}
-        dataUrl={RESOURCE_ROOT}
+        dataUrl={dataUrl}
         width={Math.max(1, window.innerWidth)}
         height={Math.max(1, window.innerHeight)}
         language={({ cn: "Cn", en: "En", jp: "Jp", tw: "Tw", kr: "Kr", th: "Th" })[language] || "Cn"}

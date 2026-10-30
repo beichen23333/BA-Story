@@ -29,8 +29,6 @@ export type IL2dConfig = {
         }[];
       };
     };
-    /** 实际上是请求的路径 */
-    otherSpine?: string[];
   };
 };
 export type IL2dPlayQue = {

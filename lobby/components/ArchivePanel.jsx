@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { resourceUrl } from "../../public/utils.ts";
+import { getResourcesUrl } from "../../public/utils.ts";
 
 const ARCHIVE_CARDS = [
   { key: "archiveFavor", image: "Replay_Favor.png" },
@@ -34,7 +34,7 @@ export function ArchivePanel({ t, onSelect }) {
   };
   return <section className="archive-panel" aria-label={t.archiveTitle}>
     {ARCHIVE_CARDS.map((card) => <button className={`archive-replay-card ${bouncingKey === card.key ? "archive-replay-card-bounce" : ""}`} type="button" key={card.key} onClick={() => handleSelect(card.key)} onAnimationEnd={(event) => { if (event.animationName === "storyCardBounce" && bouncingKey === card.key) finishSelection(card.key); }}>
-      <div className="archive-replay-image"><img src={resourceUrl("scenarioMode", card.image)} alt="" draggable="false" /></div>
+      <div className="archive-replay-image"><img src={getResourcesUrl("scenarioMode", card.image)} alt="" draggable="false" /></div>
       <div className="archive-replay-title">{t[`${card.key}Title`]}</div>
       <div className="archive-replay-description">{t[`${card.key}Description`]}</div>
     </button>)}

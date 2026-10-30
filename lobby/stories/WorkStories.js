@@ -1,4 +1,4 @@
-import { resourceUrl } from "../../public/utils.ts";
+import { getResourcesUrl } from "../../public/utils.ts";
 import { WORK_STORY_TEXTS, WORK_STORY_EPISODES } from "../../public/texts/worktexts.js";
 
 export const WORK_STORY_PAGES = [
@@ -22,7 +22,7 @@ export const WORK_STORY_PAGES = [
     stories: page.map(([id, volume]) => ({
         id,
         volume,
-        image: resourceUrl("scenarioMode", `Replay_Contents_${id}.png`)
+        image: getResourcesUrl("scenarioMode", `Replay_Contents_${id}.png`)
     }))
 }));
 

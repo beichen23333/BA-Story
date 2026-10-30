@@ -22,22 +22,6 @@ export const l2dConfig: IL2dConfig = {
         animation: "Start_Idle_02",
       },
     ],
-    otherSpine: ["CH0184_home/CH0184_00/CH0184_00"],
-  },
-  CH0198_home: {
-    name: "CH0198_home",
-    playQue: [
-      {
-        name: "CH0198_home",
-        animation: "Start_Idle_01",
-        fadeTime: 4.8,
-        fade: true,
-      },
-      {
-        name: "CH0198_home",
-        animation: "Idle_01",
-      },
-    ],
     spineSettings: {
       CH0198_home: {
         scale: 1.5,
@@ -424,7 +408,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.25,
       },
     },
-    otherSpine: [],
   },
   CH0205_home: {
     name: "CH0205_home",
@@ -441,7 +424,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0209_home: {
     name: "CH0209_home",
@@ -458,7 +440,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0210_home: {
     name: "CH0210_home",
@@ -475,7 +456,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   // 泉奈
   Izuna_home: {
@@ -493,7 +473,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0179_home: {
     name: "CH0179_home",
@@ -510,7 +489,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.9,
       },
     },
-    otherSpine: [],
   },
   // 优香
   Yuuka_home: {
@@ -528,7 +506,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0183_home: {
     name: "CH0183_home",
@@ -545,7 +522,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   // 红叶
   Momiji_home: {
@@ -563,7 +539,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.3,
       },
     },
-    otherSpine: [],
   },
   CH0124_home: {
     name: "CH0124_home",
@@ -580,7 +555,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.3,
       },
     },
-    otherSpine: [],
   },
   CH0185_home: {
     name: "CH0185_home",
@@ -597,7 +571,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0098_home: {
     name: "CH0098_home",
@@ -614,7 +587,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0193_home: {
     name: "CH0193_home",
@@ -631,7 +603,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0169_home: {
     name: "CH0169_home",
@@ -648,7 +619,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.4,
       },
     },
-    otherSpine: [],
   },
   // 咏叶（歌原）
   Utaha_home: {
@@ -666,7 +636,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0071_home: {
     name: "CH0071_home",
@@ -683,7 +652,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.1,
       },
     },
-    otherSpine: [],
   },
   CH0089_home: {
     name: "CH0089_home",
@@ -709,7 +677,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   // 水梓
   Azusa_swimsuit_home: {
@@ -727,7 +694,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0123_home: {
     name: "CH0123_home",
@@ -744,7 +710,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0176_home: {
     name: "CH0176_home",
@@ -761,7 +726,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0058_home: {
     name: "CH0058_home",
@@ -778,7 +742,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.2,
       },
     },
-    otherSpine: [],
   },
   CH9997_home: {
     name: "CH9997_home",
@@ -795,7 +758,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.7,
       },
     },
-    otherSpine: [],
   },
   CH9998_home: {
     name: "CH9998_home",
@@ -812,7 +774,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH9996_home: {
     name: "CH9996_home",
@@ -829,7 +790,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.72,
       },
     },
-    otherSpine: [],
   },
   CH0161_home: {
     name: "CH0161_home",
@@ -846,7 +806,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.3,
       },
     },
-    otherSpine: [],
   },
   CH0224_home: {
     name: "CH0224_home",
@@ -863,7 +822,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.3,
       },
     },
-    otherSpine: [],
   },
   CH0225_home: {
     name: "CH0225_home",
@@ -880,7 +838,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   // 晴
   Hare_home: {
@@ -898,7 +855,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0219_home: {
     name: "CH0219_home",
@@ -915,7 +871,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0232_home: {
     name: "CH0232_home",
@@ -932,7 +887,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.1,
       },
     },
-    otherSpine: [],
   },
   CH0233_home: {
     name: "CH0233_home",
@@ -949,7 +903,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.5,
       },
     },
-    otherSpine: [],
   },
   CH0230_home: {
     name: "CH0230_home",
@@ -966,7 +919,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.5,
       },
     },
-    otherSpine: [],
   },
   CH0231_home: {
     name: "CH0231_home",
@@ -983,7 +935,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   // 伊吹
   Ibuki_home: {
@@ -1001,7 +952,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.1,
       },
     },
-    otherSpine: [],
   },
   CH0079_home: {
     name: "CH0079_home",
@@ -1018,7 +968,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0239_home: {
     name: "CH0239_home",
@@ -1035,7 +984,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0240_home: {
     name: "CH0240_home",
@@ -1052,7 +1000,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1,
       },
     },
-    otherSpine: [],
   },
   CH0196_home: {
     name: "CH0196_home",
@@ -1069,7 +1016,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.4,
       },
     },
-    otherSpine: [],
   },
   CH0110_home: {
     name: "CH0110_home",
@@ -1086,7 +1032,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.24,
       },
     },
-    otherSpine: [],
   },
   CH0255_home: {
     name: "CH0255_home",
@@ -1103,7 +1048,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.2,
       },
     },
-    otherSpine: [],
   },
   CH0155_home: {
     name: "CH0155_home",
@@ -1120,7 +1064,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   // 渚
   Nagisa_home: {
@@ -1138,7 +1081,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 3.0,
       },
     },
-    otherSpine: [],
   },
   Azusa_home: {
     name: "Azusa_home",
@@ -1155,7 +1097,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0095_home: {
     name: "CH0095_home",
@@ -1172,7 +1113,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0220_home: {
     name: "CH0220_home",
@@ -1189,7 +1129,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0250_home: {
     name: "CH0250_home",
@@ -1206,7 +1145,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.3,
       },
     },
-    otherSpine: [],
   },
   CH0251_home: {
     name: "CH0251_home",
@@ -1223,7 +1161,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.4,
       },
     },
-    otherSpine: [],
   },
   CH0201_home: {
     name: "CH0201_home",
@@ -1240,7 +1177,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0202_home: {
     name: "CH0202_home",
@@ -1257,7 +1193,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0189_home: {
     name: "CH0189_home",
@@ -1274,7 +1209,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.2,
       },
     },
-    otherSpine: [],
   },
   CH0258_home: {
     name: "CH0258_home",
@@ -1291,7 +1225,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.3,
       },
     },
-    otherSpine: [],
   },
   CH0260_home: {
     name: "CH0260_home",
@@ -1308,7 +1241,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0266_home: {
     name: "CH0266_home",
@@ -1325,7 +1257,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.3,
       },
     },
-    otherSpine: [],
   },
   CH0269_home: {
     name: "CH0269_home",
@@ -1342,7 +1273,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.5,
       },
     },
-    otherSpine: [],
   },
   CH0263_home: {
     name: "CH0263_home",
@@ -1368,7 +1298,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0267_home: {
     name: "CH0267_home",
@@ -1401,7 +1330,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0216_home: {
     name: "CH0216_home",
@@ -1418,7 +1346,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.2,
       },
     },
-    otherSpine: [],
   },
   CH0262_home: {
     name: "CH0262_home",
@@ -1435,7 +1362,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.0,
       },
     },
-    otherSpine: [],
   },
   CH0270_home: {
     name: "CH0270_home",
@@ -1452,7 +1378,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.5,
       },
     },
-    otherSpine: [],
   },
   CH0271_home: {
     name: "CH0271_home",
@@ -1469,7 +1394,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.2,
       },
     },
-    otherSpine: [],
   },
   CH0178_home: {
     name: "CH0178_home",
@@ -1486,7 +1410,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.8,
       },
     },
-    otherSpine: [],
   },
   CH0139_home: {
     name: "CH0139_home",
@@ -1503,7 +1426,6 @@ export const l2dConfig: IL2dConfig = {
         scale: 1.4,
       },
     },
-    otherSpine: [],
   },
   // 丽情（俪舒）
   Reizyo_home: {
@@ -1530,7 +1452,6 @@ export const l2dConfig: IL2dConfig = {
         ],
       },
     },
-    otherSpine: [],
   },
   CH0238_home: {
     name: "CH0238_home",
@@ -1548,7 +1469,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   CH0284_home: {
     name: "CH0284_home",
@@ -1566,7 +1486,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   CH0285_home: {
     name: "CH0285_home",
@@ -1584,7 +1503,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   CH0080_home: {
     name: "CH0080_home",
@@ -1602,7 +1520,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 和纱
   Kazusa_home: {
@@ -1621,7 +1538,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   Serika_home: {
     name: "Serika_home",
@@ -1639,7 +1555,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   Miyako_home: {
     name: "Miyako_home",
@@ -1657,7 +1572,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   Hoshino_home: {
     name: "Hoshino_home",
@@ -1680,9 +1594,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [
-      "hoshino_home/hoshino_home_background/hoshino_home_background",
-    ],
   },
   CH0280_home: {
     name: "CH0280_home",
@@ -1700,7 +1611,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   CH0070_home: {
     name: "CH0070_home",
@@ -1718,7 +1628,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   CH0281_home: {
     name: "CH0281_home",
@@ -1736,7 +1645,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   CH0282_home: {
     name: "CH0282_home",
@@ -1754,7 +1662,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   CH0158_home: {
     name: "CH0158_home",
@@ -1772,7 +1679,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 正月芹香
   Serika_newyear_home: {
@@ -1791,7 +1697,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 真纪（露营）
   CH0235_home: {
@@ -1810,7 +1715,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 伊织
   Iori_home: {
@@ -1828,7 +1732,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 心奈
   CH0137_home: {
@@ -1847,7 +1750,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 阿露（正月）
   Aru_newyear_home: {
@@ -1864,7 +1766,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 茱莉（打工）
   CH0286_home: {
@@ -1883,7 +1784,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 濑名（常服）
   CH0082_home: {
@@ -1902,7 +1802,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 静子
   Shizuko_home: {
@@ -1921,7 +1820,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 爱莉
   Airi_home: {
@@ -1940,7 +1838,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 玛丽
   Mari_home: {
@@ -1959,7 +1856,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 芹奈
   Serina_home: {
@@ -1978,7 +1874,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 芹奈（圣诞）
   CH0194_home: {
@@ -1997,7 +1892,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 爱丽丝
   Aris_home: {
@@ -2016,7 +1910,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 艾米
   Eimi_home: {
@@ -2035,7 +1928,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   // 白子（骑行）
   Shiroko_ridingsuit_home: {
@@ -2054,7 +1946,6 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
   CH0294_home: {
     name: "CH0294_home",
@@ -2072,6 +1963,5 @@ export const l2dConfig: IL2dConfig = {
         customizeBones: [],
       },
     },
-    otherSpine: [],
   },
 };

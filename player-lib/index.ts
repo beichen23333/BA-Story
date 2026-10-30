@@ -691,9 +691,6 @@ export const resourcesLoader = {
       if (unit.l2d) {
         const l2dUrl = unit.l2d.spineUrl;
         checkloadAssetAlias(l2dUrl, l2dUrl);
-        playerStore.curL2dConfig?.otherSpine?.forEach(i =>
-          this.checkAndAdd(utils.getResourcesUrl("otherL2dSpine", i))
-        );
         playerStore.setL2DSpineUrl(unit.l2d.spineUrl);
       }
     }
@@ -765,7 +762,7 @@ export const resourcesLoader = {
   async addFXResources() {
     for (const fxImages of playerStore.fxImageTable.values()) {
       for (const url of fxImages) {
-        checkloadAssetAlias(url, utils.getResourcesUrl("fx", url));
+        checkloadAssetAlias(url, utils.getResourcesUrl("bgEffectImgs", url));
       }
     }
   },

@@ -8,7 +8,6 @@ export type OtherSoundsUrls = {
 export type ResourcesTypes =
   | "emotionImg"
   | "emotionSound"
-  | "fx"
   | "l2dSpine"
   | "l2dVoice"
   | "excel"
@@ -19,10 +18,14 @@ export type ResourcesTypes =
   | "voiceKr"
   | "characterSpine"
   | "bg"
+  | "lobbyBg"
   | "otherSound"
-  | "otherL2dSpine"
   | "bgEffectImgs"
   | "avatar"
   | "video"
   | "popupImage"
-  | "bgEffectSounds";
+  | "bgEffectSounds"
+  | "ui"
+  | "scenarioMode"
+  | "font"
+  | "scenarioScript";

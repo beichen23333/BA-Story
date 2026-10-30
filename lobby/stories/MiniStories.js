@@ -1,4 +1,4 @@
-import { asset } from "../../public/utils.ts";
+import { getResourcesUrl } from "../../public/utils.ts";
 import { MINI_STORY_TEXTS, MINI_STORY_EPISODES } from "../../public/texts/minitexts.js";
 
 export const MINI_STORY_PAGES = [
@@ -30,7 +30,7 @@ export const MINI_STORY_PAGES = [
         id: `mini-page-${pageIndex + 1}`, stories: page.map(([id, volume]) => ({
             id,
             volume,
-            image: asset(`mode/Mini_Volume_${volume}.png`)
+            image: getResourcesUrl("scenarioMode", `Mini_Volume_${volume}.png`)
         }))
     })
 );
