@@ -45,7 +45,7 @@ export type PlayerProps = {
   storySummary: StorySummary;
   startFullScreen?: boolean;
   useMp3?: boolean;
-  useSuperSampling?: "2" | "4" | "" | boolean;
+  usePC?: boolean;
   /** 跳转至传入的 index */
   changeIndex?: number;
   /**
@@ -62,6 +62,7 @@ const props = withDefaults(defineProps<PlayerProps>(), {
   voiceLanguage: "jp",
   startFullScreen: false,
   useMp3: false,
+  usePC: false,
   enableClickFx: true,
 });
 const storySummary = ref({ ...props.storySummary });

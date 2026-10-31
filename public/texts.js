@@ -467,6 +467,9 @@ export const PLAYER_UI_TEXTS = {
     menu: "菜单",
     log: "对话记录",
     summary: "概要",
+    summaryCancel: "取消",
+    summaryConfirm: "确认",
+    summarySkipPrompt: "※是否跳过该故事？",
     close: "关闭",
     setting: "设置",
     volume: "音量",
@@ -499,6 +502,9 @@ export const PLAYER_UI_TEXTS = {
   en: {
     log: "LOG",
     summary: "Summary",
+    summaryCancel: "Cancel",
+    summaryConfirm: "Confirm",
+    summarySkipPrompt: "※Skip this story?",
     close: "Close",
     setting: "Setting",
     volume: "Volume",
@@ -533,6 +539,9 @@ export const PLAYER_UI_TEXTS = {
   jp: {
     log: "ログ",
     summary: "あらすじ",
+    summaryCancel: "キャンセル",
+    summaryConfirm: "確認",
+    summarySkipPrompt: "※このストーリーをスキップしますか？",
     close: "閉じる",
     setting: "設定",
     volume: "ボリューム",
@@ -565,6 +574,9 @@ export const PLAYER_UI_TEXTS = {
   kr: {
     log: "로그",
     summary: "요약",
+    summaryCancel: "취소",
+    summaryConfirm: "확인",
+    summarySkipPrompt: "※이 이야기를 건너뛰시겠습니까?",
     close: "닫기",
     setting: "설치",
     volume: "볼륨",
@@ -597,6 +609,9 @@ export const PLAYER_UI_TEXTS = {
   tw: {
     log: "對話記錄",
     summary: "概要",
+    summaryCancel: "取消",
+    summaryConfirm: "確認",
+    summarySkipPrompt: "※是否跳過這個故事？",
     close: "關閉",
     setting: "設定",
     volume: "音量",
@@ -631,6 +646,9 @@ export const PLAYER_UI_TEXTS = {
     menu: "เมนู",
     log: "บันทึกการสนทนา",
     summary: "สรุป",
+    summaryCancel: "ยกเลิก",
+    summaryConfirm: "ยืนยัน",
+    summarySkipPrompt: "※ข้ามเรื่องนี้หรือไม่?",
     close: "ปิด",
     setting: "การตั้งค่า",
     volume: "ระดับเสียง",
@@ -668,55 +686,31 @@ Object.assign(PLAYER_UI_TEXTS.cn, {
     "audio-format-tip": "音频格式选项",
     "audio-format-mp4": "mp4 格式",
     "audio-format-obb": "obb 格式",
-    "super-resolution-tip": "超分选项",
-    "super-resolution-disable": "禁用超分",
-    "super-resolution-2x": "2x",
-    "super-resolution-4x": "4x",
 });
 Object.assign(PLAYER_UI_TEXTS.en, {
     "audio-format-tip": "Audio format",
     "audio-format-mp4": "MP4 format",
     "audio-format-obb": "OBB format",
-    "super-resolution-tip": "Supersampling",
-    "super-resolution-disable": "Disable supersampling",
-    "super-resolution-2x": "2x",
-    "super-resolution-4x": "4x",
 });
 Object.assign(PLAYER_UI_TEXTS.jp, {
     "audio-format-tip": "音声形式",
     "audio-format-mp4": "MP4形式",
     "audio-format-obb": "OBB形式",
-    "super-resolution-tip": "高解像度化",
-    "super-resolution-disable": "高解像度化を無効",
-    "super-resolution-2x": "2x",
-    "super-resolution-4x": "4x",
 });
 Object.assign(PLAYER_UI_TEXTS.kr, {
     "audio-format-tip": "오디오 형식",
     "audio-format-mp4": "MP4 형식",
     "audio-format-obb": "OBB 형식",
-    "super-resolution-tip": "슈퍼 샘플링",
-    "super-resolution-disable": "슈퍼 샘플링 비활성화",
-    "super-resolution-2x": "2x",
-    "super-resolution-4x": "4x",
 });
 Object.assign(PLAYER_UI_TEXTS.tw, {
     "audio-format-tip": "音訊格式選項",
     "audio-format-mp4": "mp4 格式",
     "audio-format-obb": "obb 格式",
-    "super-resolution-tip": "超分選項",
-    "super-resolution-disable": "停用超分",
-    "super-resolution-2x": "2x",
-    "super-resolution-4x": "4x",
 });
 Object.assign(PLAYER_UI_TEXTS.th, {
     "audio-format-tip": "รูปแบบเสียง",
     "audio-format-mp4": "รูปแบบ MP4",
     "audio-format-obb": "รูปแบบ OBB",
-    "super-resolution-tip": "ซูเปอร์แซมปลิง",
-    "super-resolution-disable": "ปิดซูเปอร์แซมปลิง",
-    "super-resolution-2x": "2x",
-    "super-resolution-4x": "4x",
 });
 
 const PLAYER_UI_EXTRA_TEXTS = {

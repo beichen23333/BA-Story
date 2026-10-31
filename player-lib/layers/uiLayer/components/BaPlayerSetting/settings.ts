@@ -17,28 +17,6 @@ export const ObbAudioSetting: BaRadioData = {
   ],
 };
 
-export const SuperResolutionSetting: BaRadioData = {
-  name: "SuperResolutionSetting",
-  tip: "super-resolution-tip",
-  options: [
-    {
-      id: "SuperResolutionSetting-disable",
-      label: "super-resolution-disable",
-      value: "disable",
-    },
-    {
-      id: "SuperResolutionSetting-2x",
-      label: "super-resolution-2x",
-      value: "4x",
-    },
-    {
-      id: "SuperResolutionSetting-4x",
-      label: "super-resolution-4x",
-      value: "4x",
-    },
-  ],
-};
-
 export const MasterVolumeSetting: BaSliderData = {
   name: "volume-master",
   tip: "",

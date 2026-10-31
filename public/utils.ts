@@ -7,7 +7,7 @@ import type { Spine } from "@esotericsoftware/spine-pixi-v7";
 // ============================================================
 export let dataUrl = "https://res.bluearchive.help/image/ba-all-data";
 let oggAudioType = "ogg";
-let superSampling = "";
+let pcMode = false;
 let otherSoundMap: OtherSoundsUrls = {
   select: `${dataUrl}/Audio/Sound/UI_Button_Touch.wav`,
   bg_underfire: `${dataUrl}/Audio/Sound/UI_FX_BG_UnderFire.wav`,
@@ -51,19 +51,12 @@ export function getResourcesUrl(type: ResourcesTypes, arg: string): string {
       if (id?.endsWith("ND")) id = id.slice(0, -2);
       const filename = `${id}_spr`;
       const directory = filename.toLowerCase();
-      return superSampling
-        ? `${dataUrl}/UIs/03_Scenario/02_Character/${directory}/${directory}${superSampling}/${filename}.skel`
-        : `${dataUrl}/UIs/03_Scenario/02_Character/${directory}/${filename}.skel`;
+      const characterRoot = pcMode ? "02_Character_PC" : "02_Character";
+      return `${dataUrl}/UIs/03_Scenario/${characterRoot}/${directory}/${filename}.skel`;
     }
     case "lobbyBg":
       return `${dataUrl}/UIs/00_Images/Bg/${arg}`;
     case "bg":
-      if (superSampling && /01_Background/.test(arg)) {
-        const pathArr = arg.split("/");
-        const lastFileName = pathArr.pop();
-        const dir = pathArr.join("/");
-        return `${dataUrl}/${dir}/01_Background${superSampling}/${lastFileName}.png`;
-      }
       return `${dataUrl}/${arg}.jpg`;
     case "otherSound":
       return Reflect.get(otherSoundMap, arg) || "";
@@ -103,9 +96,9 @@ export function setOggAudioType(audioType: "mp3") {
   oggAudioType = audioType;
 }
 
-/** 设置 Spine 超采样倍率。 */
-export function setSuperSampling(type: "2" | "4" | "" | boolean) {
-  superSampling = type === true ? "-2x" : `-${type}x`;
+/** 设置 PC 角色 Spine 资源模式。 */
+export function setPCMode(enabled: boolean): void {
+  pcMode = Boolean(enabled);
 }
 
 /** 获取本体资源加载所需的其他特效音地址。 */

@@ -559,9 +559,9 @@ export async function init(
     return;
   }
 
-  const { useMp3, useSuperSampling } = props;
+  const { useMp3, usePC } = props;
   useMp3 && utils.setOggAudioType("mp3");
-  useSuperSampling && utils.setSuperSampling(useSuperSampling);
+  utils.setPCMode(Boolean(usePC));
   storyHandler.endCallback = endCallback;
   storyHandler.errorCallback = errorCallback;
   /* 用于 dispose 后的重新加载 */

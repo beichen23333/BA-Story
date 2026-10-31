@@ -15,7 +15,7 @@ const StoryPlayer = forwardRef(function StoryPlayer(
     storySummary = false,
     startFullScreen = false,
     useMp3 = false,
-    useSuperSampling = false,
+    usePC = false,
     changeIndex,
     exitFullscreenTimeOut,
     enableClickFx = false,
@@ -48,7 +48,7 @@ const StoryPlayer = forwardRef(function StoryPlayer(
       storySummary,
       startFullScreen,
       useMp3,
-      useSuperSampling,
+      usePC,
       changeIndex,
       exitFullscreenTimeOut,
       enableClickFx,
@@ -112,12 +112,12 @@ const StoryPlayer = forwardRef(function StoryPlayer(
       storySummary,
       startFullScreen,
       useMp3,
-      useSuperSampling,
+      usePC,
       changeIndex,
       exitFullscreenTimeOut,
       enableClickFx,
     });
-  }, [story, dataUrl, width, height, language, voiceLanguage, userName, storySummary, startFullScreen, useMp3, useSuperSampling, changeIndex, exitFullscreenTimeOut, enableClickFx]);
+  }, [story, dataUrl, width, height, language, voiceLanguage, userName, storySummary, startFullScreen, useMp3, usePC, changeIndex, exitFullscreenTimeOut, enableClickFx]);
 
   return (
     <div

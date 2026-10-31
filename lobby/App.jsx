@@ -67,6 +67,7 @@ export function App({ active = true } = {}) {
       if (!data || typeof data !== "object" || Array.isArray(data) || !Array.isArray(data.content) || data.content.length === 0) throw new Error("INVALID_STORY_DATA");
       if (requestId !== storyLoadRequestRef.current) return;
       setLoadedStoryData(data);
+      storyExitTransitionRef.current = false;
       setPlayerReplayKey(0);
       setPlayingStorySelection({ story, episode });
     } catch (error) {
@@ -99,6 +100,8 @@ export function App({ active = true } = {}) {
   const [selectedStory, setSelectedStory] = useState(null);
   const [storyInfoSelection, setStoryInfoSelection] = useState(null);
   const [playingStorySelection, setPlayingStorySelection] = useState(null);
+  const playingStorySelectionRef = useRef(null);
+  playingStorySelectionRef.current = playingStorySelection;
   const [loadedStoryData, setLoadedStoryData] = useState(null);
   const [storyLoading, setStoryLoading] = useState(false);
   const [storyLoadError, setStoryLoadError] = useState("");
@@ -109,12 +112,19 @@ export function App({ active = true } = {}) {
   const workDetailTransitionLock = useRef(false);
   const [storyTransitionPending, setStoryTransitionPending] = useState(false);
   const [blackout, setBlackout] = useState("");
+  const storyExitTransitionRef = useRef(false);
   const [storyPageIndex, setStoryPageIndex] = useState(0);
   const [flipPhase, setFlipPhase] = useState("");
   const [flipDirection, setFlipDirection] = useState("next");
   const pageFlipTimer = useRef(null);
   const sceneTransitionTimer = useRef(null);
 
+
+  useEffect(() => {
+    const handleStoryPlayerExit = () => exitStoryPlayer();
+    window.addEventListener("ba-story-player-exit", handleStoryPlayerExit);
+    return () => window.removeEventListener("ba-story-player-exit", handleStoryPlayerExit);
+  }, []);
 
   useEffect(() => {
     if (!playingStorySelection) return undefined;
@@ -395,6 +405,15 @@ export function App({ active = true } = {}) {
     }, 620);
   };
 
+  const exitStoryPlayer = () => {
+    if (storyExitTransitionRef.current || !playingStorySelectionRef.current) return;
+    storyExitTransitionRef.current = true;
+    runBlackoutTransition(() => {
+      setPlayingStorySelection(null);
+      setLoadedStoryData(null);
+    });
+  };
+
   const returnToScenarioMenu = () => {
     detailTransitionLock.current = false;
     workDetailTransitionLock.current = false;
@@ -621,7 +640,8 @@ export function App({ active = true } = {}) {
         storySummary={{ chapterName: playingStorySelection.episode?.title || playingStorySelection.story?.title || "剧情", summary: playingStorySelection.episode?.description || `${playingStorySelection.episode?.title || playingStorySelection.story?.title || "剧情"}。` }}
         startFullScreen={false}
         useMp3={false}
-        useSuperSampling={false}
+        usePC={false}
+        onEnd={exitStoryPlayer}
         onError={() => {}}
       />}
       {storyLoading && <div role="status" style={{ position: "fixed", inset: 0, zIndex: 2147483001, display: "grid", placeItems: "center", background: "rgba(8, 16, 28, .82)", color: "#fff", fontSize: "clamp(18px, 2vw, 28px)", fontWeight: 700 }}>{(TEXT[language] || TEXT.cn).storyLoading}</div>}

@@ -93,6 +93,10 @@ function handleBtnSkipSummary() {
   autoMode.value = false;
   showSummary.value = true;
 }
+function handleSummaryConfirm() {
+  showSummary.value = false;
+  window.dispatchEvent(new CustomEvent("ba-story-player-exit"));
+}
 function handleBtnSetting() {
   eventBus.emit("playOtherSounds", "select");
   refreshBtnMenuTimer();
@@ -310,22 +314,21 @@ function getI18n(key: string) {
       id="ba-story-summary"
       :title="getI18n('summary')"
       v-model:show="showSummary"
-      width="70%"
-      height="85%"
+      width="min(430px, 88vw)"
+      height="min(310px, 76vh)"
     >
       <div class="ba-story-summary-container">
         <h4 class="ba-story-summary-title">{{ storySummary.chapterName }}</h4>
         <p class="ba-story-summary-text">
           {{ storySummary.summary }}
         </p>
+        <p class="ba-story-summary-skip-prompt">{{ getI18n("summarySkipPrompt") }}</p>
         <div class="ba-story-summary-button-group">
-          <BaButton
-            size="middle"
-            class="polylight button-close-summary"
-            @click="showSummary = false"
-            style="width: 96%"
-          >
-            {{ getI18n("close") }}
+          <BaButton size="middle" class="polylight button-summary-cancel" @click="showSummary = false">
+            {{ getI18n("summaryCancel") }}
+          </BaButton>
+          <BaButton size="middle" class="button-summary-confirm" @click="handleSummaryConfirm">
+            {{ getI18n("summaryConfirm") }}
           </BaButton>
         </div>
       </div>
@@ -415,6 +418,20 @@ function getI18n(key: string) {
       }
     }
 
+    /* 右上角「自动 / 菜单」改为加宽的 2:1 横向矩形 */
+    :deep(.ba-button-auto),
+    :deep(.ba-button-menu) {
+      width: 5.2em;
+      height: 2.6em;
+      min-width: 0;
+      box-sizing: border-box;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+    }
+
     .ba-button-auto:enabled.activated {
       background: no-repeat right -17% bottom/contain url(/assets/Common_Btn_Normal_Y_S_Pt.webp)
         #efe34b;
@@ -484,33 +501,55 @@ function getI18n(key: string) {
     }
 
     .ba-story-summary-title {
-      margin: 0.4em 0;
+      margin: 0.02em 0 0.2em;
+      transform: translateY(-0.2em);
       color: #32363c;
       font-weight: bold;
-      font-size: 1.5em;
+      font-size: 1.2em;
       text-align: center;
     }
 
     .ba-story-summary-text {
       flex: 1;
-      margin: 0 1em;
+      margin: -0.32em 1.55em 0;
       border: solid #d1d7dc 2px;
       border-radius: 0.25em;
       background-color: #f0f0f0;
-      padding: 0.3125em 0.4375em;
+      padding: 0.28em 0.42em;
       overflow-y: auto;
-      font-size: 1.4em;
+      font-size: 0.96em;
+    }
+
+    .ba-story-summary-skip-prompt {
+      flex: 0 0 auto;
+      margin: 0.32em 0 0;
+      text-align: center;
+      font-size: 0.92em;
+      color: #32363c;
     }
 
     .ba-story-summary-button-group {
       display: flex;
       justify-content: center;
       align-items: center;
-      margin: 1em 1em 1em;
+      gap: 4%;
+      width: 78%;
+      margin: 0.42em auto 0.58em;
 
-      .button-close-summary {
-        width: 50%;
+      :deep(.ba-button) {
+        width: 48.5%;
+        min-width: 0;
+        padding: 0.42em 0.82em;
         cursor: pointer;
+        transition: transform 0.15s ease, background-color 0s, color 0s;
+      }
+      :deep(.button-summary-cancel), :deep(.button-summary-cancel:hover), :deep(.button-summary-cancel:active) {
+        background: #ffffff;
+        color: #2d4665;
+      }
+      :deep(.button-summary-confirm), :deep(.button-summary-confirm:hover), :deep(.button-summary-confirm:active) {
+        background: #25c5e8;
+        color: #2d4665;
       }
     }
   }
