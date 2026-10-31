@@ -27,6 +27,19 @@ type IStoryRawUnitParserUnit = {
 };
 // [\u2E80-\u9FFF]
 const StoryRawUnitParserUnit: IStoryRawUnitParserUnit = {
+  ending: {
+    reg: /#ending;([^;\n]+)/i,
+    fn(match: RegExpExecArray, unit: StoryUnit, rawUnit: StoryRawUnit) {
+      unit.type = "ending";
+      unit.textAbout.showText.text = [
+        {
+          content: getText(rawUnit, usePlayerStore().language).trim(),
+          effects: [],
+        },
+      ];
+      return unit;
+    },
+  },
   title: {
     reg: /#title;([^;\n]+);?([^;\n]+)?;?/i,
     fn(match: RegExpExecArray, unit: StoryUnit, rawUnit: StoryRawUnit) {

@@ -41,7 +41,7 @@ function handleClose() {
           <button class="ba-dialog-close button-nostyle" @click="handleClose">
             <i style="user-select: none">
               <img
-                src="/assets/close.svg"
+                :src="'/assets/close.svg'"
                 alt="close dialog"
                 style="width: 1em; height: 1em; vertical-align: -0.15em"
               />

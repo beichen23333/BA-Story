@@ -8,6 +8,18 @@
     }"
     @click="simulateUiClick"
   >
+    <div v-if="endingVisible" ref="endingOverlay" class="ending-overlay" @click.stop>
+      <div class="ending-backdrop"></div>
+      <div class="ending-content">
+        <div ref="endingLabel" class="ending-label">{{ endingText }}</div>
+        <img
+          ref="endingStamp"
+          class="ending-stamp"
+          :src="'/assets/Scenario_Complete.png'"
+          alt="Scenario Complete"
+        />
+      </div>
+    </div>
     <div
       class="container-inner"
       :class="{ 'prevent-interact': preventInteract }"
@@ -116,10 +128,10 @@
           class="title-border"
           :style="{ '--side-padding': `${titleBorderPadding}px` }"
         >
-          <img src="/assets/title_border__upper_left.svg" alt="upper-left" />
-          <img src="/assets/title_border__upper_right.svg" alt="upper-right" />
-          <img src="/assets/title_border__lower_right.svg" alt="lower-right" />
-          <img src="/assets/title_border__lower_left.svg" alt="lower-left" />
+          <img :src="'/assets/title_border__upper_left.svg'" alt="upper-left" />
+          <img :src="'/assets/title_border__upper_right.svg'" alt="upper-right" />
+          <img :src="'/assets/title_border__lower_right.svg'" alt="lower-right" />
+          <img :src="'/assets/title_border__lower_left.svg'" alt="lower-left" />
           <div
             ref="titleContain"
             class="title-contain"
@@ -230,6 +242,12 @@ import {
 import { useThrottleFn } from "@vueuse/core";
 
 const state = useUiState();
+const endingVisible = ref(false);
+const endingText = ref("");
+const endingOverlay = ref<HTMLElement>();
+const endingLabel = ref<HTMLElement>();
+const endingStamp = ref<HTMLImageElement>();
+let endingTimeline: gsap.core.Timeline | undefined;
 const textDialogWidth = ref(0);
 const TextDialog = ref<HTMLElement>() as Ref<HTMLElement>; // 文本框长度, 用于计算tooltip最大位置
 const toBeContinuedBg0 = ref<HTMLElement>(); // to be continued的背景
@@ -792,7 +810,39 @@ function onStContainerClick() {
     eventBus.emit("click");
   }
 }
+function handleShowEnding(value: string) {
+  eventBus.emit("hideAllUI");
+  endingTimeline?.kill();
+  endingText.value = value;
+  endingVisible.value = true;
+  nextTick(() => {
+    if (!endingOverlay.value || !endingLabel.value || !endingStamp.value) return;
+    gsap.set(endingOverlay.value, { opacity: 1 });
+    gsap.set(endingLabel.value, { opacity: 1 });
+    gsap.set(endingStamp.value, { opacity: 0, scale: 2.8, transformOrigin: "center center" });
+    endingTimeline = gsap.timeline({
+      delay: 0.3,
+      onComplete: () => {
+        endingVisible.value = false;
+        eventBus.emit("endingDone");
+      },
+    });
+    endingTimeline.to(endingStamp.value, {
+      opacity: 1,
+      scale: 1,
+      duration: 1.25,
+      ease: "power2.out",
+    });
+    endingTimeline.to({}, { duration: 1.5 });
+    endingTimeline.to(endingOverlay.value, {
+      opacity: 0,
+      duration: 1,
+      ease: "power1.out",
+    });
+  });
+}
 onMounted(() => {
+  eventBus.on("showEnding", handleShowEnding);
   eventBus.on("option", doPreventInteract);
   eventBus.on("select", exitPreventInteract);
   eventBus.on("resize", updateTextDialogWidth);
@@ -817,6 +867,8 @@ onMounted(() => {
   eventBus.on("replayStory", handleReplayStory);
 });
 onUnmounted(() => {
+  endingTimeline?.kill();
+  eventBus.off("showEnding", handleShowEnding);
   eventBus.off("option", doPreventInteract);
   eventBus.off("select", exitPreventInteract);
   eventBus.off("resize", updateTextDialogWidth);
@@ -1305,5 +1357,51 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   width: 100%;
   height: 100%;
   overflow: hidden;
+}
+</style>
+
+<style lang="scss">
+.ending-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2147483647;
+  overflow: hidden;
+  pointer-events: all;
+  background: rgba(8, 10, 12, 0.28);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.ending-content {
+  position: absolute;
+  right: 4%;
+  bottom: 8%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(12px, 1.8vw, 28px);
+  width: min(78%, 1100px);
+  pointer-events: none;
+}
+.ending-label {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: calc(100% - min(12vw, 18vh) - clamp(12px, 1.8vw, 28px));
+  color: #fff;
+  font-size: clamp(22px, 3.1vw, 54px);
+  line-height: 1.25;
+  font-weight: 800;
+  text-align: right;
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+.ending-stamp {
+  position: relative;
+  flex: 0 0 min(12vw, 18vh);
+  width: min(12vw, 18vh);
+  max-width: 150px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0;
+  pointer-events: none;
 }
 </style>

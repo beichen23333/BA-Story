@@ -18,7 +18,7 @@ import { characterInit } from "@/layers/characterLayer";
 import { effectInit } from "@/layers/effectLayer";
 import { soundInit } from "@/layers/soundLayer";
 import { translate } from "@/layers/translationLayer";
-import { buildStoryIndexStackRecord } from "@/layers/translationLayer/utils";
+import { buildStoryIndexStackRecord, getVoiceUrl } from "@/layers/translationLayer/utils";
 import { disposeUiState, useUiState } from "@/stores/state";
 import { PlayerConfigs, StoryUnit } from "@/types/common";
 import { watch } from "vue";
@@ -43,12 +43,15 @@ Howler.autoSuspend = false;
 let playerStore = usePlayerStore();
 let privateState = initPrivateState();
 
+
+
 /**
  * 多余的不能识别出l2d音频的事件名
  */
 const unexistL2dSoundEvent = ["sound/Nonomi_MemorialLobby_3_3"];
 
 const assetLoadPromises = new Map<string, Promise<unknown>>();
+let voiceLanguageChangeHandler: ((event: Event) => void) | undefined;
 
 export async function checkloadAssetAlias(alias: string, url: string) {
   if (resourcesLoader.loadedList.includes(alias)) {
@@ -79,6 +82,10 @@ export function continuePlay() {
  * 回收播放器资源, 让播放器回到初始状态
  */
 export function dispose() {
+  if (voiceLanguageChangeHandler) {
+    window.removeEventListener("ba-story-voice-language-change", voiceLanguageChangeHandler);
+    voiceLanguageChangeHandler = undefined;
+  }
   eventBus.emit("removeEffect");
   eventBus.emit("dispose");
   initPrivateState().app?.destroy();
@@ -106,6 +113,7 @@ export const eventEmitter = {
   isStoryLogShow: false,
   toBeContinueDone: true,
   nextEpisodeDone: true,
+  endingDone: true,
   /** 当前l2d动画是否播放完成 */
   l2dAnimationDone: true,
   VoiceJpDone: true,
@@ -165,6 +173,10 @@ export const eventEmitter = {
     eventBus.on("effectDone", () => (eventEmitter.effectDone = true));
     eventBus.on("characterDone", () => (eventEmitter.characterDone = true));
     eventBus.on("titleDone", () => (this.titleDone = true));
+    eventBus.on("endingDone", () => {
+      this.endingDone = true;
+      storyHandler.end();
+    });
     eventBus.on("stDone", () => (this.stDone = true));
     eventBus.on("l2dAnimationDone", e => {
       if (e.done) {
@@ -262,6 +274,10 @@ export const eventEmitter = {
   actionByUnitType(currentStoryUnit?: StoryUnit) {
     currentStoryUnit = currentStoryUnit ?? storyHandler.currentStoryUnit;
     switch (currentStoryUnit.type) {
+      case "ending":
+        this.endingDone = false;
+        eventBus.emit("showEnding", currentStoryUnit.textAbout.showText.text[0]?.content || "");
+        break;
       case "title":
         this.titleDone = false;
         if (currentStoryUnit.textAbout.titleInfo) {
@@ -429,12 +445,6 @@ export const eventEmitter = {
     if (storyHandler.currentStoryUnit.hide) {
       //当下一节点仍是text时只隐藏character
       if (storyHandler.currentStoryUnit.hide === "all") {
-        // if (storyHandler.nextStoryUnit.type === 'text' && !storyHandler.currentStoryUnit.transition) {
-        //   eventBus.emit('hideCharacter')
-        // }
-        // else {
-        //   eventBus.emit('hide')
-        // }
         eventBus.emit("hideCharacter");
       } else {
         eventBus.emit("hidemenu");
@@ -599,6 +609,24 @@ export async function init(
   privateState.stackStoryUnit = buildStoryIndexStackRecord(
     privateState.allStoryUnit
   );
+  if (voiceLanguageChangeHandler) {
+    window.removeEventListener("ba-story-voice-language-change", voiceLanguageChangeHandler);
+  }
+  voiceLanguageChangeHandler = (event: Event) => {
+    const value = (event as CustomEvent<string>).detail;
+    if (!( ["cn", "jp", "kr"] as string[]).includes(value)) return;
+    privateState.voiceLanguage = value as "cn" | "jp" | "kr";
+    const rawUnits = props.story.content.filter(Boolean);
+    privateState.allStoryUnit.forEach((unit: StoryUnit, index: number) => {
+      if (!unit.audio) unit.audio = {};
+      unit.audio.voiceJPUrl = getVoiceUrl(rawUnits[index], privateState.voiceLanguage);
+    });
+    const currentUnit = storyHandler.currentStoryUnit;
+    if (!storyHandler.isEnd && !eventEmitter.VoiceJpDone && currentUnit.audio?.voiceJPUrl) {
+      eventBus.emit("playAudio", { voiceJPUrl: currentUnit.audio.voiceJPUrl });
+    }
+  };
+  window.addEventListener("ba-story-voice-language-change", voiceLanguageChangeHandler);
   bgInit();
   characterInit();
   soundInit();

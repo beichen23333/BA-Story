@@ -24,6 +24,7 @@ const showMenu = ref(false);
 const forceShowMenu = ref(false);
 const showSubMenu = ref(false);
 const disableMenuButton = ref(false);
+const hideAllUI = ref(false);
 
 let props = defineProps<{
   storySummary: StorySummary;
@@ -54,6 +55,17 @@ eventBus.on("hide", () => {
   showMenu.value = false;
   showSetting.value = false;
 });
+eventBus.on("hideAllUI", () => {
+  showSummary.value = false;
+  showStoryLog.value = false;
+  showMenu.value = false;
+  forceShowMenu.value = false;
+  showSubMenu.value = false;
+  showSetting.value = false;
+  selectOptions.value = [];
+  hideAllUI.value = true;
+  clearTimeout(btnMenuTimer);
+});
 eventBus.on("showStoryLog", e => {
   if (showSummary.value || showSetting.value) {
     return;
@@ -68,6 +80,7 @@ eventBus.on("hidemenu", () => {
   showMenu.value = false;
 });
 eventBus.on("showmenu", () => {
+  hideAllUI.value = false;
   showMenu.value = true;
 });
 eventBus.on("option", e => (selectOptions.value = [...e]));
@@ -85,7 +98,6 @@ function handleBtnChatLog() {
   eventBus.emit("playOtherSounds", "select");
   refreshBtnMenuTimer();
   showStoryLog.value = true;
-  autoMode.value = false;
 }
 function handleBtnSkipSummary() {
   eventBus.emit("playOtherSounds", "select");
@@ -100,7 +112,6 @@ function handleSummaryConfirm() {
 function handleBtnSetting() {
   eventBus.emit("playOtherSounds", "select");
   refreshBtnMenuTimer();
-  autoMode.value = false;
   showSetting.value = true;
 }
 
@@ -243,6 +254,7 @@ function getI18n(key: string) {
     tabindex="0"
   >
     <div
+      v-if="!hideAllUI"
       class="right-top"
       :style="{ opacity: showMenu || forceShowMenu ? 1 : 0 }"
       ref="rightTop"
@@ -275,7 +287,7 @@ function getI18n(key: string) {
             @mouseup="handleBtnMouseUp"
             @mouseleave="handleBtnMouseUp"
           >
-            <img draggable="false" src="/assets/setting.svg" />
+            <img draggable="false" :src="'/assets/setting.svg'" />
           </button>
           <button
             class="button-nostyle ba-menu-option"
@@ -286,7 +298,7 @@ function getI18n(key: string) {
             @mouseup="handleBtnMouseUp"
             @mouseleave="handleBtnMouseUp"
           >
-            <img draggable="false" src="/assets/menu.svg" />
+            <img draggable="false" :src="'/assets/menu.svg'" />
           </button>
           <button
             class="button-nostyle ba-menu-option"
@@ -297,7 +309,7 @@ function getI18n(key: string) {
             @mouseup="handleBtnMouseUp"
             @mouseleave="handleBtnMouseUp"
           >
-            <img draggable="false" src="/assets/fast-forward.svg" />
+            <img draggable="false" :src="'/assets/fast-forward.svg'" />
           </button>
         </div>
       </Transition>

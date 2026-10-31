@@ -26,6 +26,8 @@ export type Events = {
    * 清除当前内容
    */
   hide: undefined;
+  hideAllUI: undefined;
+  endingDone: undefined;
   /**
    * 参数是原来的宽度大小
    */
