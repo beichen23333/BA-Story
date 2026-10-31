@@ -333,11 +333,11 @@ $tooltip-padding-t: 4px;
   font-weight: bold;
   line-height: var(--font-size);
   .rt {
-    --local-font-size: max(calc(var(--font-size) * 0.6), 12px);
+    --local-font-size: max(calc(var(--font-size) * 0.4), 8px);
     position: absolute;
     // top: calc(var(--local-font-size) * var(--top-offset));
     top: calc(
-      var(--local-font-size) * var(--top-offset) + var(--font-size) * 0.5 / 2
+      var(--local-font-size) * var(--top-offset) + var(--font-size) * 0.2 / 2
     );
     left: 50%;
     transform: translateX(-50%);

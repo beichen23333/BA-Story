@@ -987,7 +987,7 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   //--font-size: 2rem;
   --param-font-size: 64;
   font-weight: bold;
-  margin-top: 1.5%;
+  margin-top: 0.8%;
   color: white;
   :deep(span.unit) {
     --font-size: max(
@@ -1000,7 +1000,7 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
       var(--minimum-fs)
     );
     font-size: var(--font-size);
-    line-height: calc(var(--font-size) * 1.5 + 0.25rem);
+    line-height: calc(var(--font-size) * 1.3 + 0.25rem);
   }
 }
 
