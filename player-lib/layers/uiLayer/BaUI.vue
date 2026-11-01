@@ -287,7 +287,7 @@ function getI18n(key: string) {
             @mouseup="handleBtnMouseUp"
             @mouseleave="handleBtnMouseUp"
           >
-            <img draggable="false" :src="'/assets/setting.svg'" />
+            <img draggable="false" :src="'./assets/setting.svg'" />
           </button>
           <button
             class="button-nostyle ba-menu-option"
@@ -298,7 +298,7 @@ function getI18n(key: string) {
             @mouseup="handleBtnMouseUp"
             @mouseleave="handleBtnMouseUp"
           >
-            <img draggable="false" :src="'/assets/menu.svg'" />
+            <img draggable="false" :src="'./assets/menu.svg'" />
           </button>
           <button
             class="button-nostyle ba-menu-option"
@@ -309,7 +309,7 @@ function getI18n(key: string) {
             @mouseup="handleBtnMouseUp"
             @mouseleave="handleBtnMouseUp"
           >
-            <img draggable="false" :src="'/assets/fast-forward.svg'" />
+            <img draggable="false" :src="'./assets/fast-forward.svg'" />
           </button>
         </div>
       </Transition>
@@ -445,7 +445,7 @@ function getI18n(key: string) {
     }
 
     .ba-button-auto:enabled.activated {
-      background: no-repeat right -17% bottom/contain url(/assets/Common_Btn_Normal_Y_S_Pt.webp)
+      background: no-repeat right -17% bottom/contain url(../assets/Common_Btn_Normal_Y_S_Pt.webp)
         #efe34b;
     }
 
@@ -507,7 +507,7 @@ function getI18n(key: string) {
             rgba(240, 240, 240, 0.6) 70%,
             rgba(240, 240, 240, 0) 100%
           ),
-        80px 45% url(/assets/UITex_BGPoliLight_1.svg) rgb(164 216 237);
+        80px 45% url(../assets/UITex_BGPoliLight_1.svg) rgb(164 216 237);
       background-size: 100%;
       height: 100%;
     }

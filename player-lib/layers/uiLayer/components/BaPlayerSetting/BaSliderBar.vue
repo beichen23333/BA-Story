@@ -128,7 +128,7 @@ $thumb-size: 16px;
     opacity: 1;
     border: none;
     box-shadow: none;
-    background: url("/assets/slider_point.png") center / contain no-repeat;
+    background: url("../assets/slider_point.png") center / contain no-repeat;
     background-color: transparent;
     width: $thumb-size;
     height: $thumb-size;

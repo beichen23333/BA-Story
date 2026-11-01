@@ -8,6 +8,7 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 import ElementPlus from "unplugin-element-plus/vite";
 
 export default defineConfig({
+  base: "./",
   plugins: [
     react(),
     vue(),

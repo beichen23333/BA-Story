@@ -223,7 +223,7 @@ $radio-size: 16px;
   :deep(.el-radio__input.is-checked .el-radio__inner) {
     border: none;
     box-shadow: none;
-    background: url("/assets/slider_point.png") center / contain no-repeat;
+    background: url("../assets/slider_point.png") center / contain no-repeat;
     background-color: transparent;
   }
 }

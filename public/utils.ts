@@ -134,7 +134,7 @@ export const AUDIO_FILES = {
 
 /** 预加载大厅图片、字体和音频，并统一回报进度。 */
 export async function loadResources(language: string, onProgress?: (progress: number) => void) {
-  const imageEntries = [...RESOURCE_FILES.map(({ name, type }) => ({ name, url: getResourcesUrl(type, name) })), { name: "Growth_Bg.png", url: "/assets/Growth_Bg.png" }];
+  const imageEntries = [...RESOURCE_FILES.map(({ name, type }) => ({ name, url: getResourcesUrl(type, name) })), { name: "Growth_Bg.png", url: "./assets/Growth_Bg.png" }];
   const fontFile = FONT_FILES[language];
   const total = imageEntries.length + Object.keys(AUDIO_FILES).length + (fontFile ? 1 : 0);
   let completed = 0;

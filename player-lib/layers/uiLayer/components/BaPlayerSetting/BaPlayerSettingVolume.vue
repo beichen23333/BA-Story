@@ -85,7 +85,7 @@ function remount(key: VolumeKey) {
       >
         <template #prefix>
           <img
-            :src="'/assets/volume_mute.png'"
+            :src="'./assets/volume_mute.png'"
             draggable="false"
             class="volume-img"
             alt=""
@@ -93,7 +93,7 @@ function remount(key: VolumeKey) {
         </template>
         <template #suffix>
           <img
-            :src="'/assets/volume_full.png'"
+            :src="'./assets/volume_full.png'"
             class="volume-img"
             alt=""
             draggable="false"
@@ -124,7 +124,7 @@ function remount(key: VolumeKey) {
         >
           <template #prefix>
             <img
-              :src="'/assets/volume_mute.png'"
+              :src="'./assets/volume_mute.png'"
               draggable="false"
               class="volume-img"
               alt=""
@@ -132,7 +132,7 @@ function remount(key: VolumeKey) {
           </template>
           <template #suffix>
             <img
-              :src="'/assets/volume_full.png'"
+              :src="'./assets/volume_full.png'"
               class="volume-img"
               alt=""
               draggable="false"

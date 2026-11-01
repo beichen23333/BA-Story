@@ -41,7 +41,7 @@ function handleClose() {
           <button class="ba-dialog-close button-nostyle" @click="handleClose">
             <i style="user-select: none">
               <img
-                :src="'/assets/close.svg'"
+                :src="'./assets/close.svg'"
                 alt="close dialog"
                 style="width: 1em; height: 1em; vertical-align: -0.15em"
               />
@@ -106,7 +106,7 @@ function handleClose() {
             rgba(240, 240, 240, 1) 38%,
             rgba(240, 240, 240, 1) 100%
           ),
-        url(/assets/UITex_BGPoliLight_1.svg) rgb(164 216 237);
+        url(../assets/UITex_BGPoliLight_1.svg) rgb(164 216 237);
       background-position: 0 30%;
       background-size: 100%;
       overflow: hidden;
@@ -163,7 +163,7 @@ function handleClose() {
             rgba(255, 255, 255, 0.85) 85%,
             rgba(255, 255, 255, 0) 100%
           ),
-        repeat right -30% bottom/50% url(/assets/UITex_BGPoliLight_1.svg) rgb(135, 196, 232);
+        repeat right -30% bottom/50% url(../assets/UITex_BGPoliLight_1.svg) rgb(135, 196, 232);
       min-height: 0;
     }
   }

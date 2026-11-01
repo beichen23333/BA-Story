@@ -3,7 +3,7 @@ import { PropType, ref, watch } from "vue";
 import { changeStoryIndex } from "../../userInteract";
 import { LogText } from "@/types/store";
 
-const avatarBG = "/assets/Deco_GachaItemBg.webp";
+const avatarBG = "./assets/Deco_GachaItemBg.webp";
 
 const props = defineProps({
   deltaY: Number,

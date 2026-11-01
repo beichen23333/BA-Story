@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-const blueButton = "/assets/CCG_Img_BtnBlue.png";
+const blueButton = "./assets/CCG_Img_BtnBlue.png";
 import { TEXT } from "../../public/texts.js";
 import "../styles/story-info-modal.css";
 

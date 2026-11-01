@@ -86,7 +86,7 @@ export function App({ active = true } = {}) {
   const loadingAvatarRef = useRef(null);
   const loadingProgressRef = useRef(0);
   const resourcesReadyRef = useRef(false);
-  const bgImage = "/assets/Growth_Bg.png";
+  const bgImage = "./assets/Growth_Bg.png";
   const [sceneEntering, setSceneEntering] = useState(false);
   const [sceneEntryKey, setSceneEntryKey] = useState(0);
   const [groupStoryOpen, setGroupStoryOpen] = useState(false);
@@ -165,7 +165,7 @@ export function App({ active = true } = {}) {
     };
   }, []);
 
-  const { portrait, isMobile, showRotatePrompt, enterLandscape } = useOrientation();
+  const { portrait, isMobile, showRotatePrompt, enterLandscape, orientationError, orientationBusy, dismissOrientationError } = useOrientation();
   const t = TEXT[language];
   const audioRef = useRef(null);
   const buttonTouchAudioRef = useRef(null);
@@ -649,8 +649,9 @@ export function App({ active = true } = {}) {
       </div>}
       {blackout && <div className={`story-scene-blackout ${blackout === "fade" ? "is-fading" : "is-cover"}`} aria-hidden="true" />}
       {showRotatePrompt && (
-        <OrientationOverlay t={t} onEnterLandscape={enterLandscape} />
+        <OrientationOverlay t={t} onEnterLandscape={enterLandscape} busy={orientationBusy} />
       )}
+      {orientationError && <div role="alert" style={{ position: "fixed", left: 16, right: 16, bottom: "max(16px, env(safe-area-inset-bottom))", zIndex: 2147483003, padding: "14px 16px", borderRadius: 10, background: "rgba(25, 31, 42, .96)", color: "#fff", fontSize: 14, lineHeight: 1.5, boxShadow: "0 6px 24px rgba(0,0,0,.3)", overflowWrap: "anywhere" }}><div>{orientationError}</div><button type="button" onClick={dismissOrientationError} style={{ marginTop: 8, padding: "5px 12px", border: "1px solid rgba(255,255,255,.45)", borderRadius: 6, background: "transparent", color: "#fff" }}>关闭</button></div>}
     </main>
   );
 }

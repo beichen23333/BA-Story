@@ -4,8 +4,8 @@ import { getMiniStoryPage } from "../stories/MiniStories.js";
 import { getWorkStoryPage } from "../stories/WorkStories.js";
 import { TEXT } from "../../public/texts.js";
 import { getResourcesUrl } from "../../public/utils.ts";
-const fileIcon = "/assets/file.png";
-const blueButton = "/assets/CCG_Img_BtnBlue.png";
+const fileIcon = "./assets/file.png";
+const blueButton = "./assets/CCG_Img_BtnBlue.png";
 import "../styles/story-detail.css";
 
 function localizeEpisode(episode, index, language, title) {

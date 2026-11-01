@@ -15,7 +15,7 @@
         <img
           ref="endingStamp"
           class="ending-stamp"
-          :src="'/assets/Scenario_Complete.png'"
+          :src="'./assets/Scenario_Complete.png'"
           alt="Scenario Complete"
         />
       </div>
@@ -128,10 +128,10 @@
           class="title-border"
           :style="{ '--side-padding': `${titleBorderPadding}px` }"
         >
-          <img :src="'/assets/title_border__upper_left.svg'" alt="upper-left" />
-          <img :src="'/assets/title_border__upper_right.svg'" alt="upper-right" />
-          <img :src="'/assets/title_border__lower_right.svg'" alt="lower-right" />
-          <img :src="'/assets/title_border__lower_left.svg'" alt="lower-left" />
+          <img :src="'./assets/title_border__upper_left.svg'" alt="upper-left" />
+          <img :src="'./assets/title_border__upper_right.svg'" alt="upper-right" />
+          <img :src="'./assets/title_border__lower_right.svg'" alt="lower-right" />
+          <img :src="'./assets/title_border__lower_left.svg'" alt="lower-left" />
           <div
             ref="titleContain"
             class="title-contain"
@@ -962,7 +962,7 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
     right: 0;
     bottom: 1rem;
     animation: next-btn 0.6s linear alternate infinite;
-    background: url("/assets/text-next.webp");
+    background: url("../assets/text-next.webp");
     background-size: $size $size;
     width: 10px;
     height: 10px;
@@ -1099,7 +1099,7 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
             rgba(240, 240, 240, 1) 38%,
             rgba(240, 240, 240, 0.1) 100%
           ),
-          url(/assets/UITex_BGPoliLight_1.svg) rgb(164 216 237)
+          url(../assets/UITex_BGPoliLight_1.svg) rgb(164 216 237)
             no-repeat 0 30%;
         background-size: 100%, 100%;
         padding: var(--font-size) 0;
