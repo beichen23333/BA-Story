@@ -1,22 +1,24 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 
 function isMobileDevice() {
-  if (typeof window === "undefined" || typeof navigator === "undefined") return false;
-  const ua = navigator.userAgent || "";
-  if (/Windows NT/i.test(ua) || (/Macintosh/i.test(ua) && !("ontouchend" in document))) return false;
-  return /Android|iPhone|iPod|iPad|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+  if (typeof window === "undefined") return false;
+  return window.matchMedia?.("(pointer: coarse)").matches || /Android|iPhone|iPod|iPad|Mobile/i.test(navigator.userAgent || "");
 }
 function getToy() {
-  return typeof window !== "undefined" && window.toy && typeof window.toy.setContainerMode === "function" ? window.toy : null;
+  if (typeof window === "undefined" || typeof navigator === "undefined") return null;
+  // Toy API 只在 Bilibili 客户端中启用；普通浏览器即使存在同名注入对象，也走 Web 逻辑。
+  const ua = navigator.userAgent || "";
+  const isBilibili = /BiliApp|哔哩哔哩|bilibili/i.test(ua);
+  return isBilibili && window.toy && typeof window.toy.setContainerMode === "function" ? window.toy : null;
 }
 function getErrorMessage(error) {
   return error?.message || error?.msg || error?.code || String(error || "未知错误");
 }
 
 export function useOrientation() {
-  const [portrait, setPortrait] = useState(false);
+  const [portrait, setPortrait] = useState(() => typeof window !== "undefined" && window.innerHeight > window.innerWidth);
   const [isMobile, setIsMobile] = useState(false);
-  const [showRotatePrompt, setShowRotatePrompt] = useState(false);
+  const [showRotatePrompt, setShowRotatePrompt] = useState(() => typeof window !== "undefined" && window.innerHeight > window.innerWidth && !getToy());
   const [orientationError, setOrientationError] = useState("");
   const [orientationBusy, setOrientationBusy] = useState(false);
   const toyListenerRef = useRef(null);
@@ -24,10 +26,16 @@ export function useOrientation() {
 
   const updateBrowserOrientation = useCallback(() => {
     const mobile = isMobileDevice();
-    const isPortrait = window.matchMedia("(orientation: portrait)").matches || window.innerHeight > window.innerWidth;
+    // 以实际布局视口方向为准，不再用 UA/移动设备识别限制浏览器遮罩。
+    // 与用户提供的已验证测试页保持一致：以 window.innerWidth/innerHeight 判断。
+    // visualViewport 在移动浏览器地址栏收缩、桌面模式下可能给出不代表设备方向的值。
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    const isPortrait = height > width;
     setIsMobile(mobile);
     setPortrait(isPortrait);
-    setShowRotatePrompt(isPortrait && mobile && !getToy());
+    // 普通 Web 页面竖屏时始终显示遮罩；仅真正接入 Toy SDK 的客户端走 SDK 状态。
+    setShowRotatePrompt(isPortrait && !getToy());
   }, []);
 
   const applyToyState = useCallback((state) => {
@@ -44,6 +52,7 @@ export function useOrientation() {
     media.addEventListener?.("change", updateBrowserOrientation);
     window.addEventListener("resize", updateBrowserOrientation);
     window.addEventListener("orientationchange", updateBrowserOrientation);
+    window.visualViewport?.addEventListener("resize", updateBrowserOrientation);
     const toy = getToy();
     if (toy?.onContainerChange) {
       try { toyListenerRef.current = toy.onContainerChange(applyToyState); }
@@ -53,6 +62,7 @@ export function useOrientation() {
       media.removeEventListener?.("change", updateBrowserOrientation);
       window.removeEventListener("resize", updateBrowserOrientation);
       window.removeEventListener("orientationchange", updateBrowserOrientation);
+      window.visualViewport?.removeEventListener("resize", updateBrowserOrientation);
       if (typeof toyListenerRef.current === "function") toyListenerRef.current();
       toyListenerRef.current = null;
     };
@@ -105,7 +115,6 @@ export function useOrientation() {
     } catch (error) {
       updateBrowserOrientation();
       if (fullscreenError) setOrientationError(`浏览器未能进入横屏：${getErrorMessage(error)}（全屏请求：${getErrorMessage(fullscreenError)}）`);
-      else setOrientationError(`已尝试进入全屏，但浏览器拒绝锁定横屏：${getErrorMessage(error)}`);
     }
     updateBrowserOrientation();
     busyRef.current = false;

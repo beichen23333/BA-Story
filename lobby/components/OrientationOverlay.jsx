@@ -1,9 +1,11 @@
 import React from "react";
+import { createPortal } from "react-dom";
 import { RotateCw, ArrowUp } from "lucide-react";
 
 export function OrientationOverlay({ t, onEnterLandscape, busy = false }) {
-  return (
-    <div className="orientation-screen">
+  if (typeof document === "undefined") return null;
+  return createPortal(
+    <div className="orientation-screen" role="dialog" aria-modal="true">
       <div className="orientation-content">
         <div className="orientation-icon">
           <RotateCw size={44} />
@@ -14,6 +16,7 @@ export function OrientationOverlay({ t, onEnterLandscape, busy = false }) {
           <ArrowUp size={20} /> {t.rotateButton}
         </button>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -661,11 +661,8 @@ button, select {
         max-width: 1500px;
     }
 }
-@media (min-width: 761px) {
-    .orientation-screen {
-        display: none;
-    }
-}
+/* 横屏提示不能按视口宽度隐藏：桌面浏览器、平板或移动端桌面站点
+   都可能在竖屏时拥有 >= 761px 的 CSS 视口。显示状态统一由 useOrientation 控制。 */
 
 /* Loading screen: values and timing transcribed from the supplied original index.7ab147c6.js / index.8590fbef.css. */
 .loading_wrapper{display:flex;flex-direction:column;align-items:center;justify-content:center;position:fixed;inset:0;z-index:9999;overflow:hidden;font-size:1.5625vw;background-color:#fff;background-image:url("https://webcnstatic.yostar.net/ba_cn_web/prod/web/assets/loading_bg_pc.ba246778.png");background-repeat:no-repeat;background-size:cover}
