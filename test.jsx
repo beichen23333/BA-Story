@@ -26,7 +26,7 @@ function TestPage() {
   const [enterStatus, setEnterStatus] = useState("点击后尝试进入全屏并锁定横屏");
 
   useEffect(() => {
-    fetch("/data/test.json")
+    fetch("/data/test1.json")
       .then((res) => {
         if (!res.ok) throw new Error(`读取 data/test.json 失败：${res.status}`);
         return res.json();

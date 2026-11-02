@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getClubStoryPage } from "../stories/ClubStories.js";
 import { getMiniStoryPage } from "../stories/MiniStories.js";
 import { getWorkStoryPage } from "../stories/WorkStories.js";
+import { getEventStoryPage } from "../stories/EventStories.js";
 import { TEXT } from "../../public/texts.js";
 import { getResourcesUrl } from "../../public/utils.ts";
 const fileIcon = "./assets/file.png";
@@ -16,15 +17,15 @@ function localizeEpisode(episode, index, language, title) {
 
 export function StoryDetailPanel({ story, pageIndex = 0, language = "cn", onBack, onEpisodeSelect, storyType = "club" }) {
   const t = TEXT[language] || TEXT.cn;
-  const pageLoaders = { club: getClubStoryPage, mini: getMiniStoryPage, work: getWorkStoryPage };
+  const pageLoaders = { club: getClubStoryPage, mini: getMiniStoryPage, work: getWorkStoryPage, event: getEventStoryPage };
   const allStories = (pageLoaders[storyType] || getClubStoryPage)(pageIndex, language);
   const current = story ? allStories.find((item) => item.id === story.id) || story : null;
   const [coverState, setCoverState] = useState("loading");
   useEffect(() => { setCoverState("loading"); }, [current?.id, current?.volume]);
-  const coverUrl = current ? (storyType === "work" ? getResourcesUrl("scenarioMode", `Replay_Contents_${current.id}_EpisodeSelect.png`) : storyType === "mini" ? getResourcesUrl("scenarioMode", `Mini_Chapter_${current.volume}_1.png`) : getResourcesUrl("scenarioMode", `Sub_Chapter_${current.volume}_1.png`)) : "";
+  const coverUrl = current ? (storyType === "event" ? getResourcesUrl("eventScenario", `Event_Image_${current.id}.png`) : storyType === "work" ? getResourcesUrl("scenarioMode", `Replay_Contents_${current.id}_EpisodeSelect.png`) : storyType === "mini" ? getResourcesUrl("scenarioMode", `Mini_Chapter_${current.volume}_1.png`) : getResourcesUrl("scenarioMode", `Sub_Chapter_${current.volume}_1.png`)) : "";
   const episodeSource = current ? (Array.isArray(current.episodes) ? current.episodes : storyType === "work" ? [] : [{ id: 1, title: current.title }]) : [];
   const episodes = episodeSource.map((episode, index) => localizeEpisode(episode, index, language, current.title)).sort((a, b) => Number(b.number ?? b.id) - Number(a.number ?? a.id));
-  return <section className="story-detail-layout" aria-label={storyType === "work" ? t.archiveTitle : t.clubDetailTitle}>
+  return <section className="story-detail-layout" aria-label={storyType === "work" || storyType === "event" ? t.archiveTitle : t.clubDetailTitle}>
     <article className="story-detail-cover">
       <header className="story-detail-cover-title">{current ? <><span className="story-detail-cover-title-main">{t.chapterPrefix.replace("{number}", "01")}</span><span className="story-detail-title-separator">｜</span><span className="story-detail-cover-title-name">{current.title}</span></> : t.invalidStory}</header>
       <div className="story-detail-art-wrap">

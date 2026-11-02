@@ -17,6 +17,10 @@ let otherSoundMap: OtherSoundsUrls = {
 /** 根据资源类型和参数生成统一资源地址。 */
 export function getResourcesUrl(type: ResourcesTypes, arg: string): string {
   switch (type) {
+    case "eventContent":
+      return `${dataUrl}/UIs/01_Common/27_EventContent/${arg}`;
+    case "eventScenario":
+      return `${dataUrl}/UIs/03_Scenario/06_Event/${arg}`;
     case "emotionImg":
       return `${dataUrl}/UIs/03_Scenario/03_Emoticon/${arg}`;
     case "emotionSound":

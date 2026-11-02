@@ -80,11 +80,14 @@
           >
             <img :src="popupSrc.image" alt="完了加载失败了" class="image" />
           </div>
-          <VideoBackground
+          <video
             ref="videoComponent"
             :src="popupSrc.video"
-            objectFit="cover"
-            style="width: 100%; height: 100%"
+            style="width: 100%; height: 100%; object-fit: cover"
+            autoplay
+            playsinline
+            preload="auto"
+            :loop="false"
             v-if="popupSrc.video"
             @ended="onPopupVideoEnd"
             @error="onPopupVideoError"
@@ -227,7 +230,6 @@ import {
   reactive,
   ref,
 } from "vue";
-import VideoBackground from "vue-responsive-video-background-player";
 import TypingUnit from "./components/TypingUnit.vue";
 import TypingEmitter from "./utils/typingEmitter";
 import StUnit from "@/layers/textLayer/components/StUnit.vue";
@@ -260,7 +262,8 @@ const placeTranslatorEL = ref<HTMLElement>(); // 译者的el
 const nextEpisodeContainer = ref<HTMLElement>(); // 下一章的el
 const titleContain = ref<HTMLElement>(); // 标题内容的el, 为了实现scale效果
 const overrideTitleZIndex = ref<number>();
-const videoComponent = ref();
+const videoComponent = ref<HTMLVideoElement | null>(null);
+let popupVideoFinished = false;
 
 // 对话
 const dialogText = ref<Text[]>([]);
@@ -666,6 +669,7 @@ function handlePopupImage(url: string) {
   popupSrc.image = url;
 }
 function handlePopupVideo(payload: string | { videoUrl: string; soundUrl?: string; soundVolume?: number }) {
+  popupVideoFinished = false;
   hideMenu();
   const videoUrl = typeof payload === "string" ? payload : payload.videoUrl;
   popupSrc.video = videoUrl;
@@ -677,22 +681,31 @@ function handlePopupVideo(payload: string | { videoUrl: string; soundUrl?: strin
     }));
   }
 }
-function onPopupVideoEnd() {
+function finishPopupVideo() {
+  // ended/error/close 统一收尾，防止多个事件重复推进剧情。
+  if (popupVideoFinished) return;
+  popupVideoFinished = true;
+  const video = videoComponent.value;
+  if (video) {
+    video.pause();
+    video.removeAttribute("src");
+    video.load();
+  }
+  popupSrc.video = "";
   eventBus.emit("popupVideoDone");
 }
+function onPopupVideoEnd() {
+  finishPopupVideo();
+}
 function onPopupVideoError() {
-  eventBus.emit("popupVideoDone");
+  finishPopupVideo();
 }
 function hideMenu() {
   eventBus.emit("hidemenu");
 }
 function handlePopupClose() {
-  eventBus.emit("popupVideoDone");
+  finishPopupVideo();
   popupSrc.image = "";
-  videoComponent.value?.pause();
-  nextTick(() => {
-    popupSrc.video = "";
-  });
 }
 /**
  * 播放加载动画

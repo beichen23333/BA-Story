@@ -28,5 +28,7 @@ export type ResourcesTypes =
   | "bgEffectSounds"
   | "ui"
   | "scenarioMode"
+  | "eventContent"
+  | "eventScenario"
   | "font"
   | "scenarioScript";
