@@ -74,6 +74,10 @@ export function getResourcesUrl(type: ResourcesTypes, arg: string): string {
       return `${dataUrl}/Audio/Sound/UI_FX_${arg}.wav`;
     case "avatar":
       return `${dataUrl}/${arg}.png`;
+    case "video":
+      return `${dataUrl}/${String(arg).replace(/^\/+/, "")}.mp4`;
+    case "videoSound":
+      return `${dataUrl}/${String(arg).replace(/^\/+/, "")}.ogg`;
     case "popupImage":
       return `${dataUrl}/UIs/03_Scenario/04_ScenarioImage/${arg}.png`;
     default:

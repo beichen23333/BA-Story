@@ -29,7 +29,6 @@ import BaUI from "@/layers/uiLayer/BaUI.vue";
 import { useUiState } from "@/stores/state";
 import { StoryRawUnit, TranslatedStoryUnit } from "@/types/common";
 import { Language, StorySummary } from "@/types/store";
-import { useElementSize } from "@vueuse/core";
 import eventBus from "./eventBus";
 import BAClickFX from "ba-click-fx";
 import { initPrivateState, usePlayerStore } from "./stores";
@@ -79,6 +78,7 @@ watch(() => props.language, (value) => {
   try {
     const state = initPrivateState();
     state.language = value;
+    window.dispatchEvent(new CustomEvent("ba-story-player-language-change", { detail: value }));
     const currentIndex = storyHandler.currentStoryIndex;
     const translatedUnits = translate(props.story);
     state.allStoryUnit = translatedUnits;
@@ -112,18 +112,6 @@ watch(
 
 const player = ref<HTMLDivElement>();
 let clickFxInstance: BAClickFX | null = null;
-const { width: playerActualWidth, height: playerActualHeight } =
-  useElementSize(player);
-
-watch([playerActualWidth, playerActualHeight], () => {
-  if (!fullScreen.value || isMobile.phone || isPseudoFullscreen.value) {
-    return;
-  }
-
-  playerWidth.value = playerActualWidth.value;
-  playerHeight.value = playerActualHeight.value;
-});
-
 const playerStyle = computed(() => {
   return { height: `${playerHeight.value}px`, width: `${playerWidth.value}px` };
 });

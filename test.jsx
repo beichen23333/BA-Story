@@ -1,17 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
-import { createApp, h } from "vue";
+import { createApp, h, onBeforeUnmount, onMounted, ref } from "vue";
 import { createPinia } from "pinia";
 import BaStoryPlayer from "./player-lib/BaStoryPlayer.vue";
 
 const DATA_URL = "https://res.bluearchive.help/image/ba-all-data";
+const DESIGN_WIDTH = 1280;
+const DESIGN_HEIGHT = 720;
+
+// 保持 16:9 设计比例，按当前可视区域等比缩放，避免播放器画布再次被父容器缩放。
+function getPlayerSize() {
+  const viewportWidth = Math.max(1, window.visualViewport?.width || window.innerWidth);
+  const viewportHeight = Math.max(1, window.visualViewport?.height || window.innerHeight);
+  const scale = Math.min(viewportWidth / DESIGN_WIDTH, viewportHeight / DESIGN_HEIGHT);
+  return {
+    width: Math.max(1, Math.round(DESIGN_WIDTH * scale)),
+    height: Math.max(1, Math.round(DESIGN_HEIGHT * scale)),
+  };
+}
 
 function TestPage() {
   const [story, setStory] = useState(null);
   const [error, setError] = useState("");
   const [entered, setEntered] = useState(false);
   const [enterStatus, setEnterStatus] = useState("点击后尝试进入全屏并锁定横屏");
-  const [viewport, setViewport] = useState({ width: window.innerWidth, height: window.innerHeight });
 
   useEffect(() => {
     fetch("/data/test.json")
@@ -24,52 +36,57 @@ function TestPage() {
   }, []);
 
   useEffect(() => {
-    const resize = () => setViewport({ width: window.innerWidth, height: window.innerHeight });
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
-  }, []);
-
-  useEffect(() => {
     if (!story || !entered) return;
     const mount = document.getElementById("player-mount");
     if (!mount) return;
+
     const app = createApp({
-      render: () => h(BaStoryPlayer, {
-        story,
-        dataUrl: DATA_URL,
-        width: viewport.width,
-        height: viewport.height,
-        language: "Cn",
-        voiceLanguage: "jp",
-        userName: "sensei",
-        storySummary: { chapterName: "文本样式测试", summary: "测试 Ruby 标签与 Ending。" },
-        startFullScreen: false,
-        useMp3: false,
-        usePC: false,
-        enableClickFx: true,
-      }),
+      setup() {
+        const playerSize = ref(getPlayerSize());
+        const updatePlayerSize = () => {
+          playerSize.value = getPlayerSize();
+        };
+        onMounted(() => {
+          window.addEventListener("resize", updatePlayerSize, { passive: true });
+          window.addEventListener("orientationchange", updatePlayerSize, { passive: true });
+          window.visualViewport?.addEventListener("resize", updatePlayerSize, { passive: true });
+        });
+        onBeforeUnmount(() => {
+          window.removeEventListener("resize", updatePlayerSize);
+          window.removeEventListener("orientationchange", updatePlayerSize);
+          window.visualViewport?.removeEventListener("resize", updatePlayerSize);
+        });
+        return () => h(BaStoryPlayer, {
+          story,
+          dataUrl: DATA_URL,
+          width: playerSize.value.width,
+          height: playerSize.value.height,
+          language: "Cn",
+          voiceLanguage: "cn",
+          userName: "sensei",
+          storySummary: { chapterName: "文本样式测试", summary: "测试 Ruby 标签与 Ending。" },
+          startFullScreen: false,
+          useMp3: false,
+          usePC: false,
+          enableClickFx: true,
+        });
+      },
     });
     app.use(createPinia());
     app.mount(mount);
     return () => app.unmount();
-  }, [story, entered, viewport]);
+  }, [story, entered]);
 
   const enterLandscape = () => {
     const el = document.documentElement;
-
-    // 1. 先尝试全屏（这是 lock 生效的前提）
     if (!el.requestFullscreen) {
       setEnterStatus("当前浏览器不支持全屏 API，无法强制横屏。");
       setEntered(true);
       return;
     }
-
     el.requestFullscreen()
       .then(() => {
-        // 2. 全屏成功后，再调用 lock
-        if (!screen.orientation?.lock) {
-          throw new Error("Screen Orientation Lock API 不可用");
-        }
+        if (!screen.orientation?.lock) throw new Error("Screen Orientation Lock API 不可用");
         return screen.orientation.lock("landscape");
       })
       .then(() => {
@@ -78,18 +95,21 @@ function TestPage() {
       })
       .catch((err) => {
         console.error("全屏或横屏锁定失败:", err);
-        // iOS Safari 等环境会走到这里，无法强制横屏
         setEnterStatus(`无法强制横屏：${err.message || "浏览器不支持"}`);
-        setEntered(true); // 仍然进入播放器，但方向由设备决定
+        setEntered(true);
       });
   };
 
   return <>
     <style>{`
       *{box-sizing:border-box}
-      html,body,#test-root{margin:0;width:100%;height:100%;overflow:hidden;background:#000}
-      #player-shell{position:fixed;inset:0;width:100vw;height:100vh;overflow:hidden;background:#000}
+      html,body,#test-root{margin:0;width:100%;height:100%;height:100dvh;overflow:hidden;background:#000}
+      #player-shell{position:fixed;inset:0;width:100vw;height:100vh;height:100dvh;overflow:hidden;background:#000}
       #player-mount{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+      /* BaStoryPlayer 的外层占满视口，内部 16:9 画布只缩放一次并居中。 */
+      #player{display:flex!important;align-items:center!important;justify-content:center!important}
+      #player__background{flex:0 0 auto!important;max-width:100vw;max-height:100dvh}
+      #player__main{flex:0 0 auto!important}
       .enter-screen{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;background:#10131a;color:#fff;font-family:Arial,sans-serif;text-align:center;padding:24px;z-index:10}
       .enter-screen button{border:0;border-radius:8px;background:#3f88f2;color:#fff;padding:14px 28px;font-size:18px;font-weight:600;cursor:pointer}
       .enter-screen p{margin:0;color:#b9c2d0;font-size:14px;max-width:80%}

@@ -87,4 +87,13 @@ export const excelApi = {
       return data;
     });
   },
+
+  async getVideoExcel() {
+    return retryableRequest(async () => {
+      const { data } = await api.get<any>(
+        getResourcesUrl("excel", "VideoExcel.json")
+      );
+      return data;
+    });
+  },
 };

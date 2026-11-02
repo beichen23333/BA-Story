@@ -67,7 +67,7 @@ export function soundInit() {
         bgm.volume(channelVolume("bgmVolume"));
       }
       if (sfx) {
-        sfx.volume(channelVolume("sfxVolume"));
+        sfx.volume(channelVolume("sfxVolume") * Math.max(0, Math.min(1, playAudioInfo.soundVolume ?? 1)));
       }
       if (voice) {
         voice.volume(channelVolume("voiceVolume"));

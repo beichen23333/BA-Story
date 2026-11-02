@@ -83,10 +83,11 @@
           <VideoBackground
             ref="videoComponent"
             :src="popupSrc.video"
-            objectFit="contain"
+            objectFit="cover"
             style="width: 100%; height: 100%"
             v-if="popupSrc.video"
             @ended="onPopupVideoEnd"
+            @error="onPopupVideoError"
           />
         </div>
       </div>
@@ -664,17 +665,29 @@ function handleNextEpisode(e: ShowTitleOption) {
 function handlePopupImage(url: string) {
   popupSrc.image = url;
 }
-function handlePopupVideo(url: string) {
+function handlePopupVideo(payload: string | { videoUrl: string; soundUrl?: string; soundVolume?: number }) {
   hideMenu();
-  popupSrc.video = url;
+  const videoUrl = typeof payload === "string" ? payload : payload.videoUrl;
+  popupSrc.video = videoUrl;
+  if (typeof payload !== "string" && payload.soundUrl) {
+    // Let the story unit's ordinary audio setup finish first, then attach the video soundtrack.
+    nextTick(() => eventBus.emit("playAudio", {
+      soundUrl: payload.soundUrl,
+      soundVolume: payload.soundVolume ?? 1,
+    }));
+  }
 }
 function onPopupVideoEnd() {
-  console.log("video end");
+  eventBus.emit("popupVideoDone");
+}
+function onPopupVideoError() {
+  eventBus.emit("popupVideoDone");
 }
 function hideMenu() {
   eventBus.emit("hidemenu");
 }
 function handlePopupClose() {
+  eventBus.emit("popupVideoDone");
   popupSrc.image = "";
   videoComponent.value?.pause();
   nextTick(() => {
@@ -983,12 +996,14 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
   }
 }
 
+
 .content {
   //--font-size: 2rem;
-  --param-font-size: 64;
+  --param-font-size: 65;
   font-weight: bold;
-  margin-top: 0.8%;
+  margin-top: -0.5%; // 文本高度
   color: white;
+  line-height: 1.5; //文本间距
   :deep(span.unit) {
     --font-size: max(
       calc(
@@ -1000,7 +1015,6 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
       var(--minimum-fs)
     );
     font-size: var(--font-size);
-    line-height: calc(var(--font-size) * 1.3 + 0.25rem);
   }
 }
 

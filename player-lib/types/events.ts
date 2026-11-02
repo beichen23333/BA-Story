@@ -194,7 +194,8 @@ export type Events = {
   /**
    * 弹出视频, 参数是视频url
    */
-  popupVideo: string;
+  popupVideo: { videoUrl: string; soundUrl?: string; soundVolume?: number };
+  popupVideoDone: undefined;
   /**
    * 隐藏popup
    */
@@ -267,6 +268,7 @@ export interface PlayAudio {
     bgmArgs: BGMExcelTableItem;
   };
   soundUrl?: string;
+  soundVolume?: number;
   voiceJPUrl?: string;
 }
 

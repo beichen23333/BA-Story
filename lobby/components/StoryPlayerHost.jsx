@@ -1,7 +1,21 @@
-import React, { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import React, { useEffect, useRef, useState, forwardRef, useImperativeHandle } from "react";
 import { createApp, h, shallowReactive } from "vue";
 import { createPinia } from "pinia";
 import BaStoryPlayer from "../../player-lib/BaStoryPlayer.vue";
+
+const DESIGN_WIDTH = 1280;
+const DESIGN_HEIGHT = 720;
+
+// 与 test.jsx 使用完全相同的 16:9 视口适配算法。
+function getPlayerSize() {
+  const viewportWidth = Math.max(1, window.visualViewport?.width || window.innerWidth);
+  const viewportHeight = Math.max(1, window.visualViewport?.height || window.innerHeight);
+  const scale = Math.min(viewportWidth / DESIGN_WIDTH, viewportHeight / DESIGN_HEIGHT);
+  return {
+    width: Math.max(1, Math.round(DESIGN_WIDTH * scale)),
+    height: Math.max(1, Math.round(DESIGN_HEIGHT * scale)),
+  };
+}
 
 const StoryPlayer = forwardRef(function StoryPlayer(
   {
@@ -28,6 +42,20 @@ const StoryPlayer = forwardRef(function StoryPlayer(
   ref
 ) {
   const containerRef = useRef(null);
+  const [playerSize, setPlayerSize] = useState(() => getPlayerSize());
+
+  useEffect(() => {
+    const updatePlayerSize = () => setPlayerSize(getPlayerSize());
+    window.addEventListener("resize", updatePlayerSize, { passive: true });
+    window.addEventListener("orientationchange", updatePlayerSize, { passive: true });
+    window.visualViewport?.addEventListener("resize", updatePlayerSize, { passive: true });
+    updatePlayerSize();
+    return () => {
+      window.removeEventListener("resize", updatePlayerSize);
+      window.removeEventListener("orientationchange", updatePlayerSize);
+      window.visualViewport?.removeEventListener("resize", updatePlayerSize);
+    };
+  }, []);
   const appRef = useRef(null);
   const mountRef = useRef(null);
   const playerInstanceRef = useRef(null);
@@ -40,8 +68,8 @@ const StoryPlayer = forwardRef(function StoryPlayer(
     propsRef.current = shallowReactive({
       story,
       dataUrl,
-      width,
-      height,
+      width: playerSize.width,
+      height: playerSize.height,
       language,
       voiceLanguage,
       userName,
@@ -104,8 +132,8 @@ const StoryPlayer = forwardRef(function StoryPlayer(
     Object.assign(propsRef.current, {
       story,
       dataUrl,
-      width,
-      height,
+      width: playerSize.width,
+      height: playerSize.height,
       language,
       voiceLanguage,
       userName,
@@ -117,7 +145,7 @@ const StoryPlayer = forwardRef(function StoryPlayer(
       exitFullscreenTimeOut,
       enableClickFx,
     });
-  }, [story, dataUrl, width, height, language, voiceLanguage, userName, storySummary, startFullScreen, useMp3, usePC, changeIndex, exitFullscreenTimeOut, enableClickFx]);
+  }, [story, dataUrl, playerSize.width, playerSize.height, language, voiceLanguage, userName, storySummary, startFullScreen, useMp3, usePC, changeIndex, exitFullscreenTimeOut, enableClickFx]);
 
   return (
     <div

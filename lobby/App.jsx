@@ -622,8 +622,8 @@ export function App({ active = true } = {}) {
         key={`${playingStorySelection.story?.id ?? "story"}-${playingStorySelection.episode?.id ?? "episode"}-${playerReplayKey}`}
         story={loadedStoryData}
         dataUrl={dataUrl}
-        width={Math.max(1, window.innerWidth)}
-        height={Math.max(1, window.innerHeight)}
+        width={1280}
+        height={720}
         language={({ cn: "Cn", en: "En", jp: "Jp", tw: "Tw", kr: "Kr", th: "Th" })[language] || "Cn"}
         voiceLanguage={voiceLanguage}
         userName={userName}

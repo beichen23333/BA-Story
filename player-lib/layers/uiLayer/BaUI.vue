@@ -3,7 +3,7 @@ import eventBus from "@/eventBus";
 import { storyHandler } from "@/index";
 import { usePlayerStore } from "@/stores";
 import gsap from "gsap";
-import { computed, onMounted, provide, ref, toRef, watch } from "vue";
+import { computed, onMounted, onUnmounted, provide, ref, toRef, watch } from "vue";
 import BaChatLog from "./components/BaChatLog/BaChatLog.vue";
 import BaPlayerSetting from "./components/BaPlayerSetting/BaPlayerSetting.vue";
 import BaDialog from "./components/BaDialog.vue";
@@ -25,6 +25,19 @@ const forceShowMenu = ref(false);
 const showSubMenu = ref(false);
 const disableMenuButton = ref(false);
 const hideAllUI = ref(false);
+const isVideoPlaying = ref(false);
+const handleVideoStart = () => {
+  isVideoPlaying.value = true;
+  showSubMenu.value = false;
+  forceShowMenu.value = false;
+  showMenu.value = false;
+  clearTimeout(btnMenuTimer);
+};
+const handleVideoDone = () => {
+  isVideoPlaying.value = false;
+};
+eventBus.on("popupVideo", handleVideoStart);
+eventBus.on("popupVideoDone", handleVideoDone);
 
 let props = defineProps<{
   storySummary: StorySummary;
@@ -80,6 +93,7 @@ eventBus.on("hidemenu", () => {
   showMenu.value = false;
 });
 eventBus.on("showmenu", () => {
+  if (isVideoPlaying.value) return;
   hideAllUI.value = false;
   showMenu.value = true;
 });
@@ -126,6 +140,7 @@ function handleBaSelector(selectionGroup: number) {
 }
 
 function handleBtnAutoMode() {
+  if (isVideoPlaying.value) return;
   autoMode.value = !autoMode.value;
 }
 
@@ -133,6 +148,7 @@ function handleBtnAutoMode() {
 let btnMenuTimer: number;
 
 function handleBtnMenu() {
+  if (isVideoPlaying.value) return;
   if (showSubMenu.value) {
     showSubMenu.value = false;
   } else {
@@ -241,6 +257,11 @@ onMounted(() => {
     );
   }
 });
+onUnmounted(() => {
+  eventBus.off("popupVideo", handleVideoStart);
+  eventBus.off("popupVideoDone", handleVideoDone);
+});
+
 function getI18n(key: string) {
   return getUiI18n(key, props.language);
 }
@@ -249,12 +270,12 @@ function getI18n(key: string) {
 <template>
   <div
     class="baui"
-    :class="{ 'has-menu': overrideTextContainer }"
+    :class="{ 'has-menu': overrideTextContainer, 'video-playing': isVideoPlaying }"
     :style="{ 'font-size': `${bauiem}px`, cursor: cursorStyle }"
     tabindex="0"
   >
     <div
-      v-if="!hideAllUI"
+      v-if="!hideAllUI && !isVideoPlaying"
       class="right-top"
       :style="{ opacity: showMenu || forceShowMenu ? 1 : 0 }"
       ref="rightTop"
@@ -385,6 +406,8 @@ function getI18n(key: string) {
   padding: 0;
   cursor: pointer;
 }
+
+.baui.video-playing .right-top { display: none !important; visibility: hidden !important; pointer-events: none !important; }
 
 .right-top {
   position: absolute;

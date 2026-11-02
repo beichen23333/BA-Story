@@ -198,13 +198,17 @@ const StoryRawUnitParserUnit: IStoryRawUnitParserUnit = {
     },
   },
   video: {
-    reg: /#video;([^;\n]+);([^;\n]+);?/i,
-    //处理情况为 #video;Scenario/Main/22000_MV_Video;Scenario/Main/22000_MV_Sound
+    // Legacy path-based video syntax remains supported.
+    reg: /^\s*#video;([^;\n]+);([^;\n]+);?\s*$/i,
     fn(match: RegExpExecArray, unit: StoryUnit) {
-      unit.video = {
-        videoPath: match[1],
-        soundPath: match[2],
-      };
+      unit.video = { videoPath: match[1], soundPath: match[2] };
+      return unit;
+    },
+  },
+  videoExcel: {
+    reg: /^\s*#(?:video|videons2);(\d+)\s*$/i,
+    fn(match: RegExpExecArray, unit: StoryUnit) {
+      unit.videoId = Number(match[1]);
       return unit;
     },
   },
@@ -348,7 +352,7 @@ const StoryRawUnitParserUnit: IStoryRawUnitParserUnit = {
           const parseResult = /\[n?s(\d{0,2})?](.+)/.exec(it);
           if (!parseResult) {
             console.error(
-              `在处理选项文本时遇到严重错误, 在尝试解析'${it}'时, 期望'/\\[n?s(\\d{0,2})?](.+)/'， 实际 undefined`
+              `在处理选项文本时遇到严重错误, 在尝试解析'${it}'时, 期望'/\\[n?s(\d{0,2})?](.+)/'， 实际 undefined`
             );
             return undefined;
           }

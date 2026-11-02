@@ -215,7 +215,10 @@ export interface StoryUnit {
   video?: {
     videoPath: string;
     soundPath: string;
+    soundVolume?: number;
   };
+  /** ID-based video instruction resolved from VideoExcel.json after parsing the full story. */
+  videoId?: number;
 }
 export interface Text {
   /**

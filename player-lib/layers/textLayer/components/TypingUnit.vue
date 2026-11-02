@@ -97,7 +97,7 @@ const currentSubContent = ref(filterRuby.value.join(""));
 const contentPointer = ref(-1);
 const subContentPointer = ref(-1);
 const subPadding = ref(0);
-const subContainTop = computed(() => (props.title ? "-0.6" : "-1"));
+const subContainTop = computed(() => (props.title ? "-1.4" : "-1.3")); // ruby高度
 const effectCSS = computed(() => ({
   ...parseTextEffectToCss(props.text.effects),
   "--padding": subPadding.value,
@@ -337,7 +337,7 @@ $tooltip-padding-t: 4px;
     position: absolute;
     // top: calc(var(--local-font-size) * var(--top-offset));
     top: calc(
-      var(--local-font-size) * var(--top-offset) + var(--font-size) * 0.2 / 2
+      var(--local-font-size) * var(--top-offset) + var(--font-size) * 0.4 / 2
     );
     left: 50%;
     transform: translateX(-50%);

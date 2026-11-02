@@ -23,6 +23,7 @@ export type ResourcesTypes =
   | "bgEffectImgs"
   | "avatar"
   | "video"
+  | "videoSound"
   | "popupImage"
   | "bgEffectSounds"
   | "ui"

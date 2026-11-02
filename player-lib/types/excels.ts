@@ -61,6 +61,15 @@ export interface CharacterNameExcelTableItem {
   SmallPortrait: string;
 }
 
+export interface VideoExcelTableItem {
+  Id: number;
+  Nation: string[];
+  VideoPath?: string[];
+  VideoTeenPath?: string[];
+  SoundPath?: string[];
+  SoundVolume?: number[];
+}
+
 export interface TransitionTableItem {
   Name: number;
   TransitionOut: TransitionTypes;

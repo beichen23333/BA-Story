@@ -23,6 +23,7 @@ import { disposeUiState, useUiState } from "@/stores/state";
 import { PlayerConfigs, StoryUnit } from "@/types/common";
 import { watch } from "vue";
 import { excelApi } from "@/api";
+import type { VideoExcelTableItem } from "@/types/excels";
 import { retry } from "radash";
 // 注册全局 PIXI
 import * as PIXI from "pixi.js";
@@ -52,6 +53,7 @@ const unexistL2dSoundEvent = ["sound/Nonomi_MemorialLobby_3_3"];
 
 const assetLoadPromises = new Map<string, Promise<unknown>>();
 let voiceLanguageChangeHandler: ((event: Event) => void) | undefined;
+let storyLanguageChangeHandler: (() => void) | undefined;
 
 export async function checkloadAssetAlias(alias: string, url: string) {
   if (resourcesLoader.loadedList.includes(alias)) {
@@ -86,6 +88,10 @@ export function dispose() {
     window.removeEventListener("ba-story-voice-language-change", voiceLanguageChangeHandler);
     voiceLanguageChangeHandler = undefined;
   }
+  if (storyLanguageChangeHandler) {
+    window.removeEventListener("ba-story-player-language-change", storyLanguageChangeHandler);
+    storyLanguageChangeHandler = undefined;
+  }
   eventBus.emit("removeEffect");
   eventBus.emit("dispose");
   initPrivateState().app?.destroy();
@@ -117,6 +123,7 @@ export const eventEmitter = {
   /** 当前l2d动画是否播放完成 */
   l2dAnimationDone: true,
   VoiceJpDone: true,
+  videoDone: true,
 
   get unitDone(): boolean {
     let result = true;
@@ -170,6 +177,7 @@ export const eventEmitter = {
         window.dispatchEvent(new CustomEvent("ba-player-replay-request"));
       }
     });
+    eventBus.on("popupVideoDone", () => (eventEmitter.videoDone = true));
     eventBus.on("effectDone", () => (eventEmitter.effectDone = true));
     eventBus.on("characterDone", () => (eventEmitter.characterDone = true));
     eventBus.on("titleDone", () => (this.titleDone = true));
@@ -518,21 +526,92 @@ export const eventEmitter = {
   },
 
   showPopup() {
+    const video = storyHandler.currentStoryUnit.video;
     if (storyHandler.currentStoryUnit.PopupFileName) {
       eventBus.emit("popupImage", storyHandler.currentStoryUnit.PopupFileName);
-    } else if (storyHandler.currentStoryUnit.video) {
-      eventBus.emit(
-        "popupVideo",
-        storyHandler.currentStoryUnit.video.videoPath
-      );
-      eventBus.emit("playAudio", {
-        soundUrl: storyHandler.currentStoryUnit.video.soundPath,
+    } else if (video) {
+      this.videoDone = false;
+      eventBus.emit("popupVideo", {
+        videoUrl: video.videoPath,
+        soundUrl: video.soundPath || undefined,
+        soundVolume: video.soundVolume ?? 1,
       });
     } else {
       eventBus.emit("hidePopup");
     }
   },
 };
+
+const videoExcelTable = new Map<number, VideoExcelTableItem>();
+
+function hasVideoInstruction(story: PlayerConfigs["story"]): boolean {
+  return story.content.some(unit =>
+    /^\s*#(?:video|videons2);\d+\s*$/im.test(String(unit?.ScriptKr ?? ""))
+  );
+}
+
+async function loadVideoExcelIfNeeded(story: PlayerConfigs["story"]): Promise<void> {
+  videoExcelTable.clear();
+  if (!hasVideoInstruction(story)) return;
+  try {
+    const rows = await excelApi.getVideoExcel() as VideoExcelTableItem[];
+    for (const row of rows || []) {
+      if (Number.isFinite(Number(row.Id))) videoExcelTable.set(Number(row.Id), row);
+    }
+  } catch (error) {
+    console.error("Failed to load resource map: VideoExcel", error);
+    videoExcelTable.clear();
+  }
+}
+
+function normalizeVideoNation(value: string): string {
+  const nation = String(value || "").trim().toUpperCase();
+  const aliases: Record<string, string> = {
+    ZH: "CN", "ZH-CN": "CN", CHS: "CN",
+    JA: "JP", KO: "KR",
+    "ZH-TW": "TW", CHT: "TW",
+  };
+  return aliases[nation] || nation;
+}
+
+/** Nation 的顺序与 VideoPath / SoundPath / SoundVolume 的数组下标一一对应。 */
+function nationIndex(nations: string[] | undefined, wanted: string): number {
+  if (!nations?.length) return 0;
+  const normalizedNations = nations.map(normalizeVideoNation);
+  if (normalizedNations.includes("ALL")) return 0;
+  const exact = normalizedNations.indexOf(normalizeVideoNation(wanted));
+  if (exact >= 0) return exact;
+  const jp = normalizedNations.indexOf("JP");
+  return jp >= 0 ? jp : 0;
+}
+
+function resolveVideoExcelUnits(units: StoryUnit[]): void {
+  // 剧情文本语言决定视频版本；配音语言独立决定视频内嵌音轨。
+  const videoNation = normalizeVideoNation(String(playerStore.language || "Jp"));
+  const soundNation = normalizeVideoNation(String(privateState.voiceLanguage || "jp"));
+  for (const unit of units) {
+    if (unit.videoId === undefined) continue;
+    const row = videoExcelTable.get(unit.videoId);
+    if (!row) {
+      console.warn(`VideoExcel.json 中不存在视频 ID: ${unit.videoId}`);
+      continue;
+    }
+    const videoIndex = nationIndex(row.Nation, videoNation);
+    const soundIndex = nationIndex(row.Nation, soundNation);
+    // 某些表格的 SoundVolume 只有一个值；目标下标不存在时安全回退到第 0 项。
+    const videoPath = row.VideoPath?.[videoIndex] || row.VideoPath?.[0];
+    const soundPath = row.SoundPath?.[soundIndex] || row.SoundPath?.[0];
+    unit.video = {
+      videoPath: videoPath ? utils.getResourcesUrl("video", videoPath) : "",
+      soundPath: soundPath ? utils.getResourcesUrl("videoSound", soundPath) : "",
+      soundVolume: row.SoundVolume?.[soundIndex] ?? row.SoundVolume?.[0] ?? 1,
+    };
+    if (!unit.video.videoPath) {
+      unit.video = undefined;
+      console.warn(`VideoExcel.json 视频 ID ${unit.videoId} 缺少 VideoPath`);
+    }
+  }
+}
 
 /**
  * 调用各层的初始化函数
@@ -606,6 +685,13 @@ export async function init(
   //加载初始化资源以便翻译层进行翻译
   await resourcesLoader.init();
   privateState.allStoryUnit = translate(props.story);
+  await loadVideoExcelIfNeeded(props.story);
+  resolveVideoExcelUnits(privateState.allStoryUnit);
+  if (storyLanguageChangeHandler) {
+    window.removeEventListener("ba-story-player-language-change", storyLanguageChangeHandler);
+  }
+  storyLanguageChangeHandler = () => resolveVideoExcelUnits(privateState.allStoryUnit);
+  window.addEventListener("ba-story-player-language-change", storyLanguageChangeHandler);
   privateState.stackStoryUnit = buildStoryIndexStackRecord(
     privateState.allStoryUnit
   );
@@ -616,6 +702,8 @@ export async function init(
     const value = (event as CustomEvent<string>).detail;
     if (!( ["cn", "jp", "kr"] as string[]).includes(value)) return;
     privateState.voiceLanguage = value as "cn" | "jp" | "kr";
+    // 语音设置变化时同步重新选择视频音轨和对应音量。
+    resolveVideoExcelUnits(privateState.allStoryUnit);
     const rawUnits = props.story.content.filter(Boolean);
     privateState.allStoryUnit.forEach((unit: StoryUnit, index: number) => {
       if (!unit.audio) unit.audio = {};
