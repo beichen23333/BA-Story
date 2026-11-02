@@ -998,26 +998,43 @@ $text-outline: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
 
 
 .content {
-  //--font-size: 2rem;
   --param-font-size: 65;
+
+  // 与每个剧情文字单元使用完全相同的字号基准，避免 PC/手机继承不同字号
+  --content-font-size: max(
+    calc(
+      (
+        var(--param-font-size) /
+        var(--standard-unity-font-size) *
+        var(--standard-font-size)
+      ) * 1rem
+    ),
+    var(--minimum-fs)
+  );
+
   font-weight: bold;
-  margin-top: -0.5%; // 文本高度
   color: white;
-  line-height: 1.5; //文本间距
+
+  // 垂直位置按实际文字字号的 -0.5% 计算，确保是有效长度
+  margin-top: calc(var(--content-font-size) * -0.005);
+
+  // 行高跟随实际文字字号，保持与手游相同的 1.5 倍比例
+  line-height: calc(var(--content-font-size) * 1.6);
+
   :deep(span.unit) {
     --font-size: max(
       calc(
         (
-            var(--param-font-size) / var(--standard-unity-font-size) *
-              var(--standard-font-size)
-          ) * 1rem
+          var(--param-font-size, 65) /
+          var(--standard-unity-font-size) *
+          var(--standard-font-size)
+        ) * 1rem
       ),
       var(--minimum-fs)
     );
     font-size: var(--font-size);
   }
 }
-
 .text-container {
   --minimum-fs: 14px; // 最小字体大小
   position: absolute;
