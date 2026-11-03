@@ -91,20 +91,20 @@ pnpm preview
 
 | 项目 | 官网 / 仓库 | 使用场景 | 许可证 / 注意事项 |
 |---|---|---|---|
-| GSAP | https://gsap.com/ · https://github.com/greensock/GSAP | 角色及 UI 动画编排 | GSAP 专有授权条款；发布前需审查 |
-| Spine Runtimes | https://esotericsoftware.com/ · https://github.com/EsotericSoftware/spine-runtimes | `@esotericsoftware/spine-pixi-v7` 角色动画运行时 | Spine Runtime License；不是标准 OSI 开源许可证，需单独核实 |
-| Howler.js | https://howlerjs.com/ · https://github.com/goldfire/howler.js | 音频播放 | MIT（按版本核验） |
-| Pinia | https://pinia.vuejs.org/ · https://github.com/vuejs/pinia | 播放器状态管理 | MIT（按版本核验） |
-| VueUse | https://vueuse.org/ · https://github.com/vueuse/vueuse | Vue Composables 与工具 | MIT（按版本核验） |
-| Axios | https://axios-http.com/ · https://github.com/axios/axios | HTTP 请求 | MIT（按版本核验） |
-| mitt | https://github.com/developit/mitt | 事件总线 | MIT（按版本核验） |
-| lodash-es | https://lodash.com/ · https://github.com/lodash/lodash | 通用工具函数 | MIT（按版本核验） |
-| radash | https://radash-docs.vercel.app/ · https://github.com/radash-docs/radash | 通用辅助工具 | MIT（按版本核验） |
-| uuid | https://github.com/uuidjs/uuid | UUID 生成 | MIT（按版本核验） |
-| xxhashjs | https://github.com/piercional/xxhashjs | 哈希工具 | MIT（按版本核验） |
-| `@ungap/structured-clone` | https://github.com/ungap/structured-clone | 结构化克隆辅助 | ISC（按版本核验） |
-| ba-click-fx | https://github.com/CialloKing/ba-click-fx | 大厅点击交互特效 | **Unknown**：请核实仓库及所用版本的许可证 |
-| vue-responsive-video-background-player | https://www.npmjs.com/package/vue-responsive-video-background-player | 响应式视频背景播放器相关集成 | **Unknown**：请核实包元数据与上游许可证 |
+| GSAP | https://gsap.com/ · https://github.com/greensock/GSAP | 角色及 UI 动画编排 | GSAP |
+| Spine Runtimes | https://esotericsoftware.com/ · https://github.com/EsotericSoftware/spine-runtimes | `@esotericsoftware/spine-pixi-v7` | Spine Runtime License |
+| Howler.js | https://howlerjs.com/ · https://github.com/goldfire/howler.js | 音频播放 | MIT |
+| Pinia | https://pinia.vuejs.org/ · https://github.com/vuejs/pinia | 播放器状态管理 | MIT |
+| VueUse | https://vueuse.org/ · https://github.com/vueuse/vueuse | Vue Composables 与工具 | MIT |
+| Axios | https://axios-http.com/ · https://github.com/axios/axios | HTTP 请求 | MIT |
+| mitt | https://github.com/developit/mitt | 事件总线 | MIT |
+| lodash-es | https://lodash.com/ · https://github.com/lodash/lodash | 通用工具函数 | MIT |
+| radash | https://radash-docs.vercel.app/ · https://github.com/radash-docs/radash | 通用辅助工具 | MIT |
+| uuid | https://github.com/uuidjs/uuid | UUID 生成 | MIT |
+| xxhashjs | https://github.com/piercional/xxhashjs | 哈希工具 | MIT |
+| `@ungap/structured-clone` | https://github.com/ungap/structured-clone | 结构化克隆辅助 | ISC |
+| ba-click-fx | https://github.com/CialloKing/ba-click-fx | 大厅点击交互特效 | MIT |
+| vue-responsive-video-background-player | https://www.npmjs.com/package/vue-responsive-video-background-player | 响应式视频背景播放器相关集成 | 未知 |
 
 ### 素材与资源（Assets & Resources）
 

@@ -4,7 +4,8 @@ import { EVENT_STORY_TEXTS, EVENT_STORY_EPISODES } from "../../public/texts/even
 export const EVENT_STORY_PAGES = [
     [
         ["801", 1],
-        ["802", 2]
+        ["802", 2],
+        ["803", 3]
     ]
 ].map((page, pageIndex) => ({
     id: `event-page-${pageIndex + 1}`,

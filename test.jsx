@@ -8,7 +8,6 @@ const DATA_URL = "https://res.bluearchive.help/image/ba-all-data";
 const DESIGN_WIDTH = 1280;
 const DESIGN_HEIGHT = 720;
 
-// 保持 16:9 设计比例，按当前可视区域等比缩放，避免播放器画布再次被父容器缩放。
 function getPlayerSize() {
   const viewportWidth = Math.max(1, window.visualViewport?.width || window.innerWidth);
   const viewportHeight = Math.max(1, window.visualViewport?.height || window.innerHeight);
