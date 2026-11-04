@@ -112,6 +112,11 @@
     color: #364d67;
     line-height: 1.35;
 }
+.story-detail-episodes-note-hidden {
+    visibility: hidden;
+    user-select: none;
+    pointer-events: none;
+}
 .story-detail-episode-scroll {
     min-height: 0;
     overflow-y: auto;
@@ -134,6 +139,16 @@
     border-radius: 11px;
     background: rgba(250, 253, 255, .96);
     box-shadow: 0 2px 2px rgba(48, 62, 70, .26), inset 0 1px #fff;
+}
+.story-detail-episodes-direct .story-detail-episode {
+    grid-template-columns: minmax(0, 1fr) clamp(82px, 9vw, 122px);
+}
+.story-detail-episodes-direct .story-detail-episode::before {
+    display: none;
+}
+.story-detail-episodes-direct .story-detail-episode-title {
+    grid-column: 1;
+    padding-left: 8px;
 }
 .story-detail-episode::before {
     content: "";
@@ -252,6 +267,9 @@
         grid-template-columns: clamp(38px, 10vw, 48px) minmax(0, 1fr) clamp(72px, 20vw, 100px);
         min-height: 58px;
         gap: 8px;
+    }
+    .story-detail-episodes-direct .story-detail-episode {
+        grid-template-columns: minmax(0, 1fr) clamp(72px, 20vw, 100px);
     }
     .story-detail-episode-title {
         font-size: clamp(14px, 3vw, 18px);

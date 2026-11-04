@@ -599,25 +599,25 @@ export function App({ active = true } = {}) {
       </>}
       {(workStoryOpen || eventStoryOpen) && !workDetailOpen && <>
         <button className="story-list-back-button archive-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <StoryListPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openWorkDetail} onCardClickSound={playButtonTouchSound} storyType={eventStoryOpen ? "event" : "work"} />
+        <StoryListPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openWorkDetail} onCardClickSound={playButtonTouchSound} storyType={eventStoryOpen ? "event" : "work"} userName={userName} />
         {storyPageIndex > 0 && <button className={`story-list-prev-page-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("previous")} aria-label={t.previousPage} disabled={Boolean(flipPhase)}><ChevronLeft size={43} strokeWidth={2.7} /></button>}
         {storyPageIndex < (eventStoryOpen ? EVENT_STORY_PAGES_BY_PAGE.length : WORK_STORY_PAGES_BY_PAGE.length) - 1 && <button className={`story-list-next-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("next")} aria-label={t.nextPage} disabled={Boolean(flipPhase)}><ChevronRight size={43} strokeWidth={2.7} /></button>}
       </>}
       {(workStoryOpen || eventStoryOpen) && workDetailOpen && <>
         <button className="story-list-back-button archive-back-button" type="button" onClick={closeWorkDetail} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <StoryDetailPanel story={selectedWorkStory} pageIndex={storyPageIndex} language={language} onBack={closeWorkDetail} storyType={eventStoryOpen ? "event" : "work"} onEpisodeSelect={(story, episode) => setStoryInfoSelection({ story, episode })} />
-        {storyInfoSelection && <StoryInfoModal story={storyInfoSelection.story} episode={storyInfoSelection.episode} language={language} onClose={() => setStoryInfoSelection(null)} onEnter={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); setStoryInfoSelection(null); void loadAndPlayEpisode(story, episode); }} />}
+        <StoryDetailPanel story={selectedWorkStory} pageIndex={storyPageIndex} language={language} onBack={closeWorkDetail} storyType={eventStoryOpen ? "event" : "work"} userName={userName} onEpisodeSelect={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); void loadAndPlayEpisode(story, episode); }} />
+        {storyInfoSelection && <StoryInfoModal story={storyInfoSelection.story} episode={storyInfoSelection.episode} language={language} userName={userName} onClose={() => setStoryInfoSelection(null)} onEnter={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); setStoryInfoSelection(null); void loadAndPlayEpisode(story, episode); }} />}
       </>}
       {groupStoryOpen && !clubDetailOpen && (<>
         <button className="story-list-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <StoryListPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openStoryDetail} onCardClickSound={playButtonTouchSound} storyType={miniStoryMode ? "mini" : "club"} />
+        <StoryListPanel pageIndex={storyPageIndex} language={language} flipPhase={flipPhase} flipDirection={flipDirection} onStorySelect={openStoryDetail} onCardClickSound={playButtonTouchSound} storyType={miniStoryMode ? "mini" : "club"} userName={userName} />
         {storyPageIndex > 0 && <button className={`story-list-prev-page-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("previous")} aria-label={t.previousPage} disabled={Boolean(flipPhase)}><ChevronLeft size={43} strokeWidth={2.7} /></button>}
         {storyPageIndex < (miniStoryMode ? MINI_STORY_PAGES.length : CLUB_STORY_PAGES.length) - 1 && <button className={`story-list-next-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("next")} aria-label={t.nextPage} disabled={Boolean(flipPhase)}><ChevronRight size={43} strokeWidth={2.7} /></button>}
       </>)}
       {groupStoryOpen && clubDetailOpen && <>
         <button className="story-list-back-button" type="button" onClick={closeStoryDetail} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <StoryDetailPanel story={selectedStory} pageIndex={storyPageIndex} language={language} onBack={closeStoryDetail} storyType={miniStoryMode ? "mini" : "club"} onEpisodeSelect={(story, episode) => setStoryInfoSelection({ story, episode })} />
-        {storyInfoSelection && <StoryInfoModal story={storyInfoSelection.story} episode={storyInfoSelection.episode} language={language} onClose={() => setStoryInfoSelection(null)} onEnter={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); setStoryInfoSelection(null); void loadAndPlayEpisode(story, episode); }} />}
+        <StoryDetailPanel story={selectedStory} pageIndex={storyPageIndex} language={language} onBack={closeStoryDetail} storyType={miniStoryMode ? "mini" : "club"} userName={userName} onEpisodeSelect={(story, episode) => setStoryInfoSelection({ story, episode })} />
+        {storyInfoSelection && <StoryInfoModal story={storyInfoSelection.story} episode={storyInfoSelection.episode} language={language} userName={userName} onClose={() => setStoryInfoSelection(null)} onEnter={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); setStoryInfoSelection(null); void loadAndPlayEpisode(story, episode); }} />}
       </>}
       {playingStorySelection && loadedStoryData && <StoryPlayer
         className="ba-story-player-page"

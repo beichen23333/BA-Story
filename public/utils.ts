@@ -206,6 +206,10 @@ export function getBackgroundImage(date = new Date()): string {
 // ============================================================
 // 纯工具函数
 // ============================================================
+export function replaceUserNameText(value: unknown, userName: string): string {
+  return String(value ?? "").replaceAll("[USERNAME]", String(userName ?? ""));
+}
+
 /** 深拷贝 JSON 兼容对象。 */
 export function deepCopyObject<T>(object: T): T {
   if (typeof object !== "object") return object;

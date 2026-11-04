@@ -1,5 +1,5 @@
 import { getResourcesUrl } from "../../public/utils.ts";
-import { WORK_STORY_TEXTS, WORK_STORY_EPISODES } from "../../public/texts/worktexts.js";
+import { WORK_STORY_TEXTS, WORK_STORY_EPISODES, WORK_STORY_EPISODE_SELECTION_TITLES } from "../../public/texts/worktexts.js";
 
 export const WORK_STORY_PAGES = [
     [
@@ -41,6 +41,7 @@ export function getWorkStoryPage(pageIndex, language = "cn") {
             descriptionKey: episode.descriptionKey,
             GroupId: episode.GroupId,
             title: episode.title[language] || episode.title.cn,
+            selectionTitle: WORK_STORY_EPISODE_SELECTION_TITLES[story.id]?.[episode.id]?.[language] || WORK_STORY_EPISODE_SELECTION_TITLES[story.id]?.[episode.id]?.cn,
             description: episode.description[language] || episode.description.cn
         })) : undefined;
         return {

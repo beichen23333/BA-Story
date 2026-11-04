@@ -361,10 +361,13 @@ export function getText(
 ): string {
   const textProperty = `Text${language}` as const;
   const localized = Reflect.get(rawStoryUnit, textProperty);
-  if (localized !== undefined && localized !== null && String(localized) !== "") return String(localized);
   const english = Reflect.get(rawStoryUnit, "TextEn");
-  if (english !== undefined && english !== null && String(english) !== "") return String(english);
-  return String(rawStoryUnit.TextJp ?? "");
+  const text = localized !== undefined && localized !== null && String(localized) !== ""
+    ? String(localized)
+    : english !== undefined && english !== null && String(english) !== ""
+      ? String(english)
+      : String(rawStoryUnit.TextJp ?? "");
+  return text.replaceAll("[USERNAME]", String(playerStore.userName ?? ""));
 }
 
 type NxTagMap = {

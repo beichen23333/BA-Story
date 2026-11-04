@@ -1,9 +1,10 @@
 import React, { useEffect } from "react";
 const blueButton = "./assets/CCG_Img_BtnBlue.png";
 import { TEXT } from "../../public/texts.js";
+import { replaceUserNameText } from "../../public/utils.ts";
 import "../styles/story-info-modal.css";
 
-export function StoryInfoModal({ story, episode, language = "cn", onClose, onEnter }) {
+export function StoryInfoModal({ story, episode, language = "cn", onClose, onEnter, userName = "sensei" }) {
   const t = TEXT[language] || TEXT.cn;
 
   useEffect(() => {
@@ -18,6 +19,8 @@ export function StoryInfoModal({ story, episode, language = "cn", onClose, onEnt
   if (!story || !episode) return null;
 
   const episodeNumber = String(episode.number ?? episode.id ?? 1).padStart(2, "0");
+  const episodeTitle = replaceUserNameText(episode.title || story.title, userName);
+  const episodeDescription = replaceUserNameText(episode.description || t.storyRewardsComplete, userName);
 
   return <div className="story-info-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose?.(); }}>
     <section className="story-info-modal" role="dialog" aria-modal="true" aria-labelledby="story-info-title">
@@ -26,9 +29,9 @@ export function StoryInfoModal({ story, episode, language = "cn", onClose, onEnt
         <button className="story-info-close" type="button" onClick={onClose} aria-label={t.close}>×</button>
       </header>
       <div className="story-info-body">
-        <div className="story-info-episode-title"><span>{episodeNumber}</span><span className="story-info-separator">｜</span><span>{episode.title || story.title}</span></div>
+        <div className="story-info-episode-title"><span>{episodeNumber}</span><span className="story-info-separator">｜</span><span>{episodeTitle}</span></div>
         <h3 className="story-detail-episodes-heading story-info-reward-heading">{t.episodeSummaryTitle || t.storyRewards}</h3>
-        <p className="story-info-reward-copy">{episode.description || t.storyRewardsComplete}</p>
+        <p className="story-info-reward-copy">{episodeDescription}</p>
         <button className="story-info-enter" type="button" onClick={() => onEnter?.(story, episode)}>
           <img src={blueButton} alt="" draggable="false" />
           <span>{t.enterStory}</span>
