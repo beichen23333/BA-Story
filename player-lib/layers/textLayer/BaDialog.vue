@@ -720,7 +720,7 @@ function handleStartLoading(url: LoadingImageUrl) {
     loadingImageSrc.value = url.url;
   } else {
     const loadingImageIndex = Math.floor(Math.random() * 40);
-    loadingImageSrc.value = `${url.url}/loading/${loadingImageIndex}.webp`;
+    loadingImageSrc.value = `${url.url}LoadingImage_${loadingImageIndex + 1}.jpg`;
   }
   showLoading.value = true;
 }

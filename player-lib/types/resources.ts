@@ -31,4 +31,5 @@ export type ResourcesTypes =
   | "eventContent"
   | "eventScenario"
   | "font"
-  | "scenarioScript";
+  | "scenarioScript"
+  | "loadingImage";

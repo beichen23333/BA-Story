@@ -74,6 +74,8 @@ export function getResourcesUrl(type: ResourcesTypes, arg: string): string {
       return `${dataUrl}/font/${arg}`;
     case "scenarioScript":
       return `${dataUrl}/data/ScenarioScript/${arg}`;
+    case "loadingImage":
+      return `${dataUrl}/UIs/01_Common/12_Loading/${arg}`;
     case "bgEffectSounds":
       return `${dataUrl}/Audio/Sound/UI_FX_${arg}.wav`;
     case "avatar":

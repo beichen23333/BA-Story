@@ -79,7 +79,8 @@ export const EVENT_STORY_PAGES = [
         ["859", 56],
         ["860", 57],
         ["861", 58],
-        ["862", 59]
+        ["862", 59],
+        ["864", 60]
     ]
 ].map((page, pageIndex) => ({
     id: `event-page-${pageIndex + 1}`,

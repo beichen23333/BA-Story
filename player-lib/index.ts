@@ -681,7 +681,7 @@ export async function init(
     ?.appendChild(app.view as HTMLCanvasElement);
   // 记录加载开始时间，用于优化加载过快黑屏一闪而过的体验
   const startLoadTime = Date.now();
-  eventBus.emit("startLoading", { url: props.dataUrl });
+  eventBus.emit("startLoading", { url: utils.getResourcesUrl("loadingImage", "") });
   //加载初始化资源以便翻译层进行翻译
   await resourcesLoader.init();
   privateState.allStoryUnit = translate(props.story);

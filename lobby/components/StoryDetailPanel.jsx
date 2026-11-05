@@ -33,7 +33,7 @@ export function StoryDetailPanel({ story, pageIndex = 0, language = "cn", onBack
   const episodes = episodeSource.map((episode, index) => localizeEpisode(episode, index, language, displayTitle, userName)).sort((a, b) => Number(b.number ?? b.id) - Number(a.number ?? a.id));
   return <section className="story-detail-layout" aria-label={storyType === "work" || storyType === "event" ? t.archiveTitle : t.clubDetailTitle}>
     <article className="story-detail-cover">
-      <header className="story-detail-cover-title">{current ? <>{storyType !== "work" && storyType !== "event" && <><span className="story-detail-cover-title-main">{t.chapterPrefix.replace("{number}", String(current.volume ?? 1))}</span><span className="story-detail-title-separator">｜</span></>}<span className="story-detail-cover-title-name">{displayTitle}</span></> : t.invalidStory}</header>
+      <header className="story-detail-cover-title">{current ? <>{storyType !== "work" && storyType !== "event" && <><span className="story-detail-cover-title-main">{t.chapterPrefix.replace("{number}", 1)}</span><span className="story-detail-title-separator">｜</span></>}<span className="story-detail-cover-title-name">{displayTitle}</span></> : t.invalidStory}</header>
       <div className="story-detail-art-wrap">
         {coverUrl && <img key={coverUrl} className="story-detail-art" src={coverUrl} alt={displayTitle} onLoad={() => setCoverState("loaded")} onError={() => setCoverState("error")} draggable="false" />}
         {coverState !== "loaded" && <div className="story-detail-cover-placeholder">{coverState === "error" || !coverUrl ? t.coverUnavailable : ""}</div>}

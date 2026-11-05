@@ -447,11 +447,7 @@
     }
 }
 
-.event-story-list-title,
-.work-story-list-card .story-list-title {
+.story-list-title,
+.event-story-list-title {
     font-size: 16px;
-}
-
-.story-list-card.event-story-list-card .event-story-list-title {
-    font-size: 16px !important;
 }
