@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { deepCopyObject } from "../../../../public/utils.ts";
+import { deepCopyObject } from "../../../../shared/utils.ts";
 import { computed, ref, Ref, watch, onBeforeUnmount } from "vue";
 import { useUiState } from "@/stores/state";
 import { Text } from "@/types/common";

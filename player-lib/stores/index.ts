@@ -1,4 +1,4 @@
-import { getResourcesUrl } from "../../public/utils.ts";
+import { getResourcesUrl } from "../../shared/utils.ts";
 import { Assets } from "pixi.js";
 import { ref } from "vue";
 import { BGEffectImgTable } from "@/types/effectLayer";

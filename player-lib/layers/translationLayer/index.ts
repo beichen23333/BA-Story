@@ -1,5 +1,5 @@
 import { usePlayerStore } from "@/stores";
-import { deepCopyObject, getEffectArray, getResourcesUrl } from "../../../public/utils.ts";
+import { deepCopyObject, getEffectArray, getResourcesUrl } from "../../../shared/utils.ts";
 import { l2dConfig } from "../l2dLayer/l2dConfig";
 import {
   StoryRawUnit,

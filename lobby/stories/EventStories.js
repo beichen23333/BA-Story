@@ -1,5 +1,5 @@
-import { getResourcesUrl } from "../../public/utils.ts";
-import { EVENT_STORY_TEXTS, EVENT_STORY_EPISODES } from "../../public/texts/eventtexts.js";
+import { getResourcesUrl } from "../../shared/utils.ts";
+import { EVENT_STORY_TEXTS, EVENT_STORY_EPISODES } from "../../shared/texts/eventtexts.js";
 
 export const EVENT_STORY_PAGES = [
     [

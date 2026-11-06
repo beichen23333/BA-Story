@@ -1,7 +1,7 @@
-import * as utils from "../public/utils.ts";
+import * as utils from "../shared/utils.ts";
 import eventBus from "@/eventBus";
 import { initPrivateState, usePlayerStore } from "@/stores";
-import { wait, getOtherSoundUrls } from "../public/utils.ts";
+import { wait, getOtherSoundUrls } from "../shared/utils.ts";
 import { EventData, Spine } from "@esotericsoftware/spine-pixi-v7";
 import {
   Application,

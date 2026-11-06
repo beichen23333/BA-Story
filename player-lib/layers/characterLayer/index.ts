@@ -36,7 +36,7 @@ import CharacterEffectPlayerInstance, {
 } from "./actionPlayer";
 import CharacterEmotionPlayerInstance from "./emotionPlayer";
 import CharacterFXPlayerInstance from "./fxPlayer";
-import { hasAnimation } from "../../../public/utils.ts";
+import { hasAnimation } from "../../../shared/utils.ts";
 
 const AnimationIdleTrack = 0; // 光环动画track index
 const AnimationFaceTrack = 1; // 差分切换

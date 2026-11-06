@@ -219,7 +219,7 @@
 <script setup lang="ts">
 import eventBus from "@/eventBus";
 import { usePlayerStore } from "@/stores";
-import { deepCopyObject } from "../../../public/utils.ts";
+import { deepCopyObject } from "../../../shared/utils.ts";
 import gsap from "gsap";
 import {
   Ref,

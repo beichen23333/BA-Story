@@ -5,7 +5,7 @@ import { getWorkStoryPage } from "../stories/WorkStories.js";
 import { getEventStoryPage } from "../stories/EventStories.js";
 import { StoryCategoryCard } from "./StoryCategoryCard";
 import { EventStoryCategoryCard } from "./EventStoryCategoryCard";
-import { TEXT } from "../../public/texts.js";
+import { TEXT } from "../../shared/texts.js";
 import "../styles/story-list.css";
 
 export function StoryListPanel({ pageIndex = 0, language = "cn", flipPhase = "", flipDirection = "next", onStorySelect, onCardClickSound, storyType = "club", userName = "sensei" }) {

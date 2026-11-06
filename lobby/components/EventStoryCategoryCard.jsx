@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { replaceUserNameText } from "../../public/utils.ts";
+import { replaceUserNameText } from "../../shared/utils.ts";
 export function EventStoryCategoryCard({ story, index = 0, onSelect, onClickSound, userName = "sensei" }) {
   const displayTitle = replaceUserNameText(story.title, userName);
   const [bouncing, setBouncing] = useState(false);

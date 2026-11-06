@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { getResourcesUrl } from "../../public/utils.ts";
+import { getResourcesUrl } from "../../shared/utils.ts";
 import { retry } from "radash";
 
 const api: AxiosInstance = axios.create({

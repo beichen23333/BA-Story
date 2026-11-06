@@ -10,7 +10,7 @@ import {
 } from "@/types/characterLayer";
 import { ColorOverlayFilter } from "@pixi/filter-color-overlay";
 import { calcCharacterYAndScale, getStageSize } from "./index";
-import { hasAnimation } from "../../../public/utils.ts";
+import { hasAnimation } from "../../../shared/utils.ts";
 
 const AnimationIdleTrack = 0; // 光环动画track index
 const AnimationFaceTrack = 1; // 差分切换

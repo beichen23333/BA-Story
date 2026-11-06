@@ -1,5 +1,5 @@
 import React from "react";
-import { LANGUAGES } from "../../public/texts.js";
+import { LANGUAGES } from "../../shared/texts.js";
 
 export function Header({ t, language, setLanguage, voiceLanguage, setVoiceLanguage, userName, setUserName, isClubDetail = false }) {
   return (

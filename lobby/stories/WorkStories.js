@@ -1,5 +1,5 @@
-import { getResourcesUrl } from "../../public/utils.ts";
-import { WORK_STORY_TEXTS, WORK_STORY_EPISODES, WORK_STORY_EPISODE_SELECTION_TITLES } from "../../public/texts/worktexts.js";
+import { getResourcesUrl } from "../../shared/utils.ts";
+import { WORK_STORY_TEXTS, WORK_STORY_EPISODES, WORK_STORY_EPISODE_SELECTION_TITLES } from "../../shared/texts/worktexts.js";
 
 export const WORK_STORY_PAGES = [
     [

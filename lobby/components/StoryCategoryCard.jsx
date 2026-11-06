@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import { replaceUserNameText } from "../../public/utils.ts";
+import { replaceUserNameText } from "../../shared/utils.ts";
 export function StoryCategoryCard({ story, index = 0, onSelect, onClickSound, userName = "sensei", storyType = "club" }) {
   const displayTitle = replaceUserNameText(story.title, userName);
   const displayDescription = replaceUserNameText(story.description, userName);

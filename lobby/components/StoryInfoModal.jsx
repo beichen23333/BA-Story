@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 const blueButton = "./assets/CCG_Img_BtnBlue.png";
-import { TEXT } from "../../public/texts.js";
-import { replaceUserNameText } from "../../public/utils.ts";
+import { TEXT } from "../../shared/texts.js";
+import { replaceUserNameText } from "../../shared/utils.ts";
 import "../styles/story-info-modal.css";
 
 export function StoryInfoModal({ story, episode, language = "cn", onClose, onEnter, userName = "sensei" }) {

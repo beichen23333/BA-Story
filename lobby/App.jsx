@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import gsap from "gsap";
 import { Howler } from "howler";
-import { TEXT } from "../public/texts.js";
-import { LANGUAGE_HTML_MAP, AUDIO_FILES, dataUrl, getResourcesUrl, loadResources } from "../public/utils.ts";
+import { TEXT } from "../shared/texts.js";
+import { LANGUAGE_HTML_MAP, AUDIO_FILES, dataUrl, getResourcesUrl, loadResources } from "../shared/utils.ts";
 import { useOrientation } from "./hooks/useOrientation";
 import { useClickEffect } from "./hooks/useClickEffect";
 import { Header } from "./components/Header";

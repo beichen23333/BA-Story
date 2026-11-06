@@ -1,5 +1,5 @@
-import { getResourcesUrl } from "../../public/utils.ts";
-import { MINI_STORY_TEXTS, MINI_STORY_EPISODES } from "../../public/texts/minitexts.js";
+import { getResourcesUrl } from "../../shared/utils.ts";
+import { MINI_STORY_TEXTS, MINI_STORY_EPISODES } from "../../shared/texts/minitexts.js";
 
 export const MINI_STORY_PAGES = [
     [

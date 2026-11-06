@@ -1,5 +1,5 @@
 import { usePlayerStore } from "@/stores";
-import { deepCopyObject, getResourcesUrl } from "../../../public/utils.ts";
+import { deepCopyObject, getResourcesUrl } from "../../../shared/utils.ts";
 import xxhash from "xxhashjs";
 import {
   Character,

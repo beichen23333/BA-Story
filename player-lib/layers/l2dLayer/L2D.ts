@@ -2,7 +2,7 @@
 // @ts-nocheck
 import eventBus from "@/eventBus";
 import { usePlayerStore } from "@/stores";
-import { getResourcesUrl } from "../../../public/utils.ts";
+import { getResourcesUrl } from "../../../shared/utils.ts";
 import { Container } from "pixi.js";
 import gsap from "gsap";
 import { Spine, Event, TrackEntry } from "@esotericsoftware/spine-pixi-v7";

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { getResourcesUrl } from "../../public/utils.ts";
+import { getResourcesUrl } from "../../shared/utils.ts";
 
 const ARCHIVE_CARDS = [
   { key: "archiveFavor", image: "Replay_Favor.png" },

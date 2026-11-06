@@ -1,5 +1,5 @@
-import { getResourcesUrl } from "../../public/utils.ts";
-import { CLUB_STORY_TEXTS, CLUB_STORY_EPISODES } from "../../public/texts/clubtexts.js";
+import { getResourcesUrl } from "../../shared/utils.ts";
+import { CLUB_STORY_TEXTS, CLUB_STORY_EPISODES } from "../../shared/texts/clubtexts.js";
 
 export const CLUB_STORY_PAGES = [
     [

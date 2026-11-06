@@ -82,7 +82,7 @@ function buttonAnimation(
 export { buttonAnimation, effectBtnMouseDown, effectBtnMouseUp };
 // i18n
 /* eslint-disable max-len */
-import { getPlayerUiText } from "../../../public/texts.js";
+import { getPlayerUiText } from "../../../shared/texts.js";
 
 export function getUiI18n(key: string, language: Language): string {
   return getPlayerUiText(key, language);

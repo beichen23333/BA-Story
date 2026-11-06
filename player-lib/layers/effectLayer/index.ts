@@ -1,7 +1,7 @@
 import eventBus from "@/eventBus";
 import { storyHandler } from "@/index";
 import { usePlayerStore } from "@/stores";
-import { wait } from "../../../public/utils.ts";
+import { wait } from "../../../shared/utils.ts";
 import { Application, Sprite } from "pixi.js";
 import gsap from "gsap";
 // import { Application, Sprite } from "pixijs";
