@@ -18,7 +18,7 @@ export function AffinityStudentStoryPanel({ student, language = "cn", t, onEpiso
         ...episode,
         title: episode.title?.[language] || episode.title?.cn || "",
         description: episode.description?.[language] || episode.description?.cn || "",
-    }));
+    })).sort((left, right) => Number(right.number ?? right.id) - Number(left.number ?? left.id));
     const story = { id: String(student.CostumeGroupId), title: displayName };
     return <section className="affinity-student-story-layout" aria-label={displayName}>
         <section className="affinity-student-visual" aria-label={displayName}>
@@ -26,7 +26,7 @@ export function AffinityStudentStoryPanel({ student, language = "cn", t, onEpiso
             <div className="affinity-student-info">
                 {portraitUrl && <img className="affinity-student-avatar" src={portraitUrl} alt={displayName} draggable="false" />}
                 <div className="affinity-student-info-copy">
-                    <div className="affinity-student-school">{schoolName}</div>
+                    <div className="affinity-student-school"><span className="affinity-student-school-text">{schoolName}</span></div>
                     <div className="affinity-student-name">{displayName}</div>
                 </div>
             </div>

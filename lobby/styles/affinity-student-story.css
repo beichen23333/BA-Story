@@ -69,7 +69,9 @@
     position: absolute;
     left: calc(var(--affinity-avatar-width) + 12px);
     top: 0;
-    width: min(43%, 250px);
+    width: max-content;
+    max-width: calc(100% - var(--affinity-avatar-width) - 40px);
+    box-sizing: border-box;
     height: clamp(25px, 4.2vh, 36px);
     display: flex;
     align-items: center;
@@ -83,6 +85,13 @@
     font-weight: 800;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+.affinity-student-school-text {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .affinity-student-name {
     position: absolute;
@@ -284,7 +293,7 @@
     }
     .affinity-student-school {
         left: calc(var(--affinity-avatar-width) + 8px);
-        width: min(54%, 220px);
+        max-width: calc(100% - var(--affinity-avatar-width) - 32px);
     }
     .affinity-student-episode {
         grid-template-columns: clamp(36px, 8vw, 48px) minmax(0, 1fr) clamp(72px, 18vw, 96px);
