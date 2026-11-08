@@ -1,14 +1,19 @@
 import React from "react";
 import { getCostumeCollectionTextureUrl, getCostumeDisplayName } from "../stories/AffinityStories.ts";
 import { AFFINITY_STUDENT_STORY_EPISODES } from "../../shared/texts/affinitytexts.js";
+import { SCHOOL_CLUB_TEXTS } from "../../shared/texts.js";
 import { StudentSpinePreview } from "./StudentSpinePreview";
 import "../styles/affinity-student-story.css";
+
+const SCHOOL_TEXT_LANGUAGE = { cn: "Cn", tw: "Tw", kr: "Kr", jp: "Jp", en: "En", th: "Th" };
 
 export function AffinityStudentStoryPanel({ student, language = "cn", t, onEpisodeSelect }) {
     if (!student) return null;
     const displayName = getCostumeDisplayName(student, language);
     const spineResourceName = student.ScenarioCharacter || student.SpineResourceName || "";
     const portraitUrl = getCostumeCollectionTextureUrl(student.CollectionTexturePath);
+    const schoolLanguage = SCHOOL_TEXT_LANGUAGE[String(language || "cn").toLowerCase()] || "Cn";
+    const schoolName = SCHOOL_CLUB_TEXTS.School[student.School]?.[schoolLanguage] || SCHOOL_CLUB_TEXTS.None[schoolLanguage];
     const episodes = (AFFINITY_STUDENT_STORY_EPISODES[String(student.CostumeGroupId)] || []).map((episode) => ({
         ...episode,
         title: episode.title?.[language] || episode.title?.cn || "",
@@ -21,7 +26,7 @@ export function AffinityStudentStoryPanel({ student, language = "cn", t, onEpiso
             <div className="affinity-student-info">
                 {portraitUrl && <img className="affinity-student-avatar" src={portraitUrl} alt={displayName} draggable="false" />}
                 <div className="affinity-student-info-copy">
-                    <div className="affinity-student-school">{student.School || ""}</div>
+                    <div className="affinity-student-school">{schoolName}</div>
                     <div className="affinity-student-name">{displayName}</div>
                 </div>
             </div>

@@ -21,6 +21,7 @@ function localizeEpisode(episode, index, language, title, userName) {
 export function StoryDetailPanel({ story, pageIndex = 0, language = "cn", onBack, onEpisodeSelect, storyType = "club", userName = "sensei" }) {
   const t = TEXT[language] || TEXT.cn;
   const directEpisodeEntry = storyType === "work" || storyType === "event";
+  const eventEpisodeEntry = storyType === "event";
   const pageLoaders = { club: getClubStoryPage, mini: getMiniStoryPage, work: getWorkStoryPage, event: getEventStoryPage };
   const allStories = (pageLoaders[storyType] || getClubStoryPage)(pageIndex, language);
   const current = story ? allStories.find((item) => item.id === story.id) || story : null;
@@ -40,12 +41,12 @@ export function StoryDetailPanel({ story, pageIndex = 0, language = "cn", onBack
       </div>
       <p className="story-detail-description">{displayDescription || t.invalidStory}</p>
     </article>
-    <section className={`story-detail-episodes ${directEpisodeEntry ? "story-detail-episodes-direct" : ""}`}>
+    <section className={`story-detail-episodes ${storyType === "work" ? "story-detail-episodes-direct" : eventEpisodeEntry ? "story-detail-episodes-event" : ""}`}>
       <h2 className="story-detail-episodes-heading">{t.selectStory}</h2>
       <p className={`story-detail-episodes-note ${directEpisodeEntry ? "story-detail-episodes-note-hidden" : ""}`}>{t.episodeComplete}</p>
       <div className="story-detail-episode-scroll">
         {episodes.length ? episodes.map((episode, index) => <article className="story-detail-episode" key={`${episode.id}-${index}`}>
-          {!directEpisodeEntry && <div className="story-detail-episode-index"><div className="story-detail-episode-number">{String(episode.number ?? episode.id ?? index + 1).padStart(2, "0")}</div><img className="story-detail-file-icon" src={fileIcon} alt="" draggable="false" /></div>}
+          {(!directEpisodeEntry || eventEpisodeEntry) && <div className={`story-detail-episode-index ${eventEpisodeEntry ? "story-detail-event-episode-index" : ""}`}><div className="story-detail-episode-number">{String(episode.number ?? episode.id ?? index + 1).padStart(2, "0")}</div>{!eventEpisodeEntry && <img className="story-detail-file-icon" src={fileIcon} alt="" draggable="false" />}</div>}
           <div className="story-detail-episode-title" title={episode.selectionTitle || episode.title}>{episode.selectionTitle || episode.title}</div>
           <button className="story-detail-enter" type="button" onClick={() => onEpisodeSelect?.(current, episode)}>
             <img src={blueButton} alt="" draggable="false" />

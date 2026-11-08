@@ -815,3 +815,4 @@ export function getPlayerUiText(key, language) {
     const langDict = PLAYER_UI_TEXTS[lang] || PLAYER_UI_TEXTS.cn;
     return langDict[key] || key;
 }
+export { SCHOOL_CLUB_TEXTS } from "./texts/schoolclubtexts.js";
