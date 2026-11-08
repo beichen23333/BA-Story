@@ -8,6 +8,9 @@ import { useClickEffect } from "./hooks/useClickEffect";
 import { Header } from "./components/Header";
 import { StoryCard } from "./components/StoryCard";
 import { ArchivePanel } from "./components/ArchivePanel";
+import { AffinityStoryPanel } from "./components/AffinityStoryPanel";
+import { getCostumeCollectionBackgroundUrl } from "./stories/AffinityStories.ts";
+import { AffinityStudentStoryPanel } from "./components/AffinityStudentStoryPanel";
 import { WORK_STORY_PAGES_BY_PAGE } from "./stories/WorkStories.js";
 import { EVENT_STORY_PAGES_BY_PAGE } from "./stories/EventStories.js";
 import { OrientationOverlay } from "./components/OrientationOverlay";
@@ -92,6 +95,8 @@ export function App({ active = true } = {}) {
   const [sceneEntryKey, setSceneEntryKey] = useState(0);
   const [groupStoryOpen, setGroupStoryOpen] = useState(false);
   const [archiveOpen, setArchiveOpen] = useState(false);
+  const [affinityStoryOpen, setAffinityStoryOpen] = useState(false);
+  const [selectedAffinityStudent, setSelectedAffinityStudent] = useState(null);
   const [workStoryOpen, setWorkStoryOpen] = useState(false);
   const [eventStoryOpen, setEventStoryOpen] = useState(false);
   const [workDetailOpen, setWorkDetailOpen] = useState(false);
@@ -109,9 +114,11 @@ export function App({ active = true } = {}) {
   const [playerReplayKey, setPlayerReplayKey] = useState(0);
   const detailTransitionLock = useRef(false);
   const workDetailTransitionLock = useRef(false);
+  const affinityStudentTransitionLock = useRef(false);
   const [storyTransitionPending, setStoryTransitionPending] = useState(false);
   const [blackout, setBlackout] = useState("");
   const [storyPageIndex, setStoryPageIndex] = useState(0);
+  const [affinityPageCount, setAffinityPageCount] = useState(1);
   const [flipPhase, setFlipPhase] = useState("");
   const [flipDirection, setFlipDirection] = useState("next");
   const pageFlipTimer = useRef(null);
@@ -411,6 +418,8 @@ export function App({ active = true } = {}) {
     workDetailTransitionLock.current = false;
     if ((workStoryOpen || eventStoryOpen) && workDetailOpen) { runBlackoutTransition(() => { setWorkDetailOpen(false); setSelectedWorkStory(null); setStoryInfoSelection(null); }); return; }
     if (workStoryOpen || eventStoryOpen) { runBlackoutTransition(() => { setWorkStoryOpen(false); setEventStoryOpen(false); setArchiveOpen(true); setStoryPageIndex(0); }); return; }
+    if (affinityStoryOpen && selectedAffinityStudent) { if (affinityStudentTransitionLock.current) return; affinityStudentTransitionLock.current = true; runBlackoutTransition(() => { setSelectedAffinityStudent(null); affinityStudentTransitionLock.current = false; }); return; }
+    if (affinityStoryOpen) { if (pageFlipTimer.current) window.clearTimeout(pageFlipTimer.current); pageFlipTimer.current = null; setFlipPhase(""); setStoryPageIndex(0); runBlackoutTransition(() => { setAffinityStoryOpen(false); setArchiveOpen(true); }); return; }
     if (archiveOpen) { runBlackoutTransition(() => { setArchiveOpen(false); setSelected(""); setActiveMain(1); setStoryTransitionPending(false); setSceneEntering(false); setSceneEntryKey((key) => key + 1); requestAnimationFrame(() => { setSceneEntering(true); window.setTimeout(() => setSceneEntering(false), 850); }); }); return; }
     setClubDetailOpen(false);
     setSelectedStory(null);
@@ -440,7 +449,7 @@ export function App({ active = true } = {}) {
   // 翻页时先显示空白纸面，再翻动右半页；切换数据后禁用卡片入场动画，避免旧页残影与延迟显示。
   const flipStoryPage = (direction = "next") => {
     if (flipPhase) return;
-    const pageCount = eventStoryOpen ? EVENT_STORY_PAGES_BY_PAGE.length : workStoryOpen ? WORK_STORY_PAGES_BY_PAGE.length : miniStoryMode ? MINI_STORY_PAGES.length : CLUB_STORY_PAGES.length;
+    const pageCount = affinityStoryOpen ? affinityPageCount : eventStoryOpen ? EVENT_STORY_PAGES_BY_PAGE.length : workStoryOpen ? WORK_STORY_PAGES_BY_PAGE.length : miniStoryMode ? MINI_STORY_PAGES.length : CLUB_STORY_PAGES.length;
     const nextIndex = direction === "next" ? Math.min(pageCount - 1, storyPageIndex + 1) : Math.max(0, storyPageIndex - 1);
     if (nextIndex === storyPageIndex) return;
     playButtonTouchSound();
@@ -476,6 +485,15 @@ export function App({ active = true } = {}) {
       setFlipPhase("");
       setFlipDirection("next");
       setGroupStoryOpen(true);
+    });
+  };
+
+  const openAffinityStudent = (student) => {
+    if (affinityStudentTransitionLock.current || !student) return;
+    affinityStudentTransitionLock.current = true;
+    runBlackoutTransition(() => {
+      setSelectedAffinityStudent(student);
+      affinityStudentTransitionLock.current = false;
     });
   };
 
@@ -530,17 +548,17 @@ export function App({ active = true } = {}) {
 
   return (
     <main
-      className={`screen ${sceneEntering ? "scene-entering" : ""} ${groupStoryOpen ? "group-story-screen" : ""} ${(archiveOpen || workStoryOpen || eventStoryOpen) ? "archive-screen" : ""}`}
+      className={`screen ${sceneEntering ? "scene-entering" : ""} ${groupStoryOpen ? "group-story-screen" : ""} ${(archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen) ? "archive-screen" : ""}`}
       style={{
         backgroundColor: "#fff",
-        backgroundImage: `url("${bgImage}")`,
+        backgroundImage: `url("${(selectedAffinityStudent && getCostumeCollectionBackgroundUrl(selectedAffinityStudent.CollectionBGTexturePath)) || bgImage}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat"
       }}
     >
-    <Header t={(archiveOpen || workStoryOpen || eventStoryOpen) ? { ...t, pageTitle: t.archiveTitle } : groupStoryOpen ? { ...t, pageTitle: miniStoryMode ? t.affinity : (clubDetailOpen ? t.clubDetailTitle : t.clubTitle) } : t} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName} isClubDetail={groupStoryOpen && clubDetailOpen}/>
-      <section key={sceneEntryKey} className={`story-layout ${(archiveOpen || workStoryOpen || eventStoryOpen) ? "story-layout-hidden" : ""}`} aria-label={t.pageTitle}>
+    <Header t={(archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen) ? { ...t, pageTitle: t.archiveTitle } : groupStoryOpen ? { ...t, pageTitle: miniStoryMode ? t.affinity : (clubDetailOpen ? t.clubDetailTitle : t.clubTitle) } : t} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName} isClubDetail={groupStoryOpen && clubDetailOpen}/>
+      <section key={sceneEntryKey} className={`story-layout ${(archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen) ? "story-layout-hidden" : ""}`} aria-label={t.pageTitle}>
         <div className="main-stack">
           <StoryCard
             className="main-card-back"
@@ -593,9 +611,18 @@ export function App({ active = true } = {}) {
           onBounceComplete={finishStoryCardBounce}
         />
       </section>
-      {archiveOpen && !workStoryOpen && !eventStoryOpen && <>
+      {archiveOpen && !affinityStoryOpen && !workStoryOpen && !eventStoryOpen && <>
         <button className="story-list-back-button archive-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
-        <ArchivePanel t={t} onSelect={(key) => { if (key === "archiveWork" || key === "archiveEvent") { runBlackoutTransition(() => { setStoryPageIndex(0); setFlipPhase(""); setWorkDetailOpen(false); setEventStoryOpen(key === "archiveEvent"); setWorkStoryOpen(key === "archiveWork"); }); return; } playButtonTouchSound(); window.dispatchEvent(new CustomEvent("ba-archive-replay-select", { detail: key })); }} />
+        <ArchivePanel t={t} onSelect={(key) => { if (key === "archiveFavor") { playButtonTouchSound(); runBlackoutTransition(() => { setStoryPageIndex(0); setFlipPhase(""); setAffinityPageCount(1); setSelectedAffinityStudent(null); setAffinityStoryOpen(true); }); return; } if (key === "archiveWork" || key === "archiveEvent") { runBlackoutTransition(() => { setStoryPageIndex(0); setFlipPhase(""); setWorkDetailOpen(false); setEventStoryOpen(key === "archiveEvent"); setWorkStoryOpen(key === "archiveWork"); }); return; } playButtonTouchSound(); window.dispatchEvent(new CustomEvent("ba-archive-replay-select", { detail: key })); }} />
+      </>}
+      {affinityStoryOpen && <>
+        <button className="story-list-back-button archive-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>
+        <div style={{ display: selectedAffinityStudent ? "none" : "contents" }}>
+          <AffinityStoryPanel t={t} language={language} pageIndex={storyPageIndex} flipPhase={flipPhase} flipDirection={flipDirection} onPageCountChange={setAffinityPageCount} onPageReset={() => setStoryPageIndex(0)} onStudentSelect={openAffinityStudent} onStudentClickSound={playButtonTouchSound} />
+          {storyPageIndex > 0 && <button className={`story-list-prev-page-button affinity-story-prev-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("previous")} aria-label={t.previousPage} disabled={Boolean(flipPhase)}><ChevronLeft size={43} strokeWidth={2.7} /></button>}
+          {storyPageIndex < affinityPageCount - 1 && <button className={`story-list-next-button affinity-story-next-button ${flipPhase ? "is-flipping" : ""}`} type="button" onClick={() => flipStoryPage("next")} aria-label={t.nextPage} disabled={Boolean(flipPhase)}><ChevronRight size={43} strokeWidth={2.7} /></button>}
+        </div>
+        {selectedAffinityStudent && <AffinityStudentStoryPanel student={selectedAffinityStudent} language={language} t={t} onEpisodeSelect={(story, episode) => { stopMenuAudio(); playButtonTouchSound(); void loadAndPlayEpisode(story, episode); }} />}
       </>}
       {(workStoryOpen || eventStoryOpen) && !workDetailOpen && <>
         <button className="story-list-back-button archive-back-button" type="button" onClick={returnToScenarioMenu} aria-label={t.back}><ArrowLeft size={34} strokeWidth={2.3} /></button>

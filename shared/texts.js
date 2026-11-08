@@ -1,3 +1,4 @@
+import { AFFINITY_STORY_UI_TEXTS } from "./texts/affinitytexts.js";
 const ARCHIVE_TEXTS = {
     cn: {
         archiveTitle: '档案',
@@ -164,6 +165,7 @@ export const TEXT = {
     cn: {
         ...ARCHIVE_TEXTS.cn,
         ...LOBBY_TEXTS.cn,
+        ...AFFINITY_STORY_UI_TEXTS.cn,
         storyInfoTitle: '剧情信息',
         episodeSummaryTitle: "剧情概括",
         close: '关闭',
@@ -212,6 +214,7 @@ export const TEXT = {
     en: {
         ...ARCHIVE_TEXTS.en,
         ...LOBBY_TEXTS.en,
+        ...AFFINITY_STORY_UI_TEXTS.en,
         storyInfoTitle: 'Story Information',
         episodeSummaryTitle: "Story summary",
         close: 'Close',
@@ -260,6 +263,7 @@ export const TEXT = {
     kr: {
         ...ARCHIVE_TEXTS.kr,
         ...LOBBY_TEXTS.kr,
+        ...AFFINITY_STORY_UI_TEXTS.kr,
         storyInfoTitle: '스토리 정보',
         episodeSummaryTitle: "스토리 개요",
         close: '닫기',
@@ -308,6 +312,7 @@ export const TEXT = {
     jp: {
         ...ARCHIVE_TEXTS.jp,
         ...LOBBY_TEXTS.jp,
+        ...AFFINITY_STORY_UI_TEXTS.jp,
         storyInfoTitle: 'ストーリー情報',
         episodeSummaryTitle: "あらすじ",
         close: '閉じる',
@@ -356,6 +361,7 @@ export const TEXT = {
     tw: {
         ...ARCHIVE_TEXTS.tw,
         ...LOBBY_TEXTS.tw,
+        ...AFFINITY_STORY_UI_TEXTS.tw,
         storyInfoTitle: '劇情資訊',
         episodeSummaryTitle: "劇情概要",
         close: '關閉',
@@ -404,6 +410,7 @@ export const TEXT = {
     th: {
         ...ARCHIVE_TEXTS.th,
         ...LOBBY_TEXTS.th,
+        ...AFFINITY_STORY_UI_TEXTS.th,
         storyInfoTitle: 'ข้อมูลเนื้อเรื่อง',
         episodeSummaryTitle: "เรื่องย่อ",
         close: 'ปิด',

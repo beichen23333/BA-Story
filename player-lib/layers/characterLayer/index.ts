@@ -467,8 +467,8 @@ const Standard_Width_Relative = 0.3;
  */
 export const Character_Initial_Pivot_Proportion = { x: 0, y: -1 / 2 };
 
-export function calcCharacterYAndScale(spine: Spine) {
-  const { screenHeight } = getStageSize();
+export function calcCharacterYAndScale(spine: Spine, stageHeight?: number) {
+  const screenHeight = stageHeight ?? getStageSize().screenHeight;
   const scale = (screenHeight / PlayerHeight) * CharacterScale;
   const spineHeight = (spine.height / spine.scale.y) * scale;
   return {

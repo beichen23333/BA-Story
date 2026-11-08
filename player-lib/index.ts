@@ -73,6 +73,14 @@ export async function checkloadAssetAlias(alias: string, url: string) {
   return task;
 }
 
+/** 个人剧情页面复用播放器自身的 Spine 资源 URL 与 Assets 加载流程。 */
+export async function loadCharacterSpineForPreview(spineResourceName: string): Promise<Spine> {
+  const spineUrl = utils.getResourcesUrl("characterSpine", spineResourceName);
+  if (!spineUrl) throw new Error("INVALID_CHARACTER_SPINE_RESOURCE");
+  await checkloadAssetAlias(spineUrl, spineUrl);
+  return Spine.from({ skeleton: spineUrl, atlas: spineUrl.replace(/\.skel$/i, ".atlas") }) as unknown as Spine;
+}
+
 /**
  * 继续播放
  */
