@@ -15,6 +15,18 @@ let otherSoundMap: OtherSoundsUrls = {
 };
 
 /** 根据资源类型和参数生成统一资源地址。 */
+export function getPublicAssetUrl(filename: string): string {
+  return `./assets/${String(filename).replace(/^\/+/, "")}`;
+}
+
+export const MAIN_STORY_RESOURCES = {
+  sceneBackground: () => getResourcesUrl("lobbyBg", "Scenario_Bg.png"),
+  chapterBackground: () => getResourcesUrl("scenarioMode", "ChapterBg_1.png"),
+  volumeDecoration: () => getResourcesUrl("scenarioMode", "Main_Volume_Deco.png"),
+  finalChapterButton: () => getPublicAssetUrl("CCG_Img_BtnBlue.png"),
+  partTwoSwitchIcon: () => getPublicAssetUrl("main-story-part2.svg"),
+};
+
 export function getResourcesUrl(type: ResourcesTypes, arg: string): string {
   switch (type) {
     case "eventContent":
@@ -135,6 +147,13 @@ export const RESOURCE_FILES = [
     "Scenario_Title_03.png", "Scenario_Title_04.png", "Scenario_Mode_Bg_1.png",
     "Scenario_Mode_Bg_2.png", "Scenario_Mode_Bg_3.png",
   ].map(name => ({ name, type: "ui" as const })),
+  ...[
+    "Prologue_Volume_1.png", "Main_Volume_1.png", "Main_Volume_2.png", "Main_Volume_3.png",
+    "Main_Volume_4.png", "Main_Volume_5.png", "Main_Volume_6.png", "SpecialOperation_Volume_1.png",
+    "Prologue_Volume_Series2_1.png", "Main_Volume_Series2_1.png", "Main_Volume_Series2_2.png",
+    "Main_Volume_Series2_3.png", "SpecialOperation_Volume_Series2_1.png",
+    "ChapterBg_1.png", "Main_Volume_Deco.png",
+  ].map(name => ({ name, type: "scenarioMode" as const })),
 ];
 
 export const AUDIO_FILES = {

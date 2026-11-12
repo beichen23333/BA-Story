@@ -699,7 +699,6 @@ html:has(.ba-story-player-page),body:has(.ba-story-player-page){margin:0!importa
 .archive-panel { animation: archivePanelEnter .44s cubic-bezier(.22,.75,.25,1) both; will-change: transform, opacity; position: absolute; z-index: 5; left: 10.5%; top: 16.5%; width: 81%; height: 72%; padding: 2.1% 1.6%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25%; border: 2px solid rgba(116, 146, 164, .62); border-radius: 15px; background: rgba(247, 250, 250, .82); box-shadow: 0 2px 1px rgba(49, 73, 91, .25); }
 .archive-replay-card { min-width: 0; min-height: 0; padding: 0; overflow: hidden; display: flex; flex-direction: column; text-align: left; border: 1px solid rgba(121, 143, 159, .38); border-radius: 11px; background: rgba(255, 255, 255, .84); color: #354f7e; cursor: pointer; box-shadow: 0 1px 2px rgba(35, 58, 76, .12); transition: transform .16s ease, box-shadow .16s ease; }
 .archive-replay-card:hover { box-shadow: 0 3px 9px rgba(39, 63, 87, .14); }
-.archive-replay-card-bounce { animation: storyCardBounce .42s cubic-bezier(.2,.85,.25,1) both!important; z-index: 8; position: relative; }
 .archive-replay-card:active { transform: scale(.985); }
 .archive-replay-image { min-height: 0; flex: 1 1 auto; overflow: hidden; background: rgba(183, 217, 235, .28); }
 .archive-replay-image img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }

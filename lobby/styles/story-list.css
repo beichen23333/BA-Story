@@ -353,6 +353,7 @@
     .story-scene-blackout,
     .screen.group-story-screen .story-list-panel,
     .story-list-card,
+    .main-story-chapter-row.story-list-card-bounce,
     .story-list-panel.is-page-flipping::after,
     .story-list-next-button.is-flipping,
     .story-list-prev-page-button.is-flipping {

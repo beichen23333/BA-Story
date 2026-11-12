@@ -6,6 +6,8 @@ import { LANGUAGE_HTML_MAP, AUDIO_FILES, dataUrl, getResourcesUrl, loadResources
 import { useOrientation } from "./hooks/useOrientation";
 import { useClickEffect } from "./hooks/useClickEffect";
 import { Header } from "./components/Header";
+import { MainStoryPanel } from "./components/MainStoryPanel.jsx";
+import { MAIN_STORY_UI_TEXTS } from "../shared/texts/maintexts.js";
 import { StoryCard } from "./components/StoryCard";
 import { ArchivePanel } from "./components/ArchivePanel";
 import { AffinityStoryPanel } from "./components/AffinityStoryPanel";
@@ -24,6 +26,7 @@ import StoryPlayer from "./components/StoryPlayerHost";
 
 export function App({ active = true } = {}) {
   const [activeMain, setActiveMain] = useState(1);
+  const [mainStorySeries, setMainStorySeries] = useState(1);
   const [selected, setSelected] = useState("");
   const [language, setLanguageState] = useState(() => {
     try { const value = localStorage.getItem("ba-story-language"); return ["cn", "en", "kr", "jp", "tw", "th"].includes(value) ? value : "cn"; } catch { return "cn"; }
@@ -99,6 +102,7 @@ export function App({ active = true } = {}) {
   const [selectedAffinityStudent, setSelectedAffinityStudent] = useState(null);
   const [workStoryOpen, setWorkStoryOpen] = useState(false);
   const [eventStoryOpen, setEventStoryOpen] = useState(false);
+  const [mainStoryOpen, setMainStoryOpen] = useState(false);
   const [workDetailOpen, setWorkDetailOpen] = useState(false);
   const [selectedWorkStory, setSelectedWorkStory] = useState(null);
   const [miniStoryMode, setMiniStoryMode] = useState(false);
@@ -414,6 +418,22 @@ export function App({ active = true } = {}) {
   };
 
   const returnToScenarioMenu = () => {
+    if (mainStoryOpen) {
+      playButtonTouchSound();
+      runBlackoutTransition(() => {
+        setMainStoryOpen(false);
+        setSelected("");
+        setSceneEntering(false);
+        setSceneEntryKey((key) => key + 1);
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            setSceneEntering(true);
+            window.setTimeout(() => setSceneEntering(false), 850);
+          });
+        });
+      });
+      return;
+    }
     detailTransitionLock.current = false;
     workDetailTransitionLock.current = false;
     if ((workStoryOpen || eventStoryOpen) && workDetailOpen) { runBlackoutTransition(() => { setWorkDetailOpen(false); setSelectedWorkStory(null); setStoryInfoSelection(null); }); return; }
@@ -470,6 +490,15 @@ export function App({ active = true } = {}) {
   };
 
   const finishStoryCardBounce = () => {
+    if (selected === "main1" || selected === "main2") {
+      const targetSeries = selected === "main2" ? 2 : 1;
+      setSelected("");
+      runBlackoutTransition(() => {
+        setMainStorySeries(targetSeries);
+        setMainStoryOpen(true);
+      });
+      return;
+    }
     if (selected === "archive") {
       setSelected("");
       runBlackoutTransition(() => setArchiveOpen(true));
@@ -548,17 +577,35 @@ export function App({ active = true } = {}) {
 
   return (
     <main
-      className={`screen ${sceneEntering ? "scene-entering" : ""} ${groupStoryOpen ? "group-story-screen" : ""} ${(archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen) ? "archive-screen" : ""}`}
+      className={`screen ${sceneEntering ? "scene-entering" : ""} ${groupStoryOpen ? "group-story-screen" : ""} ${mainStoryOpen ? "main-story-open" : ""} ${(archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen) ? "archive-screen" : ""}`}
       style={{
-        backgroundColor: "#fff",
-        backgroundImage: `url("${(selectedAffinityStudent && getCostumeCollectionBackgroundUrl(selectedAffinityStudent.CollectionBGTexturePath)) || bgImage}")`,
+        backgroundColor: mainStoryOpen ? "#0b1320" : "#fff",
+        backgroundImage: mainStoryOpen ? "none" : `url("${(selectedAffinityStudent && getCostumeCollectionBackgroundUrl(selectedAffinityStudent.CollectionBGTexturePath)) || bgImage}")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat"
       }}
     >
-    <Header t={(archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen) ? { ...t, pageTitle: t.archiveTitle } : groupStoryOpen ? { ...t, pageTitle: miniStoryMode ? t.affinity : (clubDetailOpen ? t.clubDetailTitle : t.clubTitle) } : t} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName} isClubDetail={groupStoryOpen && clubDetailOpen}/>
-      <section key={sceneEntryKey} className={`story-layout ${(archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen) ? "story-layout-hidden" : ""}`} aria-label={t.pageTitle}>
+    {mainStoryOpen && <div className="main-story-frame">
+      <Header t={{ ...t, pageTitle: MAIN_STORY_UI_TEXTS.pageTitle[language === "kr" ? "Kr" : language === "jp" ? "Jp" : ""] || t.main1 }} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName}/>
+      <MainStoryPanel
+        key={`series-${mainStorySeries}`}
+        series={mainStorySeries}
+        language={language}
+        backLabel={t.back}
+        onBack={returnToScenarioMenu}
+        onClickSound={playButtonTouchSound}
+        onPartTwo={() => {
+          playButtonTouchSound();
+          runBlackoutTransition(() => {
+            setMainStorySeries(2);
+            setActiveMain(2);
+          });
+        }}
+      />
+    </div>}
+    {!mainStoryOpen && <Header t={(archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen) ? { ...t, pageTitle: t.archiveTitle } : groupStoryOpen ? { ...t, pageTitle: miniStoryMode ? t.affinity : (clubDetailOpen ? t.clubDetailTitle : t.clubTitle) } : t} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName} isClubDetail={groupStoryOpen && clubDetailOpen}/>}
+      <section key={sceneEntryKey} className={`story-layout ${mainStoryOpen || archiveOpen || affinityStoryOpen || workStoryOpen || eventStoryOpen ? "story-layout-hidden" : ""}`} aria-label={t.pageTitle}>
         <div className="main-stack">
           <StoryCard
             className="main-card-back"
@@ -569,6 +616,7 @@ export function App({ active = true } = {}) {
             main
             active={activeMain === 2}
             onClick={() => handleMainCardClick(2, "main2")}
+            onBounceComplete={finishStoryCardBounce}
           />
           <StoryCard
             className="main-card-front"
@@ -579,6 +627,7 @@ export function App({ active = true } = {}) {
             main
             active={activeMain === 1}
             onClick={() => handleMainCardClick(1, "main1")}
+            onBounceComplete={finishStoryCardBounce}
           />
         </div>
         <div className="scenario-right-top">
