@@ -692,14 +692,29 @@ export const MAIN_STORY_CHAPTER_TEXTS = [
 
 export const MAIN_STORY_UI_TEXTS = {
     pageTitle: {
+        Cn: "主线剧情",
+        En: "Main Story",
         Kr: "메인 스토리",
-        Jp: "メインストーリー"
+        Jp: "メインストーリー",
+        Tw: "主線劇情",
+        Th: "เนื้อเรื่องหลัก"
     },
     secondPartSwitch: {
         Key: 2157192222,
+        Cn: "前往第二部",
+        En: "Go to Part 2",
         Kr: "2부로 이동",
         Jp: "前往第2部",
-        JpDisplay: "第2部へ移動"
+        Tw: "前往第二部",
+        Th: "ไปยังเนื้อเรื่องหลักภาค 2"
+    },
+    firstPartSwitch: {
+        Cn: "返回第一部",
+        En: "Back to Part 1",
+        Kr: "1부로 돌아가기",
+        Jp: "第1部へ戻る",
+        Tw: "返回第一部",
+        Th: "กลับไปยังเนื้อเรื่องหลักภาค 1"
     },
     finalChapter: {
         Kr: "최종편",

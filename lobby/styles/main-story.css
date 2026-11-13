@@ -27,6 +27,7 @@
     --main-story-progress-bottom: 10.7%;
     --main-story-final-height: clamp(43.5px, 4.082vw, 53px);
     --main-story-volume-caption-height: clamp(34px, 2.75vw, 42px);
+    --main-story-volume-card-width: clamp(200px, 23cqw, 300px);
     --main-story-volume-caption-shear: clamp(19.63px, 1.588vw, 24.25px);
     --main-story-part-two-height: clamp(34px, 3.2vw, 44px);
     --main-story-part-two-top: 13.5%;
@@ -91,13 +92,15 @@
 }
 .main-story-track {
     position: relative;
-    min-width: max(100%, calc(100cqw + 200px));
+    width: calc(var(--main-story-last-volume-left, 0cqw) + var(--main-story-volume-card-width) + clamp(64px, 10cqw, 144px));
+    min-width: 100%;
     height: 100%;
+    box-sizing: border-box;
 }
 .main-story-volume-card {
     position: absolute;
     z-index: 2;
-    width: clamp(200px, 23cqw, 300px);
+    width: var(--main-story-volume-card-width);
     height: auto;
     padding: 0;
     border: 0;
@@ -414,6 +417,9 @@
     flex: 0 0 auto;
     object-fit: contain;
 }
+.main-story-part-two-button.is-return img {
+    transform: scaleX(-1);
+}
 .main-story-back-button {
     z-index: 25;
     left: 2%;
@@ -475,8 +481,8 @@
     transform: translateY(-1px);
 }
 @media (max-width: 900px) {
-    .main-story-volume-card {
-        width: clamp(210px, 34cqw, 300px);
+    .main-story-scene {
+        --main-story-volume-card-width: clamp(210px, 34cqw, 300px);
     }
     .main-story-chapter-background {
         right: -12%;

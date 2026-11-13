@@ -587,7 +587,7 @@ export function App({ active = true } = {}) {
       }}
     >
     {mainStoryOpen && <div className="main-story-frame">
-      <Header t={{ ...t, pageTitle: MAIN_STORY_UI_TEXTS.pageTitle[language === "kr" ? "Kr" : language === "jp" ? "Jp" : ""] || t.main1 }} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName}/>
+      <Header t={{ ...t, pageTitle: MAIN_STORY_UI_TEXTS.pageTitle[({ cn: "Cn", en: "En", kr: "Kr", jp: "Jp", tw: "Tw", th: "Th" })[language] || "Cn"] }} language={language} setLanguage={setLanguage} voiceLanguage={voiceLanguage} setVoiceLanguage={setVoiceLanguage} userName={userName} setUserName={setUserName}/>
       <MainStoryPanel
         key={`series-${mainStorySeries}`}
         series={mainStorySeries}
@@ -600,6 +600,13 @@ export function App({ active = true } = {}) {
           runBlackoutTransition(() => {
             setMainStorySeries(2);
             setActiveMain(2);
+          });
+        }}
+        onPartOne={() => {
+          playButtonTouchSound();
+          runBlackoutTransition(() => {
+            setMainStorySeries(1);
+            setActiveMain(1);
           });
         }}
       />

@@ -7,7 +7,7 @@ import { MainStoryVolumeCard } from "./MainStoryVolumeCard.jsx";
 import { MainStoryChapterPanel } from "./MainStoryChapterPanel.jsx";
 import "../styles/main-story.css";
 
-export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onClickSound, series = 1 }) {
+export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartOne, onClickSound, series = 1 }) {
     const seriesId = Number(series) === 2 ? 2 : 1;
     const defaultVolumeId = seriesId === 2 ? "series2-prologue" : "main-1";
     const volumes = useMemo(() => getMainStoryVolumes(language, seriesId).map((volume) => ({
@@ -18,7 +18,7 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onClick
     const [selectedChapterId, setSelectedChapterId] = useState(seriesId === 2 ? "series2-prologue-chapter-1" : "main-1-chapter-3");
     const railRef = useRef(null);
     const lastVolumeIndex = Math.max(0, volumes.length - 1);
-    const trackWidth = 6.5 + Math.floor(lastVolumeIndex / 2) * 45 + (lastVolumeIndex % 2) * 27 + 23 + 5;
+    const lastVolumeLeft = volumes.length ? 6.5 + Math.floor(lastVolumeIndex / 2) * 45 + (lastVolumeIndex % 2) * 27 : 0;
     const selectedVolume = volumes.find((volume) => volume.id === selectedVolumeId) || volumes[1] || volumes[0];
     const ui = MAIN_STORY_UI_TEXTS;
     const localeKey = language === "kr" ? "Kr" : language === "cn" || language === "jp" ? "Jp" : null;
@@ -49,7 +49,7 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onClick
             <div className="main-story-grid-overlay" aria-hidden="true" />
             <div className="main-story-light-overlay" aria-hidden="true" />
             <div className="main-story-rail" ref={railRef} onWheel={handleRailWheel}>
-                <div className="main-story-track" style={{ width: `calc(${trackWidth}cqw + max(0px, clamp(200px, 23cqw, 300px) - 23cqw))` }}>
+                <div className="main-story-track" style={{ "--main-story-last-volume-left": `${lastVolumeLeft}cqw` }}>
                     {volumes.map((volume, index) => (
                         <MainStoryVolumeCard
                             key={volume.id}
@@ -64,9 +64,12 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onClick
             <button className="main-story-back-button story-list-back-button" type="button" onClick={onBack} aria-label={backLabel}>
                 <ArrowLeft size={36} strokeWidth={2.4} />
             </button>
-            {seriesId === 1 && <button className="main-story-part-two-button" type="button" onClick={onPartTwo}>
-                <img src={MAIN_STORY_RESOURCES.partTwoSwitchIcon()} alt="" draggable="false" />
-                <span>{language === "jp" ? ui.secondPartSwitch.JpDisplay : localeKey ? ui.secondPartSwitch[localeKey] : ""}</span>
+            {seriesId === 1 ? <button className="main-story-part-two-button" type="button" onClick={onPartTwo}>
+                <img src={MAIN_STORY_RESOURCES.partSwitchIcon()} alt="" draggable="false" />
+                <span>{ui.secondPartSwitch[({ cn: "Cn", en: "En", kr: "Kr", jp: "Jp", tw: "Tw", th: "Th" })[language] || "Cn"]}</span>
+            </button> : <button className="main-story-part-two-button is-return" type="button" onClick={onPartOne}>
+                <img src={MAIN_STORY_RESOURCES.partSwitchIcon()} alt="" draggable="false" />
+                <span>{ui.firstPartSwitch[({ cn: "Cn", en: "En", kr: "Kr", jp: "Jp", tw: "Tw", th: "Th" })[language] || "Cn"]}</span>
             </button>}
             <MainStoryChapterPanel
                 volume={selectedVolume}
