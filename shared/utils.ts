@@ -21,7 +21,11 @@ export function getPublicAssetUrl(filename: string): string {
 
 export const MAIN_STORY_RESOURCES = {
   sceneBackground: () => getResourcesUrl("lobbyBg", "Scenario_Bg.png"),
+  finalSceneBackground: () => getResourcesUrl("lobbyBg", "ScenarioF_Bg.png"),
   chapterBackground: () => getResourcesUrl("scenarioMode", "ChapterBg_1.png"),
+  finalChapterBackground: () => getResourcesUrl("scenarioMode", "FChapterBg_1.png"),
+  finalVolumeBackground: () => getResourcesUrl("scenarioMode", "Main_VolumeF_Bg.png"),
+  finalVolumeImage: () => getResourcesUrl("scenarioMode", "Main_Volume_100.png"),
   volumeDecoration: () => getResourcesUrl("scenarioMode", "Main_Volume_Deco.png"),
   finalChapterButton: () => getPublicAssetUrl("CCG_Img_BtnBlue.png"),
   partSwitchIcon: () => getPublicAssetUrl("main-story-series-switch.svg"),
@@ -140,40 +144,65 @@ export const FONT_FILES: Record<string, string> = {
   th: "",
 };
 
-export const RESOURCE_FILES = [
-  ...["Scenario_Bg.png", "ScenarioF_Bg.png"].map(name => ({ name, type: "lobbyBg" as const })),
-  ...[
-    "Scenario_Title_01_1.png", "Scenario_Title_01_2.png", "Scenario_Title_02.png",
-    "Scenario_Title_03.png", "Scenario_Title_04.png", "Scenario_Mode_Bg_1.png",
-    "Scenario_Mode_Bg_2.png", "Scenario_Mode_Bg_3.png",
-  ].map(name => ({ name, type: "ui" as const })),
-  ...[
-    "Prologue_Volume_1.png", "Main_Volume_1.png", "Main_Volume_2.png", "Main_Volume_3.png",
-    "Main_Volume_4.png", "Main_Volume_5.png", "Main_Volume_6.png", "SpecialOperation_Volume_1.png",
-    "Prologue_Volume_Series2_1.png", "Main_Volume_Series2_1.png", "Main_Volume_Series2_2.png",
-    "Main_Volume_Series2_3.png", "SpecialOperation_Volume_Series2_1.png",
-    "ChapterBg_1.png", "Main_Volume_Deco.png",
-  ].map(name => ({ name, type: "scenarioMode" as const })),
-];
+export const RESOURCE_FILES: Array<{ name: string; type: ResourcesTypes }> = [];
 
 export const AUDIO_FILES = {
   theme12: { name: "Theme_12.ogg", type: "bgm" },
   buttonTouch: { name: "UI_Button_Touch.wav", type: "sound" },
 };
 
-/** 预加载大厅图片、字体和音频，并统一回报进度。 */
+const FONT_CACHE_NAME = "bluearchive-font-cache-v1";
+
+async function getCachedFontSource(url: string): Promise<{ source: string; objectUrl: string | null }> {
+  try {
+    if (typeof caches === "undefined" || typeof fetch !== "function" || typeof URL.createObjectURL !== "function") {
+      return { source: url, objectUrl: null };
+    }
+    const cache = await caches.open(FONT_CACHE_NAME);
+    const request = new Request(url, { method: "GET", mode: "cors", credentials: "omit" });
+    let response = await cache.match(request);
+    if (!response) {
+      response = await fetch(request, { cache: "force-cache" });
+      if (!response.ok || response.type === "opaque") throw new Error("FONT_FETCH_FAILED");
+      try { await cache.put(request, response.clone()); } catch {}
+    }
+    const blob = await response.blob();
+    if (!blob.size) throw new Error("EMPTY_FONT_FILE");
+    const objectUrl = URL.createObjectURL(blob);
+    return { source: objectUrl, objectUrl };
+  } catch {
+    return { source: url, objectUrl: null };
+  }
+}
+
+export async function loadCachedFontFace(family: string, url: string, descriptors: FontFaceDescriptors = {}): Promise<boolean> {
+  const cached = await getCachedFontSource(url);
+  const loadFace = async (source: string) => {
+    const face = new FontFace(family, `url("${source}")`, { display: "swap", ...descriptors });
+    const loaded = await face.load();
+    document.fonts.add(loaded);
+  };
+  try {
+    await loadFace(cached.source);
+    return true;
+  } catch {
+    if (cached.source === url) return false;
+    try {
+      await loadFace(url);
+      return true;
+    } catch {
+      return false;
+    }
+  } finally {
+    if (cached.objectUrl) URL.revokeObjectURL(cached.objectUrl);
+  }
+}
+
 export async function loadResources(language: string, onProgress?: (progress: number) => void) {
-  const imageEntries = [...RESOURCE_FILES.map(({ name, type }) => ({ name, url: getResourcesUrl(type, name) })), { name: "Growth_Bg.png", url: "./assets/Growth_Bg.png" }];
   const fontFile = FONT_FILES[language];
-  const total = imageEntries.length + Object.keys(AUDIO_FILES).length + (fontFile ? 1 : 0);
+  const total = Object.keys(AUDIO_FILES).length;
   let completed = 0;
   const reportProgress = () => { completed++; onProgress?.(Math.min(99, Math.floor(completed / total * 100))); };
-  const imageTasks = imageEntries.map(({ name, url }) => new Promise((resolve) => {
-    const image = new Image();
-    image.onload = () => { reportProgress(); resolve({ name, loaded: true }); };
-    image.onerror = () => { reportProgress(); resolve({ name, loaded: false }); };
-    image.src = url;
-  }));
   const audioTasks = Object.entries(AUDIO_FILES).map(([key, config]) => new Promise((resolve) => {
     const audio = new Audio();
     const url = getResourcesUrl(config.type as "bgm" | "sound", config.name);
@@ -186,26 +215,18 @@ export async function loadResources(language: string, onProgress?: (progress: nu
     audio.src = url;
     audio.load();
   }));
-  let fontTask: Promise<{ fontLoaded: boolean }> = Promise.resolve({ fontLoaded: false });
   if (fontFile) {
-    fontTask = (async () => {
-      try {
-        const font = new FontFace("StoryRemoteFont", `url("${getResourcesUrl("font", fontFile)}")`);
-        const loaded = await font.load();
-        document.fonts.add(loaded);
-        document.documentElement.classList.add("remote-font-loaded");
-        return { fontLoaded: true };
-      } catch {
-        document.documentElement.classList.remove("remote-font-loaded");
-        return { fontLoaded: false };
-      } finally { reportProgress(); }
-    })();
+    void loadCachedFontFace("StoryRemoteFont", getResourcesUrl("font", fontFile)).then((fontLoaded) => {
+      document.documentElement.classList.toggle("remote-font-loaded", fontLoaded);
+    }).catch(() => {
+      document.documentElement.classList.remove("remote-font-loaded");
+    });
   } else {
     document.documentElement.classList.remove("remote-font-loaded");
   }
-  const [images, font, audios] = await Promise.all([Promise.all(imageTasks), fontTask, Promise.all(audioTasks)]);
+  const audios = await Promise.all(audioTasks);
   onProgress?.(100);
-  return { images, ...font, audios };
+  return { images: [], audios };
 }
 
 // ============================================================

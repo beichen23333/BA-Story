@@ -4,16 +4,18 @@ import { MAIN_STORY_UI_TEXTS } from "../../shared/texts/maintexts.js";
 import { MAIN_STORY_RESOURCES } from "../../shared/utils.ts";
 import { useStoryCardTouch } from "../hooks/useStoryCardTouch.js";
 
-export function MainStoryChapterPanel({ volume, language, selectedChapterId, onChapterSelect, onClickSound, showFinalChapter = true }) {
+export function MainStoryChapterPanel({ volume, language, selectedChapterId, onChapterSelect, onClickSound, onFinalChapterClick, showFinalChapter = true, showChapterDescription = false, className = "" }) {
     const ui = MAIN_STORY_UI_TEXTS;
     const localeKey = language === "kr" ? "Kr" : language === "cn" || language === "jp" ? "Jp" : null;
     const heading = volume.title;
+    const selectedChapter = volume.chapters.find((chapter) => chapter.id === selectedChapterId) || volume.chapters[0];
     const { trigger, isBouncing } = useStoryCardTouch(onChapterSelect, onClickSound);
+    const { trigger: triggerFinalChapter, isBouncing: isFinalChapterBouncing } = useStoryCardTouch(onFinalChapterClick, onClickSound);
 
     return (
         <>
-            <img className="main-story-chapter-background" src={volume.chapterBackgroundUrl} alt="" draggable="false" />
-            <aside className="main-story-chapter-panel" aria-label={heading}>
+            <img className={`main-story-chapter-background ${className}`} src={volume.chapterBackgroundUrl || MAIN_STORY_RESOURCES.chapterBackground()} alt="" loading="lazy" decoding="async" draggable="false" />
+            <aside className={`main-story-chapter-panel ${className}`} aria-label={heading}>
                 <div className="main-story-chapter-heading">
                     <ChevronDown size={16} strokeWidth={3} />
                     <span>{heading}</span>
@@ -37,11 +39,12 @@ export function MainStoryChapterPanel({ volume, language, selectedChapterId, onC
                         </div>
                     ))}
                 </div>
+                {showChapterDescription && <div className="main-story-final-chapter-description">{selectedChapter?.description || ""}</div>}
             </aside>
-            {showFinalChapter && <div className="main-story-final-chapter" aria-label={`${ui.episodeClear[localeKey] || ""} ${ui.finalChapter[localeKey] || ""}`}>
-                <img src={MAIN_STORY_RESOURCES.finalChapterButton()} alt="" draggable="false" />
-                <span className="main-story-final-chapter-title">{localeKey ? ui.finalChapter[localeKey] : ""}</span>
-            </div>}
+            {showFinalChapter && <button className={`main-story-final-chapter ${isFinalChapterBouncing(volume) ? "story-list-card-bounce" : ""}`} type="button" onClick={() => triggerFinalChapter(volume)} aria-label={ui.finalChapter[localeKey] || "Final"}>
+                <img src={MAIN_STORY_RESOURCES.finalChapterButton()} alt="" loading="lazy" decoding="async" draggable="false" />
+                <span className="main-story-final-chapter-title">{localeKey ? ui.finalChapter[localeKey] : "Final"}</span>
+            </button>}
         </>
     );
 }

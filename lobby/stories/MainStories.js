@@ -20,6 +20,14 @@ export const MAIN_STORY_SERIES2_VOLUME_CONFIG = [
     { id: "series2-special-operation", number: 3, titleKey: 3774576463, image: "SpecialOperation_Volume_Series2_1.png" }
 ];
 
+export const FINAL_STORY_VOLUME_CONFIG = {
+    id: 100,
+    number: 100,
+    titleKey: 4028767973,
+    descriptionKey: 3755300568,
+    image: "Main_Volume_100.png"
+};
+
 function getTextByKey(records, key, language) {
     if (key == null) return "";
     const record = records.find((item) => item.Key === key || item.Id === key);
@@ -33,27 +41,33 @@ function getChapterTitleDisplay(title) {
     return title.replace(/^第[一二三四五六七八九十\d]+章\s*/, "");
 }
 
-export function getMainStoryVolumes(language = "cn", series = 1) {
-    const volumeConfig = Number(series) === 2 ? MAIN_STORY_SERIES2_VOLUME_CONFIG : MAIN_STORY_VOLUME_CONFIG;
-    return volumeConfig.map((volume) => {
-        const title = getTextByKey(MAIN_STORY_VOLUME_TITLE_TEXTS, volume.titleKey, language);
-        const chapters = MAIN_STORY_CHAPTER_TEXTS.filter((chapter) => chapter.volumeId === volume.id).map((chapter) => {
-            const chapterTitle = getTextByKey(MAIN_STORY_CHAPTER_TITLE_TEXTS, chapter.titleKey, language);
-            return {
-                ...chapter,
-                title: chapterTitle,
-                displayTitle: getChapterTitleDisplay(chapterTitle),
-                description: getTextByKey(MAIN_STORY_CHAPTER_DESCRIPTION_TEXTS, chapter.descriptionKey, language)
-            };
-        });
-        const volumeDescription = getTextByKey(MAIN_STORY_VOLUME_DESCRIPTION_TEXTS, volume.descriptionKey, language);
+function buildVolumeData(volume, language) {
+    const title = getTextByKey(MAIN_STORY_VOLUME_TITLE_TEXTS, volume.titleKey, language);
+    const chapters = MAIN_STORY_CHAPTER_TEXTS.filter((chapter) => chapter.volumeId === volume.id).map((chapter) => {
+        const chapterTitle = getTextByKey(MAIN_STORY_CHAPTER_TITLE_TEXTS, chapter.titleKey, language);
         return {
-            ...volume,
-            title,
-            displayTitle: title,
-            description: volumeDescription || chapters[0]?.description || "",
-            imageUrl: getResourcesUrl("scenarioMode", volume.image),
-            chapters
+            ...chapter,
+            title: chapterTitle,
+            displayTitle: getChapterTitleDisplay(chapterTitle),
+            description: getTextByKey(MAIN_STORY_CHAPTER_DESCRIPTION_TEXTS, chapter.descriptionKey, language)
         };
     });
+    const volumeDescription = getTextByKey(MAIN_STORY_VOLUME_DESCRIPTION_TEXTS, volume.descriptionKey, language);
+    return {
+        ...volume,
+        title,
+        displayTitle: title,
+        description: volumeDescription || chapters[0]?.description || "",
+        imageUrl: getResourcesUrl("scenarioMode", volume.image),
+        chapters
+    };
+}
+
+export function getMainStoryVolumes(language = "cn", series = 1) {
+    const volumeConfig = Number(series) === 2 ? MAIN_STORY_SERIES2_VOLUME_CONFIG : MAIN_STORY_VOLUME_CONFIG;
+    return volumeConfig.map((volume) => buildVolumeData(volume, language));
+}
+
+export function getFinalStoryVolume(language = "cn") {
+    return buildVolumeData(FINAL_STORY_VOLUME_CONFIG, language);
 }

@@ -36,9 +36,9 @@ export function StoryCard({
       onAnimationEnd={(event) => { if (event.animationName.includes("Bounce") || event.animationName === "cardBounce") { setBouncing(false); onBounceComplete?.(); } }}
       type="button"
     >
-      <img className="card-background" src={getResourcesUrl("ui", background)} alt="" draggable="false" />
+      <img className="card-background" src={getResourcesUrl("ui", background)} alt="" loading={main ? "eager" : "lazy"} decoding={main ? undefined : "async"} draggable="false" />
       <div className="card-art-wrap">
-        <img className="card-art" src={getResourcesUrl("ui", image)} alt="" draggable="false" />
+        <img className="card-art" src={getResourcesUrl("ui", image)} alt="" loading={main ? "eager" : "lazy"} decoding={main ? undefined : "async"} draggable="false" />
       </div>
       <div className="card-copy">
         <div className="card-label">{label}</div>

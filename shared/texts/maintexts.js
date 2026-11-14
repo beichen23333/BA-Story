@@ -136,6 +136,12 @@ export const MAIN_STORY_VOLUME_DESCRIPTION_TEXTS = [
         ...emptyLanguages
     },
     {
+        Key: 3755300568,
+        Kr: "키보토스의 일상 속에 찾아온 균열.\n\r전복된 이야기 속에서 샬레의 행방은?",
+        Jp: "日常中出现的微小裂痕\n平静的日子崩溃只在一瞬间——",
+        ...emptyLanguages
+    },
+    {
         Key: 3930897789,
         Kr: "미증유의 AI, 데카그라마톤이 키보토스에 모습을 드러냈습니다.\n그 정체와 목적은 과연 무엇일까요?",
         Jp: "基沃托斯出现了前所未有的威胁——AI十字神名。\n它的真面目和目的究竟是什么？",
@@ -314,6 +320,30 @@ export const MAIN_STORY_CHAPTER_TITLE_TEXTS = [
         Kr: "꿈 속의 열차",
         Jp: "梦中行驶的列车",
         ...emptyLanguages
+    },
+    {
+        Key: 2597871383,
+        Kr: "샬레 탈환 작전",
+        Jp: "夏莱夺回战",
+        ...emptyLanguages
+    },
+    {
+        Key: 38610745,
+        Kr: "거짓된 성소 공략전",
+        Jp: "虚妄圣所攻略战",
+        ...emptyLanguages
+    },
+    {
+        Key: 3767391336,
+        Kr: "아트라하시스의 방주 점령전",
+        Jp: "阿特拉哈西斯方舟占领战",
+        ...emptyLanguages
+    },
+    {
+        Key: 87079962,
+        Kr: "프레나파테스 결전",
+        Jp: "普雷纳帕提斯决战",
+        ...emptyLanguages
     }
 ];
 
@@ -487,6 +517,30 @@ export const MAIN_STORY_CHAPTER_DESCRIPTION_TEXTS = [
         Key: 67561232,
         Kr: "좋았던 옛 시절로 돌아가고 싶다는 생각을 해보신 적 있으신가요? 그렇다면 심야의 승강장에서 조용히 귀를 기울여 보세요. 어쩌면 과거로 가는 열차가 이미 당신 앞에 도착해 있을지도 모릅니다.",
         Jp: "若有想要回到的过去，请在深夜的月台上静静倾听。因为驶向过去的列车，或许正前来接你。",
+        ...emptyLanguages
+    },
+    {
+        Key: 4006529740,
+        Kr: "키보토스의 이변을 발견한 총학생회.\n\r비상대책위원회를 소집하는 린과\n\r이 혼란을 이용하려는 자들의 음모 속에서\n\r샬레는 이 위기를 극복할 수 있을까요?",
+        Jp: "联邦学生会发现了基沃托斯的异常。\n凛召集了紧急对策委员会。\n在试图利用混乱之人的阴谋中\n夏莱究竟能否克服这次危机？",
+        ...emptyLanguages
+    },
+    {
+        Key: 1309201978,
+        Kr: "키보토스에 여섯 개의 불길한 탑이 세워졌습니다.\n\r선생님과 학생들은 색채의 위협으로부터\n\r학원 도시를 수호하고,\n\r거짓된 성소를 성공적으로 공략할 수 있을까요?",
+        Jp: "基沃托斯立起了六座不祥的塔。\n老师和学生们能从色彩的威胁中\n守护学院都市，\n并成功攻略虚妄圣所吗？",
+        ...emptyLanguages
+    },
+    {
+        Key: 1841871719,
+        Kr: "색채에 대항하기 위해 모든 학원이 손을 잡았습니다.\n\r아득히 먼 상공에 떠 있는 아트라하시스의 방주를\n\r공략하기 위해, 학생들과 선생님은\n\r어떤 선택을 하게 될까요?",
+        Jp: "为了对抗色彩，所有学院携手合作。\n学生们和老师会做出怎样的选择，\n去攻略高高漂浮在天际的阿特拉哈西斯方舟呢？",
+        ...emptyLanguages
+    },
+    {
+        Key: 1771633284,
+        Kr: "긴 여정 끝에 돌입한 최종 국면.\n\r모두가 기다리는 곳으로 돌아가기 위해\n\r선생님은 최선을 다합니다.\n\r이야기의 끝에서 만나는 기적은 어떤 모습일까요?",
+        Jp: "漫长的旅程结束后，进入最终阶段。\n为了回到大家等待的地方，\n老师尽全力而为。\n在故事的结尾邂逅的奇迹，会是什么样子呢？",
         ...emptyLanguages
     }
 ];
@@ -687,6 +741,34 @@ export const MAIN_STORY_CHAPTER_TEXTS = [
         number: 3,
         titleKey: 1969245600,
         descriptionKey: 67561232
+    },
+    {
+        id: "final-chapter-1",
+        volumeId: 100,
+        number: 1,
+        titleKey: 2597871383,
+        descriptionKey: 4006529740
+    },
+    {
+        id: "final-chapter-2",
+        volumeId: 100,
+        number: 2,
+        titleKey: 38610745,
+        descriptionKey: 1309201978
+    },
+    {
+        id: "final-chapter-3",
+        volumeId: 100,
+        number: 3,
+        titleKey: 3767391336,
+        descriptionKey: 1841871719
+    },
+    {
+        id: "final-chapter-4",
+        volumeId: 100,
+        number: 4,
+        titleKey: 87079962,
+        descriptionKey: 1771633284
     }
 ];
 
@@ -715,6 +797,14 @@ export const MAIN_STORY_UI_TEXTS = {
         Jp: "第1部へ戻る",
         Tw: "返回第一部",
         Th: "กลับไปยังเนื้อเรื่องหลักภาค 1"
+    },
+    otherStories: {
+        Cn: "其他的故事",
+        En: "Other Stories",
+        Kr: "다른 스토리",
+        Jp: "その他のストーリー",
+        Tw: "其他的故事",
+        Th: "เรื่องราวอื่น ๆ"
     },
     finalChapter: {
         Kr: "최종편",
