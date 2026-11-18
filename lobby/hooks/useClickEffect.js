@@ -1,11 +1,6 @@
 import { useEffect, useRef } from "react";
 import { BAClickFX } from "ba-click-fx";
 
-/**
- * 蔚蓝档案风格点击粒子与光环特效 Hook
- * @param {boolean} [disabled=false] 是否禁用/隐藏点击特效（竖屏或处于旋转提示页面时不显示）
- * @param {import("ba-click-fx/config").ClickFXConfig} [options]
- */
 export function useClickEffect(disabled = false, options) {
   const disabledRef = useRef(disabled);
   disabledRef.current = disabled;
@@ -24,7 +19,7 @@ export function useClickEffect(disabled = false, options) {
 
   // 动态同步 Canvas 显隐与交互
   useEffect(() => {
-    // ba-click-fx 生成的 canvas 以及宿主容器
+    // ba-click-fx 生成的 canvas 以及容器
     const canvases = document.querySelectorAll(
       "canvas.ba-click-fx-canvas, canvas[id*='ba-click-fx'], canvas[class*='ba-click-fx'], div[aria-hidden='true'] > canvas"
     );

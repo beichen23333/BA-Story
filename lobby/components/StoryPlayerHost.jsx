@@ -6,7 +6,6 @@ import BaStoryPlayer from "../../player-lib/BaStoryPlayer.vue";
 const DESIGN_WIDTH = 1280;
 const DESIGN_HEIGHT = 720;
 
-// 与 test.jsx 使用完全相同的 16:9 视口适配算法。
 function getPlayerSize() {
   const viewportWidth = Math.max(1, window.visualViewport?.width || window.innerWidth);
   const viewportHeight = Math.max(1, window.visualViewport?.height || window.innerHeight);

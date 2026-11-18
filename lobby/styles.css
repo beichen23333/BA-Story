@@ -234,17 +234,29 @@ button {
     animation: cardBounce 0.28s cubic-bezier(0.25, 1.4, 0.5, 1);
 }
 @keyframes cardBounce {
-    0% { transform: scale(1); }
-    40% { transform: scale(0.95); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    40% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 .main-stack .main-card.card-bounce {
     animation: mainCardBounce 0.28s cubic-bezier(0.25, 1.4, 0.5, 1);
 }
 @keyframes mainCardBounce {
-    0% { transform: scale(1); }
-    40% { transform: scale(0.95); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    40% {
+        transform: scale(0.95);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 .card-background {
     position: absolute;
@@ -664,45 +676,307 @@ button, select {
    都可能在竖屏时拥有 >= 761px 的 CSS 视口。显示状态统一由 useOrientation 控制。 */
 
 /* Loading screen: values and timing transcribed from the supplied original index.7ab147c6.js / index.8590fbef.css. */
-.loading_wrapper{display:flex;flex-direction:column;align-items:center;justify-content:center;position:fixed;inset:0;z-index:9999;overflow:hidden;font-size:1.5625vw;background-color:#fff;background-image:url("https://webcnstatic.yostar.net/ba_cn_web/prod/web/assets/loading_bg_pc.ba246778.png");background-repeat:no-repeat;background-size:cover}
-.loading_wrapper .avatar_img{width:8.3333333333em;height:10.6666666667em}
-.loading_wrapper .avatar_img .hide{position:absolute;opacity:0}
-.loading_wrapper .avatar_img img{width:100%}
-.loading_wrapper .progress_wrapper{display:flex;flex-direction:column;align-items:center;margin-top:.4666666667em}
-.loading_wrapper .progress_wrapper .title{margin:0;font-family:TVPS-Vain-Capital-2,sans-serif;color:#1289f9;font-size:1.2em;font-weight:400}
-.loading_wrapper .progress_wrapper .percent{margin-top:.3666666667em;font-size:.8666666667em;font-family:TVPS-Vain-Capital-2,sans-serif;color:#1289f9}
-.loading_wrapper .loading_progress_track{width:10em;height:.16em;margin-top:.55em;overflow:hidden;background:rgba(18,137,249,.2);border-radius:999px}
-.loading_wrapper .loading_progress_fill{height:100%;background:#1289f9;border-radius:inherit;transition:width .12s linear}
-@media screen and (max-width:1300px) and (min-width:828px){.loading_wrapper{font-size:20.3125px}}
-@media screen and (max-width:828px){.loading_wrapper{width:100vw;height:100vh;height:100dvh;font-size:4.1666666667vw;background-color:#fff;background-image:url("https://webcnstatic.yostar.net/ba_cn_web/prod/web/assets/loading_bg_sp.07a2330c.png");background-repeat:no-repeat;background-size:cover}.loading_wrapper .avatar_img{width:8em;height:10.24em}.loading_wrapper .progress_wrapper{margin-top:.384em}.loading_wrapper .progress_wrapper .title{font-size:1.152em}.loading_wrapper .progress_wrapper .percent{margin-top:.288em;font-size:.864em}.loading_wrapper .loading_progress_track{width:9em;margin-top:.5em}}
-
-/* 剧情播放器作为独立页面覆盖大厅，避免继承状态栏、顶栏和大厅背景。 */
-html:has(.ba-story-player-page),body:has(.ba-story-player-page){margin:0!important;padding:0!important;width:100%!important;height:100%!important;overflow:hidden!important;background:#000!important}
-.ba-story-player-page{position:fixed!important;inset:0!important;display:flex!important;align-items:center!important;justify-content:center!important;width:100vw!important;height:100vh!important;height:100dvh!important;min-width:100vw!important;min-height:100vh!important;margin:0!important;padding:0!important;border:0!important;z-index:2147483000!important;overflow:hidden!important;background:#000!important;isolation:isolate!important;box-sizing:border-box!important}
-.ba-story-player-page #player{display:flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:center!important;background-color:#000!important;border:0!important;outline:0!important}.ba-story-player-page #player__background{display:flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:center!important;max-width:100vw!important;max-height:100dvh!important}.ba-story-player-page #player__main{flex:0 0 auto!important}.ba-story-player-page #player__background,.ba-story-player-page #player__main,.ba-story-player-page #player__main__canvas{background-color:transparent!important;border:0!important;outline:0!important}
-
-@media (max-width: 760px) {
-  .topbar { padding-left: 3%; padding-right: 2%; gap: 6px; }
-  .page-title { font-size: clamp(13px, 2vw, 18px); }
-  .language-control { min-width: 0; gap: 3px; }
-  .language-control label, .username-control label { display: none; }
-  .language-control select { max-width: 76px; padding: 3px 4px; }
-  .username-control input { width: 74px; }
+.loading_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    overflow: hidden;
+    font-size: 1.5625vw;
+    background-color: #fff;
+    background-image: url("https://webcnstatic.yostar.net/ba_cn_web/prod/web/assets/loading_bg_pc.ba246778.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.loading_wrapper .avatar_img {
+    width: 8.3333333333em;
+    height: 10.6666666667em;
+}
+.loading_wrapper .avatar_img .hide {
+    position: absolute;
+    opacity: 0;
+}
+.loading_wrapper .avatar_img img {
+    width: 100%;
+}
+.loading_wrapper .progress_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: .4666666667em;
+}
+.loading_wrapper .progress_wrapper .title {
+    margin: 0;
+    font-family: TVPS-Vain-Capital-2, sans-serif;
+    color: #1289f9;
+    font-size: 1.2em;
+    font-weight: 400;
+}
+.loading_wrapper .progress_wrapper .percent {
+    margin-top: .3666666667em;
+    font-size: .8666666667em;
+    font-family: TVPS-Vain-Capital-2, sans-serif;
+    color: #1289f9;
+}
+.loading_wrapper .loading_progress_track {
+    width: 10em;
+    height: .16em;
+    margin-top: .55em;
+    overflow: hidden;
+    background: rgba(18, 137, 249, .2);
+    border-radius: 999px;
+}
+.loading_wrapper .loading_progress_fill {
+    height: 100%;
+    background: #1289f9;
+    border-radius: inherit;
+    transition: width .12s linear;
+}
+@media screen and (max-width:1300px) and (min-width:828px) {
+    .loading_wrapper {
+        font-size: 20.3125px;
+    }
+}
+@media screen and (max-width:828px) {
+    .loading_wrapper {
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        font-size: 4.1666666667vw;
+        background-color: #fff;
+        background-image: url("https://webcnstatic.yostar.net/ba_cn_web/prod/web/assets/loading_bg_sp.07a2330c.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+    .loading_wrapper .avatar_img {
+        width: 8em;
+        height: 10.24em;
+    }
+    .loading_wrapper .progress_wrapper {
+        margin-top: .384em;
+    }
+    .loading_wrapper .progress_wrapper .title {
+        font-size: 1.152em;
+    }
+    .loading_wrapper .progress_wrapper .percent {
+        margin-top: .288em;
+        font-size: .864em;
+    }
+    .loading_wrapper .loading_progress_track {
+        width: 9em;
+        margin-top: .5em;
+    }
 }
 
+/* 剧情播放器作为独立页面覆盖大厅，避免继承状态栏、顶栏和大厅背景。 */
+html:has(.ba-story-player-page), body:has(.ba-story-player-page) {
+    margin: 0!important;
+    padding: 0!important;
+    width: 100%!important;
+    height: 100%!important;
+    overflow: hidden!important;
+    background: #000!important;
+}
+.ba-story-player-page {
+    position: fixed!important;
+    inset: 0!important;
+    display: flex!important;
+    align-items: center!important;
+    justify-content: center!important;
+    width: 100vw!important;
+    height: 100vh!important;
+    height: 100dvh!important;
+    min-width: 100vw!important;
+    min-height: 100vh!important;
+    margin: 0!important;
+    padding: 0!important;
+    border: 0!important;
+    z-index: 2147483000!important;
+    overflow: hidden!important;
+    background: #000!important;
+    isolation: isolate!important;
+    box-sizing: border-box!important;
+}
+.ba-story-player-page #player {
+    display: flex!important;
+    flex: 0 0 auto!important;
+    align-items: center!important;
+    justify-content: center!important;
+    background-color: #000!important;
+    border: 0!important;
+    outline: 0!important;
+}
+.ba-story-player-page #player__background {
+    display: flex!important;
+    flex: 0 0 auto!important;
+    align-items: center!important;
+    justify-content: center!important;
+    max-width: 100vw!important;
+    max-height: 100dvh!important;
+}
+.ba-story-player-page #player__main {
+    flex: 0 0 auto!important;
+}
+.ba-story-player-page #player__background,
+.ba-story-player-page #player__main,
+.ba-story-player-page #player__main__canvas {
+    background-color: transparent!important;
+    border: 0!important;
+    outline: 0!important;
+}
 
+@media (max-width: 760px) {
+    .topbar {
+        padding-left: 3%;
+        padding-right: 2%;
+        gap: 6px;
+    }
+    .page-title {
+        font-size: clamp(13px, 2vw, 18px);
+    }
+    .language-control {
+        min-width: 0;
+        gap: 3px;
+    }
+    .language-control label, .username-control label {
+        display: none;
+    }
+    .language-control select {
+        max-width: 76px;
+        padding: 3px 4px;
+    }
+    .username-control input {
+        width: 74px;
+    }
+}
 
 /* Archive replay page */
-@keyframes archivePanelEnter{0%{opacity:0;transform:translate3d(0,22px,0)}78%{opacity:1;transform:translate3d(0,-1px,0)}100%{opacity:1;transform:translate3d(0,0,0)}}
-.story-layout-hidden { visibility: hidden; pointer-events: none; }
-.archive-panel { animation: archivePanelEnter .44s cubic-bezier(.22,.75,.25,1) both; will-change: transform, opacity; position: absolute; z-index: 5; left: 10.5%; top: 16.5%; width: 81%; height: 72%; padding: 2.1% 1.6%; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25%; border: 2px solid rgba(116, 146, 164, .62); border-radius: 15px; background: rgba(247, 250, 250, .82); box-shadow: 0 2px 1px rgba(49, 73, 91, .25); }
-.archive-replay-card { min-width: 0; min-height: 0; padding: 0; overflow: hidden; display: flex; flex-direction: column; text-align: left; border: 1px solid rgba(121, 143, 159, .38); border-radius: 11px; background: rgba(255, 255, 255, .84); color: #354f7e; cursor: pointer; box-shadow: 0 1px 2px rgba(35, 58, 76, .12); transition: transform .16s ease, box-shadow .16s ease; }
-.archive-replay-card:hover { box-shadow: 0 3px 9px rgba(39, 63, 87, .14); }
-.archive-replay-card:active { transform: scale(.985); }
-.archive-replay-image { min-height: 0; flex: 1 1 auto; overflow: hidden; background: rgba(183, 217, 235, .28); }
-.archive-replay-image img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center; }
-.archive-replay-title { flex: 0 0 auto; width: 100%; padding: 7px 10px 6px; background: rgba(43, 65, 91, .92); color: #fff; font-size: clamp(18px, 2.1vw, 32px); line-height: 1.2; font-weight: 800; white-space: nowrap; }
-.archive-replay-description { flex: 0 0 auto; min-height: 45px; width: 100%; padding: 8px 10px; color: #8b9298; background: rgba(255, 255, 255, .92); font-size: clamp(11px, 1.05vw, 16px); line-height: 1.35; overflow-wrap: anywhere; }
-.archive-back-button { z-index: 25; }
-@media (prefers-reduced-motion: reduce) { .archive-panel { animation-duration: .01ms; will-change: auto; } }
-@media (max-width: 760px) { .archive-panel { left: 3%; top: 14%; width: 94%; height: 78%; padding: 1.5%; gap: 1.2%; border-radius: 10px; } .archive-replay-card { border-radius: 7px; } .archive-replay-title { padding: 6px 5px; font-size: clamp(13px, 2.6vw, 20px); white-space: normal; } .archive-replay-description { min-height: 42px; padding: 5px; font-size: clamp(9px, 1.6vw, 12px); } }
+@keyframes archivePanelEnter {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 22px, 0);
+    }
+    78% {
+        opacity: 1;
+        transform: translate3d(0, -1px, 0);
+    }
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+.story-layout-hidden {
+    visibility: hidden;
+    pointer-events: none;
+}
+.archive-panel {
+    animation: archivePanelEnter .44s cubic-bezier(.22, .75, .25, 1) both;
+    will-change: transform, opacity;
+    position: absolute;
+    z-index: 5;
+    left: 10.5%;
+    top: 16.5%;
+    width: 81%;
+    height: 72%;
+    padding: 2.1% 1.6%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25%;
+    border: 2px solid rgba(116, 146, 164, .62);
+    border-radius: 15px;
+    background: rgba(247, 250, 250, .82);
+    box-shadow: 0 2px 1px rgba(49, 73, 91, .25);
+}
+.archive-replay-card {
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    border: 1px solid rgba(121, 143, 159, .38);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, .84);
+    color: #354f7e;
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(35, 58, 76, .12);
+    transition: transform .16s ease, box-shadow .16s ease;
+}
+.archive-replay-card:hover {
+    box-shadow: 0 3px 9px rgba(39, 63, 87, .14);
+}
+.archive-replay-card:active {
+    transform: scale(.985);
+}
+.archive-replay-image {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow: hidden;
+    background: rgba(183, 217, 235, .28);
+}
+.archive-replay-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+.archive-replay-title {
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 7px 10px 6px;
+    background: rgba(43, 65, 91, .92);
+    color: #fff;
+    font-size: clamp(18px, 2.1vw, 32px);
+    line-height: 1.2;
+    font-weight: 800;
+    white-space: nowrap;
+}
+.archive-replay-description {
+    flex: 0 0 auto;
+    min-height: 45px;
+    width: 100%;
+    padding: 8px 10px;
+    color: #8b9298;
+    background: rgba(255, 255, 255, .92);
+    font-size: clamp(11px, 1.05vw, 16px);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+}
+.archive-back-button {
+    z-index: 25;
+}
+@media (prefers-reduced-motion: reduce) {
+    .archive-panel {
+        animation-duration: .01ms;
+        will-change: auto;
+    }
+}
+@media (max-width: 760px) {
+    .archive-panel {
+        left: 3%;
+        top: 14%;
+        width: 94%;
+        height: 78%;
+        padding: 1.5%;
+        gap: 1.2%;
+        border-radius: 10px;
+    }
+    .archive-replay-card {
+        border-radius: 7px;
+    }
+    .archive-replay-title {
+        padding: 6px 5px;
+        font-size: clamp(13px, 2.6vw, 20px);
+        white-space: normal;
+    }
+    .archive-replay-description {
+        min-height: 42px;
+        padding: 5px;
+        font-size: clamp(9px, 1.6vw, 12px);
+    }
+}

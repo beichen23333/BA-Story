@@ -69,7 +69,6 @@ const NAME_FIELD_BY_LANGUAGE: Record<CostumeLanguage, keyof CostumeExcelItem> = 
   kr: "NameKr",
   jp: "NameJp",
   tw: "NameTw",
-  // 当前数据没有 NameTh，泰语界面暂时显示英语名称。
   th: "NameEn",
 };
 

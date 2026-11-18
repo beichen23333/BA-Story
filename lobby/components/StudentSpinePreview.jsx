@@ -4,7 +4,6 @@ import { loadCharacterSpineForPreview } from "../../player-lib/index.ts";
 import { Character_Initial_Pivot_Proportion, calcCharacterYAndScale } from "../../player-lib/layers/characterLayer/index.ts";
 import { hasAnimation } from "../../shared/utils.ts";
 
-/** 个人剧情页面沿用 player 的 Spine 资源加载、Spine 实例与角色缩放算法。 */
 export function StudentSpinePreview({ resourceName, label, t }) {
     const containerRef = useRef(null);
     const [loadState, setLoadState] = useState("loading");

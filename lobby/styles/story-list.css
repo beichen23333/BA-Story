@@ -1,4 +1,3 @@
-/* 社团故事面板：背景与标题栏由父级页面继承。 */
 .story-list-panel {
     position: absolute;
     left: 16%;
