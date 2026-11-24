@@ -287,11 +287,11 @@ export function App({ active = true } = {}) {
     };
   }, []);
 
-  // 更新页面标题和语言属性
+  // 页面标题用于浏览器标签/小窗标识，不使用界面文案“故事”，避免 Via 等 WebView 容器将其显示为悬浮窗标题。
   useEffect(() => {
     document.documentElement.lang = LANGUAGE_HTML_MAP[language] || "en";
-    document.title = t.pageTitle;
-  }, [language, t.pageTitle]);
+    document.title = "蔚蓝档案剧情站";
+  }, [language]);
 
   // 背景音乐播放控制：
   // 电脑端（非移动端）：无论窗口长宽比如何，均应正常播放音乐；
@@ -595,6 +595,7 @@ export function App({ active = true } = {}) {
         backLabel={t.back}
         onBack={returnToScenarioMenu}
         onClickSound={playButtonTouchSound}
+        runBlackoutTransition={runBlackoutTransition}
         onPartTwo={() => {
           playButtonTouchSound();
           runBlackoutTransition(() => {

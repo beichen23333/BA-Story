@@ -4,12 +4,12 @@ import { MAIN_STORY_UI_TEXTS } from "../../shared/texts/maintexts.js";
 import { MAIN_STORY_RESOURCES } from "../../shared/utils.ts";
 import { useStoryCardTouch } from "../hooks/useStoryCardTouch.js";
 
-export function MainStoryChapterPanel({ volume, language, selectedChapterId, onChapterSelect, onClickSound, onFinalChapterClick, showFinalChapter = true, showChapterDescription = false, className = "" }) {
+export function MainStoryChapterPanel({ volume, language, selectedChapterId, onChapterSelect, onClickSound, onFinalChapterClick, onChapterOpen, showFinalChapter = true, showChapterDescription = false, className = "" }) {
     const ui = MAIN_STORY_UI_TEXTS;
     const localeKey = language === "kr" ? "Kr" : language === "cn" || language === "jp" ? "Jp" : null;
     const heading = volume.title;
     const selectedChapter = volume.chapters.find((chapter) => chapter.id === selectedChapterId) || volume.chapters[0];
-    const { trigger, isBouncing } = useStoryCardTouch(onChapterSelect, onClickSound);
+    const { trigger, isBouncing } = useStoryCardTouch((chapter) => { onChapterSelect?.(chapter); onChapterOpen?.(chapter); }, onClickSound);
     const { trigger: triggerFinalChapter, isBouncing: isFinalChapterBouncing } = useStoryCardTouch(onFinalChapterClick, onClickSound);
 
     return (

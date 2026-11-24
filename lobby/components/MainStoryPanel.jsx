@@ -5,9 +5,12 @@ import { MAIN_STORY_UI_TEXTS } from "../../shared/texts/maintexts.js";
 import { MAIN_STORY_RESOURCES } from "../../shared/utils.ts";
 import { MainStoryVolumeCard } from "./MainStoryVolumeCard.jsx";
 import { MainStoryChapterPanel } from "./MainStoryChapterPanel.jsx";
+import { FinalVolumeChapterStoryPanel } from "./FinalVolumeChapterStoryPanel.jsx";
+import { isVerticalDominantGesture } from "../utils/storyScroll.js";
+import { getFinalVolumeChapters } from "../stories/FinalVolumeStories.js";
 import "../styles/main-story.css";
 
-export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartOne, onClickSound, series = 1 }) {
+export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartOne, onClickSound, runBlackoutTransition, series = 1 }) {
     const seriesId = Number(series) === 2 ? 2 : 1;
     const defaultVolumeId = seriesId === 2 ? "series2-prologue" : "main-1";
     const volumes = useMemo(() => getMainStoryVolumes(language, seriesId).map((volume) => ({
@@ -22,6 +25,7 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartO
     const [selectedVolumeId, setSelectedVolumeId] = useState(defaultVolumeId);
     const [selectedChapterId, setSelectedChapterId] = useState(seriesId === 2 ? "series2-prologue-chapter-1" : "main-1-chapter-3");
     const [selectedFinalChapterId, setSelectedFinalChapterId] = useState("final-chapter-1");
+    const [isFinalChapterPage, setIsFinalChapterPage] = useState(false);
     const [isFinalPage, setIsFinalPage] = useState(false);
     const [isFinalExiting, setIsFinalExiting] = useState(false);
     const [mainContentVisible, setMainContentVisible] = useState(true);
@@ -33,6 +37,8 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartO
     const lastVolumeIndex = Math.max(0, volumes.length - 1);
     const lastVolumeLeft = volumes.length ? 6.5 + Math.floor(lastVolumeIndex / 2) * 45 + (lastVolumeIndex % 2) * 27 : 0;
     const selectedVolume = volumes.find((volume) => volume.id === selectedVolumeId) || volumes[1] || volumes[0];
+    const finalChapterDetails = useMemo(() => getFinalVolumeChapters(language), [language]);
+    const selectedFinalChapter = finalChapterDetails.find((chapter) => chapter.id === selectedFinalChapterId) || finalChapterDetails[0];
     const ui = MAIN_STORY_UI_TEXTS;
     const localeKey = language === "kr" ? "Kr" : language === "cn" || language === "jp" ? "Jp" : null;
 
@@ -61,12 +67,13 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartO
 
     const handleRailWheel = (event) => {
         const rail = railRef.current;
-        if (!rail || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+        if (!rail || !isVerticalDominantGesture(event.deltaX, event.deltaY)) return;
         rail.scrollLeft += event.deltaY;
     };
 
-    const handleFinalChapterOpen = () => {
+    const handleFinalVolumeOpen = () => {
         setSelectedFinalChapterId("final-chapter-1");
+        setIsFinalChapterPage(false);
         setHasReturnedFromFinal(false);
         setMainContentVisible(false);
         setIsFinalExiting(false);
@@ -75,8 +82,22 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartO
         setIsFinalPage(true);
     };
 
+    const handleFinalChapterOpen = (chapter) => {
+        if (chapter?.id) setSelectedFinalChapterId(chapter.id);
+        const openPage = () => setIsFinalChapterPage(true);
+        if (runBlackoutTransition) runBlackoutTransition(openPage);
+        else openPage();
+    };
+
+    const handleFinalChapterBack = () => {
+        const closePage = () => setIsFinalChapterPage(false);
+        if (runBlackoutTransition) runBlackoutTransition(closePage);
+        else closePage();
+    };
+
     const handleFinalBack = () => {
         onClickSound?.();
+        setIsFinalChapterPage(false);
         setIsFinalExiting(true);
         setHasReturnedFromFinal(true);
         setMainContentVisible(false);
@@ -99,7 +120,7 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartO
             className={`main-story-scene ${isFinalPage ? "is-final-story" : ""} ${isFinalExiting ? "is-final-exiting" : ""}`}
             style={{ backgroundImage: `url("${MAIN_STORY_RESOURCES.sceneBackground()}")` }}
         >
-            <button className="main-story-back-button story-list-back-button" type="button" onClick={onBack} aria-label={backLabel}>
+            <button className="main-story-back-button story-list-back-button" type="button" onClick={isFinalChapterPage ? handleFinalChapterBack : onBack} aria-label={backLabel}>
                 <ArrowLeft size={36} strokeWidth={2.4} />
             </button>
             {(!isFinalPage || isFinalExiting) && <div className={`main-story-normal-content ${hasReturnedFromFinal ? "is-returning" : ""} ${mainContentVisible ? "is-visible" : ""}`}>
@@ -131,7 +152,7 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartO
                     selectedChapterId={selectedChapterId}
                     onChapterSelect={handleChapterSelect}
                     onClickSound={onClickSound}
-                    onFinalChapterClick={seriesId === 1 ? handleFinalChapterOpen : undefined}
+                    onFinalChapterClick={seriesId === 1 ? handleFinalVolumeOpen : undefined}
                     showFinalChapter={seriesId === 1}
                 />
                 {seriesId === 1 && <div className="main-story-progress" aria-hidden="true">
@@ -140,32 +161,35 @@ export function MainStoryPanel({ language, backLabel, onBack, onPartTwo, onPartO
             </div>}
             {isFinalPage && <>
                 <div className={`main-story-final-background ${finalBackgroundVisible ? "is-visible" : ""}`} style={{ backgroundImage: `url("${MAIN_STORY_RESOURCES.finalSceneBackground()}")` }} aria-hidden="true" />
-                <button className={`main-story-part-two-button is-return main-story-final-return-button ${finalVolumeEntered ? "is-visible" : ""}`} type="button" onClick={handleFinalBack} aria-label={ui.otherStories[({ cn: "Cn", en: "En", kr: "Kr", jp: "Jp", tw: "Tw", th: "Th" })[language] || "Cn"]}>
-                    <img src={MAIN_STORY_RESOURCES.partSwitchIcon()} alt="" draggable="false" />
-                    <span>{ui.otherStories[({ cn: "Cn", en: "En", kr: "Kr", jp: "Jp", tw: "Tw", th: "Th" })[language] || "Cn"]}</span>
-                </button>
-                <div className={`main-story-final-volume ${finalVolumeEntered ? "is-visible" : ""} ${isFinalExiting ? "is-exiting" : ""}`}>
-                    <MainStoryVolumeCard
-                        volume={finalVolume}
-                        index={0}
-                        selected={false}
-                        staticCard
-                        centered
-                        descriptionBelow
-                    />
-                </div>
-                <div className={`main-story-final-chapters ${finalVolumeEntered ? "is-visible" : ""}`}>
-                    <MainStoryChapterPanel
-                        volume={finalVolume}
-                        language={language}
-                        selectedChapterId={selectedFinalChapterId}
-                        onChapterSelect={(chapter) => setSelectedFinalChapterId(chapter.id)}
-                        onClickSound={onClickSound}
-                        onFinalChapterClick={undefined}
-                        showFinalChapter={false}
-                        showChapterDescription={false}
-                    />
-                </div>
+                {!isFinalChapterPage && <>
+                    <button className={`main-story-part-two-button is-return main-story-final-return-button ${finalVolumeEntered ? "is-visible" : ""}`} type="button" onClick={handleFinalBack} aria-label={ui.otherStories[({ cn: "Cn", en: "En", kr: "Kr", jp: "Jp", tw: "Tw", th: "Th" })[language] || "Cn"]}>
+                        <img src={MAIN_STORY_RESOURCES.partSwitchIcon()} alt="" draggable="false" />
+                        <span>{ui.otherStories[({ cn: "Cn", en: "En", kr: "Kr", jp: "Jp", tw: "Tw", th: "Th" })[language] || "Cn"]}</span>
+                    </button>
+                    <div className={`main-story-final-volume ${finalVolumeEntered ? "is-visible" : ""} ${isFinalExiting ? "is-exiting" : ""}`}>
+                        <MainStoryVolumeCard volume={finalVolume} index={0} selected={false} staticCard centered descriptionBelow />
+                    </div>
+                    <div className={`main-story-final-chapters ${finalVolumeEntered ? "is-visible" : ""}`}>
+                        <MainStoryChapterPanel
+                            volume={finalVolume}
+                            language={language}
+                            selectedChapterId={selectedFinalChapterId}
+                            onChapterSelect={(chapter) => setSelectedFinalChapterId(chapter.id)}
+                            onChapterOpen={handleFinalChapterOpen}
+                            onClickSound={onClickSound}
+                            onFinalChapterClick={undefined}
+                            showFinalChapter={false}
+                            showChapterDescription={false}
+                        />
+                    </div>
+                </>}
+                {isFinalChapterPage && selectedFinalChapter && <FinalVolumeChapterStoryPanel
+                    chapter={selectedFinalChapter}
+                    chapters={finalChapterDetails}
+                    language={language}
+                    onChapterChange={(chapter) => setSelectedFinalChapterId(chapter.id)}
+                    onClickSound={onClickSound}
+                />}
             </>}
         </section>
     );

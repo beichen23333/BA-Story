@@ -4,6 +4,12 @@ function isMobileDevice() {
   if (typeof window === "undefined") return false;
   return window.matchMedia?.("(pointer: coarse)").matches || /Android|iPhone|iPod|iPad|Mobile/i.test(navigator.userAgent || "");
 }
+function isAndroidWebView() {
+  if (typeof navigator === "undefined") return false;
+  const ua = navigator.userAgent || "";
+  // Via 使用 Android 系统 WebView；常见 WebView UA 带有“; wv”或“Version/4.0”。
+  return /Android/i.test(ua) && (/;\s*wv\)/i.test(ua) || /Version\/[\d.]+.*Chrome\/[\d.]+.*Mobile Safari/i.test(ua));
+}
 function getToy() {
   if (typeof window === "undefined" || typeof navigator === "undefined") return null;
   // Toy API 只在 Bilibili 客户端中启用；普通浏览器即使存在同名注入对象，也走 Web 逻辑。
@@ -34,6 +40,7 @@ export function useOrientation() {
     const isPortrait = height > width;
     setIsMobile(mobile);
     setPortrait(isPortrait);
+    if (!isPortrait) setOrientationError("");
     // 普通 Web 页面竖屏时始终显示遮罩；仅真正接入 Toy SDK 的客户端走 SDK 状态。
     setShowRotatePrompt(isPortrait && !getToy());
   }, []);
@@ -104,7 +111,23 @@ export function useOrientation() {
       return;
     }
 
-    // 普通浏览器：API 必须在用户手势触发的调用链内执行。
+    // Android WebView（包括 Via）不请求整个 document 的 Fullscreen，避免触发宿主浏览器自己的沉浸/悬浮容器。
+    // 仍优先尝试 Screen Orientation；若宿主要求必须全屏，则提示用户使用系统自动旋转手动横置。
+    if (isAndroidWebView()) {
+      try {
+        if (screen.orientation?.lock) await screen.orientation.lock("landscape");
+        else throw new Error("浏览器不支持 Screen Orientation API");
+      } catch (error) {
+        updateBrowserOrientation();
+        if (window.innerHeight > window.innerWidth) setOrientationError("当前浏览器不支持网页自动横屏。请开启系统自动旋转并将手机横置；为兼容 Via 类 WebView，页面不会请求网页全屏。");
+      }
+      updateBrowserOrientation();
+      busyRef.current = false;
+      setOrientationBusy(false);
+      return;
+    }
+
+    // 其他普通浏览器：API 必须在用户手势触发的调用链内执行。
     let fullscreenError = null;
     try {
       if (!document.fullscreenElement && document.documentElement.requestFullscreen) await document.documentElement.requestFullscreen();

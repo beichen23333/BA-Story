@@ -28,6 +28,8 @@ export const MAIN_STORY_RESOURCES = {
   finalVolumeImage: () => getResourcesUrl("scenarioMode", "Main_Volume_100.png"),
   volumeDecoration: () => getResourcesUrl("scenarioMode", "Main_Volume_Deco.png"),
   finalChapterButton: () => getPublicAssetUrl("CCG_Img_BtnBlue.png"),
+  finalChapterImage: (filename: string) => getResourcesUrl("scenarioMode", filename),
+  storyFileIcon: () => getPublicAssetUrl("file.png"),
   partSwitchIcon: () => getPublicAssetUrl("main-story-series-switch.svg"),
 };
 
